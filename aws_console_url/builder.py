@@ -6,7 +6,7 @@ import dataclasses
 
 @dataclasses.dataclass
 class Builder:
-    aws_service: str = dataclasses.field()
+    aws_service: str = dataclasses.field(default=None)
     is_us_gov_cloud: bool = dataclasses.field(default=False)
     aws_account_id: T.Optional[str] = dataclasses.field(default=None)
     aws_region: T.Optional[str] = dataclasses.field(default=None)
@@ -28,3 +28,18 @@ class Builder:
     @property
     def _service_root(self) -> str:
         return f"{self._sub_domain}/{self.aws_service}"
+
+
+@dataclasses.dataclass
+class AWSConsole:
+    is_us_gov_cloud: bool = dataclasses.field(default=False)
+    aws_account_id: T.Optional[str] = dataclasses.field(default=None)
+    aws_region: T.Optional[str] = dataclasses.field(default=None)
+
+    def to_builder(self, klass: T.Type[Builder]) -> Builder:
+        return klass(
+            is_us_gov_cloud=self.is_us_gov_cloud,
+            aws_account_id=self.aws_account_id,
+            aws_region=self.aws_region,
+        )
+

@@ -8,7 +8,7 @@ from ..builder import Builder
 
 @dataclasses.dataclass
 class Dynamodb(Builder):
-    SERVICE_NAME = "dynamodbv2"
+    aws_service: str = dataclasses.field(default="dynamodbv2")
 
     @property
     def tables(self) -> str:

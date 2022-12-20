@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import typing as T
 import dataclasses
+
+from .builder import AWSConsole as AWSConsole_
 
 from .srv.awslambda import AWSLambda
 from .srv.dynamodb import Dynamodb
+from .srv.iam import Iam
 
 
 @dataclasses.dataclass
-class AWSConsole:
-    is_us_gov_cloud: bool = dataclasses.field(default=False)
-    aws_account_id: T.Optional[str] = dataclasses.field(default=None)
-    aws_region: T.Optional[str] = dataclasses.field(default=None)
+class AWSConsole(AWSConsole_):
 
     @property
     def awslambda(self) -> AWSLambda:
-        return AWSLambda(aws_service="lambda")
+        return self.to_builder(AWSLambda)
 
     @property
     def dynamodb(self) -> Dynamodb:
-        return Dynamodb(aws_service="dynamodbv2")
+        return self.to_builder(Dynamodb)
+
+    @property
+    def iam(self) -> Iam:
+        return self.to_builder(Iam)

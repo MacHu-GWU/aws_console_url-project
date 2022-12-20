@@ -7,7 +7,7 @@ from ..builder import Builder
 
 @dataclasses.dataclass
 class AWSLambda(Builder):
-    SERVICE_NAME = "lambda"
+    aws_service: str = dataclasses.field(default="lambda")
 
     @property
     def functions(self) -> str:
