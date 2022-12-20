@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.srv.dynamodb import dynamodb
+from aws_console_url.tests import aws
 
 
 def test():
     table = "dynamodb-cache"
-    print(dynamodb.tables)
-    print(dynamodb.table_overview(table))
-    print(dynamodb.table_items(table))
-    print(dynamodb.item_details(table, "my_db_credential"))
+    print(aws.dynamodb.tables)
+    print(aws.dynamodb.get_table_overview(table))
+    print(aws.dynamodb.get_table_items(table))
+    print(aws.dynamodb.get_item_details(table, "my_db_credential"))
+    print(aws.dynamodb.get_item_details(table, "my_db_credential"))
+    print(aws.dynamodb.get_item_details(
+        "data-quality-governor-dev-statistics-tracker",
+        "s3://aws-data-lab-sanhe-for-everything/poc/2022-02-01-aws_data_quality_governor/person-pii/",
+        "2022-02-09",
+    ))
 
 
 if __name__ == "__main__":

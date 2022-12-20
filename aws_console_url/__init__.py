@@ -14,6 +14,6 @@ __author_email__ = "husanhe@gmail.com"
 __github_username__ = "MacHu-GWU"
 
 try:
-    from .srv.dynamodb import dynamodb
+    from .api import AWSConsole
 except ImportError: # pragma: no cover
     pass

@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from pytest import raises, approx
 
 
 def test():
     import aws_console_url
-    pass
+
+    aws = aws_console_url.AWSConsole()
+
+    _ = aws.awslambda
+    _ = aws.dynamodb
 
 
 if __name__ == "__main__":

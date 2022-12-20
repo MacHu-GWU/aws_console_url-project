@@ -27,4 +27,4 @@ class Builder:
 
     @property
     def _service_root(self) -> str:
-        return f"{self._sub_domain}/{self.aws_service}/"
+        return f"{self._sub_domain}/{self.aws_service}"
