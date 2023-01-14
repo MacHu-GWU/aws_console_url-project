@@ -5,7 +5,7 @@ import dataclasses
 from ..builder import Builder
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class AWSLambda(Builder):
     _AWS_SERVICE = "lambda"
 

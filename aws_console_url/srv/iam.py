@@ -5,7 +5,7 @@ import dataclasses
 from ..builder import Builder
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Iam(Builder):
     _AWS_SERVICE = "iamv2"
 
@@ -35,4 +35,4 @@ class Iam(Builder):
         return f"{self._service_root}/home#/roles/details/{name}?section=permissions"
 
     def get_policy(self, name: str) -> str:
-        return f"{self._root_url}/iam/home#/policies/arn:aws:iam::{self.aws_account_id}:policy/{name}$jsonEditor"
+        return f"{self._root_url}/iam/home#/policies/arn:aws:iam::{self._account_id}:policy/{name}$jsonEditor"

@@ -6,7 +6,7 @@ import dataclasses
 from ..builder import Builder
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Dynamodb(Builder):
     _AWS_SERVICE = "dynamodbv2"
 
