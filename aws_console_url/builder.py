@@ -5,7 +5,7 @@ import dataclasses
 
 from boto_session_manager import BotoSesManager
 
-if T.TYPE_CHECKING: # pragma: no cover
+if T.TYPE_CHECKING:  # pragma: no cover
     from .console import AWSConsole
 
 
@@ -14,6 +14,7 @@ class Builder:
     """
     Per AWS Service Console URL builder.
     """
+
     aws_service: str = dataclasses.field()
     aws_account_id: T.Optional[str] = dataclasses.field(default=None)
     aws_region: T.Optional[str] = dataclasses.field(default=None)
@@ -37,7 +38,7 @@ class Builder:
         """
         if self.aws_region:
             return f"https://{self.aws_region}.{self._sub_domain}"
-        else: # pragma: no cover
+        else:  # pragma: no cover
             return f"https://{self._sub_domain}"
 
     @property
@@ -79,12 +80,18 @@ class Builder:
     def _account_id(self) -> str:
         if self.aws_account_id:
             return self.aws_account_id
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise ValueError("aws_account_id is required!")
 
     @property
     def _region(self) -> str:
         if self.aws_region:
             return self.aws_region
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise ValueError("aws_region is required!")
+
+    def _ensure_name(self, name_or_arn: str, converter: T.Callable) -> str:
+        return converter(name_or_arn) if name_or_arn.startswith("arn:") else name_or_arn
+
+    def _ensure_arn(self, name_or_arn: str, converter: T.Callable) -> str:
+        return name_or_arn if name_or_arn.startswith("arn:") else converter(name_or_arn)

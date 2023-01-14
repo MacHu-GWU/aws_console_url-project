@@ -8,6 +8,7 @@ def test():
     print(aws.iam.users)
     print(aws.iam.roles)
     print(aws.iam.policies)
+
     print(aws.iam.get_group("Admin"))
     print(aws.iam.get_user("sanhe"))
     print(aws.iam.get_role("Admin"))
