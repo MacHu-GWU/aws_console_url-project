@@ -9,6 +9,7 @@ from .compat import cached_property
 
 from .srv.awslambda import AWSLambda
 from .srv.cloudformation import CloudFormation
+from .srv.codebuild import CodeBuild
 from .srv.codecommit import CodeCommit
 from .srv.dynamodb import Dynamodb
 from .srv.iam import Iam
@@ -29,6 +30,10 @@ class AWSConsole:
     @cached_property
     def cloudformation(self) -> CloudFormation:
         return CloudFormation._from_aws_console(self)
+    
+    @cached_property
+    def codebuild(self) -> CodeBuild:
+        return CodeBuild._from_aws_console(self)
     
     @cached_property
     def codecommit(self) -> CodeCommit:
