@@ -65,6 +65,9 @@ class Builder:
 
     @classmethod
     def _from_aws_console(cls, aws_console: "AWSConsole") -> "Builder":
+        """
+        Create a builder from AWSConsole object.
+        """
         return cls._make(
             aws_account_id=aws_console.aws_account_id,
             aws_region=aws_console.aws_region,
