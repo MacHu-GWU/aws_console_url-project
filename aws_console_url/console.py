@@ -9,8 +9,10 @@ from .compat import cached_property
 
 from .srv.awslambda import AWSLambda
 from .srv.cloudformation import CloudFormation
+from .srv.codecommit import CodeCommit
 from .srv.dynamodb import Dynamodb
 from .srv.iam import Iam
+from .srv.sqs import SQS
 
 
 @dataclasses.dataclass
@@ -29,10 +31,18 @@ class AWSConsole:
         return CloudFormation._from_aws_console(self)
     
     @cached_property
+    def codecommit(self) -> CodeCommit:
+        return CodeCommit._from_aws_console(self)
+    
+    @cached_property
     def dynamodb(self) -> Dynamodb:
         return Dynamodb._from_aws_console(self)
     
     @cached_property
     def iam(self) -> Iam:
         return Iam._from_aws_console(self)
+    
+    @cached_property
+    def sqs(self) -> SQS:
+        return SQS._from_aws_console(self)
     
