@@ -3,11 +3,9 @@
 [run]
 omit =
     aws_console_url/_version.py
-    aws_console_url/cli.py
-    aws_console_url/pkg/*
     aws_console_url/docs/*
     aws_console_url/tests/*
-    aws_console_url/handlers/*
+    aws_console_url/compat.py
 
 [report]
 # Regexes for lines to exclude from consideration
