@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 
-"""
-Package Description.
-"""
-
-
 from ._version import __version__
 
-__short_description__ = "AWS Console Url Builder."
+__short_description__ = "Build AWS Console Url for debugging."
 __license__ = "MIT"
 __author__ = "Sanhe Hu"
 __author_email__ = "husanhe@gmail.com"

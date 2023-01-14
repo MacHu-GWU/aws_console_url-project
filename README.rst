@@ -1,12 +1,12 @@
 
-.. image:: https://readthedocs.org/projects/aws_console_url/badge/?version=latest
+.. .. image:: https://readthedocs.org/projects/aws_console_url/badge/?version=latest
     :target: https://aws_console_url.readthedocs.io/index.html
     :alt: Documentation Status
 
-.. image:: https://github.com/MacHu-GWU/aws_console_url-project/workflows/CI/badge.svg
+..  .. image:: https://github.com/MacHu-GWU/aws_console_url-project/workflows/CI/badge.svg
     :target: https://github.com/MacHu-GWU/aws_console_url-project/actions?query=workflow:CI
 
-.. image:: https://codecov.io/gh/MacHu-GWU/aws_console_url-project/branch/main/graph/badge.svg
+..  .. image:: https://codecov.io/gh/MacHu-GWU/aws_console_url-project/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/MacHu-GWU/aws_console_url-project
 
 .. image:: https://img.shields.io/pypi/v/aws_console_url.svg
@@ -24,13 +24,13 @@
 ------
 
 
-.. image:: https://img.shields.io/badge/Link-Document-blue.svg
+..  .. image:: https://img.shields.io/badge/Link-Document-blue.svg
     :target: https://aws_console_url.readthedocs.io/index.html
 
-.. image:: https://img.shields.io/badge/Link-API-blue.svg
+..  .. image:: https://img.shields.io/badge/Link-API-blue.svg
     :target: https://aws_console_url.readthedocs.io/py-modindex.html
 
-.. image:: https://img.shields.io/badge/Link-Source_Code-blue.svg
+..  .. image:: https://img.shields.io/badge/Link-Source_Code-blue.svg
     :target: https://aws_console_url.readthedocs.io/py-modindex.html
 
 .. image:: https://img.shields.io/badge/Link-Install-blue.svg
@@ -51,8 +51,7 @@
 
 Welcome to ``aws_console_url`` Documentation
 ==============================================================================
-
-Documentation for ``aws_console_url``.
+``aws_console_url`` allow you to generate AWS console URL for debugging with Python. You can find many examples in `unit test <./tests/srv>`_
 
 
 .. _install:

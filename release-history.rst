@@ -4,7 +4,7 @@ Release and Version History
 ==============================================================================
 
 
-0.0.3 (TODO)
+Backlog (TODO)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
 
@@ -15,18 +15,16 @@ Release and Version History
 **Miscellaneous**
 
 
-0.0.2 (TODO)
+0.1.1 (2023-01-14)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
-
-**Minor Improvements**
-
-**Bugfixes**
-
-**Miscellaneous**
-
-
-0.0.1 (2022-12-20)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - First release
+- Add support for the following AWS Services:
+    - awslambda
+    - cloudformation
+    - codebuild
+    - codecommit
+    - dynamodb
+    - iam
+    - sqs
