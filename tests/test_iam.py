@@ -17,4 +17,4 @@ def test():
 if __name__ == "__main__":
     from aws_console_url.tests import run_cov_test
 
-    run_cov_test(__file__, "aws_console_url.srv.dynamodb")
+    run_cov_test(__file__, "aws_console_url.srv.iam", preview=False)

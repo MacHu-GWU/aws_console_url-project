@@ -10,6 +10,7 @@ def test():
 
     _ = aws.awslambda
     _ = aws.dynamodb
+    _ = aws.iam
 
 
 if __name__ == "__main__":

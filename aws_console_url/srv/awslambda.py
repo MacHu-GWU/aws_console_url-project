@@ -7,7 +7,7 @@ from ..builder import Builder
 
 @dataclasses.dataclass
 class AWSLambda(Builder):
-    aws_service: str = dataclasses.field(default="lambda")
+    _AWS_SERVICE = "lambda"
 
     @property
     def functions(self) -> str:
@@ -22,6 +22,9 @@ class AWSLambda(Builder):
 
     def _function_tab(self, name: str, tab: str) -> str:
         return f"{self._service_root}/home?#/functions/{name}?tab={tab}"
+
+    def get_function(self, name: str) -> str:
+        return self._function_tab(name, "code")
 
     def get_function_code_tab(self, name: str) -> str:
         return self._function_tab(name, "code")
@@ -47,4 +50,6 @@ class AWSLambda(Builder):
         )
 
     def get_function_alias(self, name: str, alias: str) -> str:
-        return f"{self._service_root}/home?#/functions/{name}/aliases/{alias}?tab=configure"
+        return (
+            f"{self._service_root}/home?#/functions/{name}/aliases/{alias}?tab=configure"
+        )

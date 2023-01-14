@@ -14,6 +14,6 @@ __author_email__ = "husanhe@gmail.com"
 __github_username__ = "MacHu-GWU"
 
 try:
-    from .api import AWSConsole
+    from .console import AWSConsole
 except ImportError: # pragma: no cover
     pass

@@ -8,6 +8,7 @@ def test():
     print(aws.awslambda.functions)
     print(aws.awslambda.layers)
     print(aws.awslambda.filter_functions(func))
+    print(aws.awslambda.get_function(func))
     print(aws.awslambda.get_function_code_tab(func))
     print(aws.awslambda.get_function_test_tab(func))
     print(aws.awslambda.get_function_monitor_tab(func))
@@ -21,4 +22,4 @@ def test():
 if __name__ == "__main__":
     from aws_console_url.tests import run_cov_test
 
-    run_cov_test(__file__, "aws_console_url.srv.awslambda")
+    run_cov_test(__file__, "aws_console_url.srv.awslambda", preview=False)
