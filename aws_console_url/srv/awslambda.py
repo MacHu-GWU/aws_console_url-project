@@ -1,25 +1,104 @@
 # -*- coding: utf-8 -*-
 
+import typing as T
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder, ArnBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class AWSLambda(Builder):
+class LambdaFunctionArn(ArnBuilder):
+    name: T.Optional[str] = dataclasses.field(default=None)
+    version: T.Optional[int] = dataclasses.field(default=None)
+    alias: T.Optional[str] = dataclasses.field(default=None)
+
+    @classmethod
+    def make(
+        cls,
+        aws_account_id: str,
+        aws_region: str,
+        name,
+        version: T.Optional[int] = None,
+        alias: T.Optional[str] = None,
+    ) -> "LambdaFunctionArn":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+            name=name,
+            version=version,
+            alias=alias,
+        )
+
+    @property
+    def is_regular(self) -> bool:
+        return not bool(self.version or self.alias)
+
+    @property
+    def is_version(self) -> bool:
+        return bool(self.version)
+
+    @property
+    def is_alias(self) -> bool:
+        return bool(self.alias)
+
+    @property
+    def arn(self):
+        arn = f"arn:aws:lambda:{self.aws_region}:{self.aws_account_id}:function:{self.name}"
+        if self.version:
+            return f"{arn}:{self.version}"
+        if self.alias:
+            return f"{arn}:{self.alias}"
+        return arn
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "LambdaFunctionArn":
+        parts = arn.split(":")
+        aws_account_id = parts[4]
+        aws_region = parts[3]
+        name = parts[6]
+        if len(parts) == 8:
+            last_part = parts[7]
+            if last_part.isdigit():
+                version = int(last_part)
+                return cls(
+                    aws_account_id=aws_account_id,
+                    aws_region=aws_region,
+                    name=name,
+                    version=version,
+                )
+            else:
+                alias = last_part
+                return cls(
+                    aws_account_id=aws_account_id,
+                    aws_region=aws_region,
+                    name=name,
+                    alias=alias,
+                )
+        else:
+            return cls(
+                aws_account_id=aws_account_id,
+                aws_region=aws_region,
+                name=name,
+            )
+
+
+@dataclasses.dataclass(frozen=True)
+class AWSLambda(ConsoleUrlBuilder):
     _AWS_SERVICE = "lambda"
 
+    # --- Menu
     @property
     def functions(self) -> str:
         return f"{self._service_root}/home?#/functions"
+
+    def filter_functions(self, name: str) -> str:
+        return f"{self._service_root}/home?#/functions?fo=and&o0=%3A&v0={name}"
 
     @property
     def layers(self) -> str:
         return f"{self._service_root}/home?#/layers"
 
-    def filter_functions(self, name: str) -> str:
-        return f"{self._service_root}/home?#/functions?fo=and&o0=%3A&v0={name}"
-
+    # --- Function
     def _function_tab(self, name: str, tab: str) -> str:
         return f"{self._service_root}/home?#/functions/{name}?tab={tab}"
 
@@ -50,6 +129,4 @@ class AWSLambda(Builder):
         )
 
     def get_function_alias(self, name: str, alias: str) -> str:
-        return (
-            f"{self._service_root}/home?#/functions/{name}/aliases/{alias}?tab=configure"
-        )
+        return f"{self._service_root}/home?#/functions/{name}/aliases/{alias}?tab=configure"

@@ -2,11 +2,11 @@
 
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class A2I(Builder):
+class A2I(ConsoleUrlBuilder):
     _AWS_SERVICE = "a2i"
 
     # --- Human Review Workflows

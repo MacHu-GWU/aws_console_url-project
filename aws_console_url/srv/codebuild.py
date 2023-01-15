@@ -2,11 +2,11 @@
 
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class CodeBuild(Builder):
+class CodeBuild(ConsoleUrlBuilder):
     _AWS_SERVICE = "codesuite/codebuild"
 
     @property

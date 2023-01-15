@@ -1,29 +1,29 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import aws
+from aws_console_url.tests import console
 
 
 def test():
     stack = "CDKToolkit"
     change_set_id = "arn:aws:cloudformation:us-east-1:669508176277:changeSet/cdk-deploy-change-set/c78e670d-9563-47ef-a121-df2cf4baf369"
-    print(aws.cloudformation.stacks)
-    print(aws.cloudformation.stacksets)
-    print(aws.cloudformation.exports)
+    print(console.cloudformation.stacks)
+    print(console.cloudformation.stacksets)
+    print(console.cloudformation.exports)
 
-    print(aws.cloudformation.get_stack(stack))
-    print(aws.cloudformation.get_stack_info(stack))
-    print(aws.cloudformation.get_stack_events(stack))
-    print(aws.cloudformation.get_stack_resources(stack))
-    print(aws.cloudformation.get_stack_outputs(stack))
-    print(aws.cloudformation.get_stack_parameters(stack))
-    print(aws.cloudformation.get_stack_changesets(stack))
+    print(console.cloudformation.get_stack(stack))
+    print(console.cloudformation.get_stack_info(stack))
+    print(console.cloudformation.get_stack_events(stack))
+    print(console.cloudformation.get_stack_resources(stack))
+    print(console.cloudformation.get_stack_outputs(stack))
+    print(console.cloudformation.get_stack_parameters(stack))
+    print(console.cloudformation.get_stack_changesets(stack))
 
-    print(aws.cloudformation.get_change_set(stack, change_set_id))
-    print(aws.cloudformation.get_change_set_changes(stack, change_set_id))
-    print(aws.cloudformation.get_change_set_inputs(stack, change_set_id))
-    print(aws.cloudformation.get_change_set_template(stack, change_set_id))
-    print(aws.cloudformation.get_change_set_json(stack, change_set_id))
-    print(aws.cloudformation.get_change_set_hooks(stack, change_set_id))
+    print(console.cloudformation.get_change_set(stack, change_set_id))
+    print(console.cloudformation.get_change_set_changes(stack, change_set_id))
+    print(console.cloudformation.get_change_set_inputs(stack, change_set_id))
+    print(console.cloudformation.get_change_set_template(stack, change_set_id))
+    print(console.cloudformation.get_change_set_json(stack, change_set_id))
+    print(console.cloudformation.get_change_set_hooks(stack, change_set_id))
 
 
 if __name__ == "__main__":

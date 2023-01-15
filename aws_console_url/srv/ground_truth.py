@@ -3,11 +3,11 @@
 import dataclasses
 from functools import lru_cache
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class GroundTruth(Builder):
+class GroundTruth(ConsoleUrlBuilder):
     _AWS_SERVICE = "sagemaker/groundtruth"
 
     # --- Labeling Jobs

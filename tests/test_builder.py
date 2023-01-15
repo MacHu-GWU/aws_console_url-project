@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from aws_console_url.tests import aws
+from aws_console_url.tests import console
 
 
 def test():
-    _ = aws.iam._account_id
-    _ = aws.iam._region
+    _ = console.iam._account_id
+    _ = console.iam._region
 
 
 if __name__ == "__main__":

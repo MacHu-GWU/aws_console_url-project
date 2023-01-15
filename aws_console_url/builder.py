@@ -7,10 +7,11 @@ from boto_session_manager import BotoSesManager
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .console import AWSConsole
+    from .resource import AWSResource
 
 
 @dataclasses.dataclass(frozen=True)
-class Builder:
+class ConsoleUrlBuilder:
     """
     Per AWS Service Console URL builder.
     """
@@ -55,7 +56,7 @@ class Builder:
         aws_region: T.Optional[str],
         is_us_gov_cloud: bool,
         bsm: BotoSesManager,
-    ) -> "Builder":
+    ) -> "ConsoleUrlBuilder":
         return cls(
             aws_service=cls._AWS_SERVICE,
             aws_account_id=aws_account_id,
@@ -65,7 +66,7 @@ class Builder:
         )
 
     @classmethod
-    def _from_aws_console(cls, aws_console: "AWSConsole") -> "Builder":
+    def _from_aws_console(cls, aws_console: "AWSConsole") -> "ConsoleUrlBuilder":
         """
         Create a builder from AWSConsole object.
         """
@@ -95,3 +96,42 @@ class Builder:
 
     def _ensure_arn(self, name_or_arn: str, converter: T.Callable) -> str:
         return name_or_arn if name_or_arn.startswith("arn:") else converter(name_or_arn)
+
+
+@dataclasses.dataclass(frozen=True)
+class ArnBuilder:
+    aws_account_id: T.Optional[str] = dataclasses.field(default=None)
+    aws_region: T.Optional[str] = dataclasses.field(default=None)
+
+    @classmethod
+    def make(cls, **kwargs) -> "ArnBuilder":
+        raise NotImplementedError
+
+    @property
+    def arn(self) -> str:
+        raise NotImplementedError
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "ArnBuilder":
+        raise NotImplementedError
+
+    @classmethod
+    def _make(
+        cls,
+        aws_account_id: T.Optional[str],
+        aws_region: T.Optional[str],
+    ) -> "ArnBuilder":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+        )
+
+    @classmethod
+    def _from_aws_resource(cls, aws_resource: "AWSResource") -> "ArnBuilder":
+        """
+        Create a builder from AWSConsole object.
+        """
+        return cls._make(
+            aws_account_id=aws_resource.aws_account_id,
+            aws_region=aws_resource.aws_region,
+        )

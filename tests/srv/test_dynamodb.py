@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import aws
+from aws_console_url.tests import console
 
 
 def test():
     table = "dynamodb-cache"
-    print(aws.dynamodb.tables)
-    print(aws.dynamodb.get_table_overview(table))
-    print(aws.dynamodb.get_table_items(table))
-    print(aws.dynamodb.get_item_details(table, "my_db_credential"))
-    print(aws.dynamodb.get_item_details(
+    print(console.dynamodb.tables)
+    print(console.dynamodb.get_table_overview(table))
+    print(console.dynamodb.get_table_items(table))
+    print(console.dynamodb.get_item_details(table, "my_db_credential"))
+    print(console.dynamodb.get_item_details(
         table="data-quality-governor-dev-statistics-tracker",
         hash_key="s3://aws-data-lab-sanhe-for-everything/poc/2022-02-01-aws_data_quality_governor/person-pii/",
         range_key="2022-02-09",

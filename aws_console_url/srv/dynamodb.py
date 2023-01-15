@@ -3,11 +3,11 @@
 import typing as T
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class Dynamodb(Builder):
+class Dynamodb(ConsoleUrlBuilder):
     _AWS_SERVICE = "dynamodbv2"
 
     @property

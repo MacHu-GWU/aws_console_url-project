@@ -3,11 +3,11 @@
 import typing as T
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class CodeCommit(Builder):
+class CodeCommit(ConsoleUrlBuilder):
     _AWS_SERVICE = "codesuite/codecommit"
 
     @property

@@ -2,11 +2,11 @@
 
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class SQS(Builder):
+class SQS(ConsoleUrlBuilder):
     _AWS_SERVICE = "sqs/v2"
 
     @property

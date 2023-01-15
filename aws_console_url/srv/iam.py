@@ -2,11 +2,11 @@
 
 import dataclasses
 
-from ..builder import Builder
+from ..builder import ConsoleUrlBuilder
 
 
 @dataclasses.dataclass(frozen=True)
-class Iam(Builder):
+class Iam(ConsoleUrlBuilder):
     _AWS_SERVICE = "iamv2"
 
     # --- ARN
