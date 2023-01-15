@@ -13,6 +13,7 @@ from .srv.cloudformation import CloudFormation
 from .srv.codebuild import CodeBuild
 from .srv.codecommit import CodeCommit
 from .srv.dynamodb import Dynamodb
+from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
 from .srv.sqs import SQS
@@ -48,6 +49,10 @@ class AWSConsole:
     @cached_property
     def dynamodb(self) -> Dynamodb:
         return Dynamodb._from_aws_console(self)
+    
+    @cached_property
+    def glue(self) -> Glue:
+        return Glue._from_aws_console(self)
     
     @cached_property
     def ground_truth(self) -> GroundTruth:
