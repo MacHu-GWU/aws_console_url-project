@@ -9,6 +9,8 @@ __author_email__ = "husanhe@gmail.com"
 __github_username__ = "MacHu-GWU"
 
 try:
+    from boto_session_manager import BotoSesManager
+
     from .console import AWSConsole
     from . import resource as aws_resource
 except ImportError: # pragma: no cover

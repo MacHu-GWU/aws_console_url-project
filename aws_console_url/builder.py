@@ -11,9 +11,58 @@ if T.TYPE_CHECKING:  # pragma: no cover
 
 
 @dataclasses.dataclass(frozen=True)
+class ArnBuilder:
+    """
+    Abstract Amazon Resource Name builder for different AWS services.
+    """
+
+    aws_account_id: T.Optional[str] = dataclasses.field(default=None)
+    aws_region: T.Optional[str] = dataclasses.field(default=None)
+
+    @classmethod
+    def make(cls, **kwargs) -> "ArnBuilder":
+        raise NotImplementedError
+
+    @property
+    def arn(self) -> str:
+        raise NotImplementedError
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "ArnBuilder":
+        raise NotImplementedError
+
+    @classmethod
+    def _make(
+        cls,
+        aws_account_id: T.Optional[str],
+        aws_region: T.Optional[str],
+    ) -> "ArnBuilder":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+        )
+
+    @classmethod
+    def _from_aws_resource(cls, aws_resource: "AWSResource") -> "ArnBuilder":
+        """
+        Create a builder from AWSConsole object.
+        """
+        return cls._make(
+            aws_account_id=aws_resource.aws_account_id,
+            aws_region=aws_resource.aws_region,
+        )
+
+
+@dataclasses.dataclass(frozen=True)
 class ConsoleUrlBuilder:
     """
     Per AWS Service Console URL builder.
+
+    Note:
+
+        This class is for internal implementation only. User should never
+        create instance of this class themselves. It is managed by
+        :class:`aws_console_url.console.AWSConsole` API class as property methods.
     """
 
     aws_service: str = dataclasses.field()
@@ -96,42 +145,3 @@ class ConsoleUrlBuilder:
 
     def _ensure_arn(self, name_or_arn: str, converter: T.Callable) -> str:
         return name_or_arn if name_or_arn.startswith("arn:") else converter(name_or_arn)
-
-
-@dataclasses.dataclass(frozen=True)
-class ArnBuilder:
-    aws_account_id: T.Optional[str] = dataclasses.field(default=None)
-    aws_region: T.Optional[str] = dataclasses.field(default=None)
-
-    @classmethod
-    def make(cls, **kwargs) -> "ArnBuilder":
-        raise NotImplementedError
-
-    @property
-    def arn(self) -> str:
-        raise NotImplementedError
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "ArnBuilder":
-        raise NotImplementedError
-
-    @classmethod
-    def _make(
-        cls,
-        aws_account_id: T.Optional[str],
-        aws_region: T.Optional[str],
-    ) -> "ArnBuilder":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-        )
-
-    @classmethod
-    def _from_aws_resource(cls, aws_resource: "AWSResource") -> "ArnBuilder":
-        """
-        Create a builder from AWSConsole object.
-        """
-        return cls._make(
-            aws_account_id=aws_resource.aws_account_id,
-            aws_region=aws_resource.aws_region,
-        )
