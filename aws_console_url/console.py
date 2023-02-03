@@ -14,6 +14,7 @@ from .srv.codebuild import CodeBuild
 from .srv.codecommit import CodeCommit
 from .srv.dynamodb import Dynamodb
 from .srv.ec2 import EC2
+from .srv.ecr import ECR
 from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
@@ -67,6 +68,10 @@ class AWSConsole:
     @cached_property
     def ec2(self) -> EC2:
         return EC2._from_aws_console(self)
+    
+    @cached_property
+    def ecr(self) -> ECR:
+        return ECR._from_aws_console(self)
     
     @cached_property
     def glue(self) -> Glue:

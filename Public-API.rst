@@ -105,6 +105,12 @@ ec2
 - ``aws_console_url.AWSConsole.ec2.get_instance(instance_id: str)``
 - ``aws_console_url.AWSConsole.ec2.instances``
 
+ecr
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.ecr.get_repo(name: str)``
+- ``aws_console_url.AWSConsole.ecr.get_repo_uri(name: str)``
+- ``aws_console_url.AWSConsole.ecr.repos``
+
 glue
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.glue.classifiers``
