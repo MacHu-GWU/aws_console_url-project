@@ -16,11 +16,13 @@ def test():
         ).arn
     )
     assert glue_database.name == database
+    assert "None" not in glue_database.arn
 
     print(console.glue.get_database_arn(database))
     print(console.glue.get_table_arn(database, table))
     print(console.glue.get_job_arn(job))
     print(console.glue.get_crawler_arn(crawler))
+
     # --- console
     print(console.glue.databases)
     print(console.glue.tables)

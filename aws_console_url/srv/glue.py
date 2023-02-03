@@ -10,12 +10,12 @@ from ..model import Resource, BaseServiceResourceV1, Service
 class BaseGlueResource(BaseServiceResourceV1):
     name: T.Optional[str] = dataclasses.field(default=None)
 
-    _service_name = "glue"
+    _SERVICE_NAME = "glue"
 
 
 @dataclasses.dataclass(frozen=True)
 class GlueDatabase(BaseGlueResource):
-    _resource_type = "database"
+    _RESOURCE_TYPE = "database"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -55,27 +55,27 @@ class GlueTable(Resource):
 
 @dataclasses.dataclass(frozen=True)
 class GlueJob(BaseGlueResource):
-    _resource_type = "job"
+    _RESOURCE_TYPE = "job"
 
 
 @dataclasses.dataclass(frozen=True)
 class GlueCrawler(BaseGlueResource):
-    _resource_type = "crawler"
+    _RESOURCE_TYPE = "crawler"
 
 
 @dataclasses.dataclass(frozen=True)
 class GlueRegistry(BaseGlueResource):
-    _resource_type = "registry"
+    _RESOURCE_TYPE = "registry"
 
 
 @dataclasses.dataclass(frozen=True)
 class GlueSchema(BaseGlueResource):
-    _resource_type = "schema"
+    _RESOURCE_TYPE = "schema"
 
 
 @dataclasses.dataclass(frozen=True)
 class GlueWorkflow(BaseGlueResource):
-    _resource_type = "workflow"
+    _RESOURCE_TYPE = "workflow"
 
 
 @dataclasses.dataclass(frozen=True)
