@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import console
+from aws_console_url.tests import resource, console
 
 
 def test():
     repo = "test"
     pr_id = 9
 
+    # --- resource
+    codecommit_repo = resource.CodeCommitRepository.from_arn(
+        resource.CodeCommitRepository.make(
+            console.aws_account_id, console.aws_region, repo
+        ).arn
+    )
+    assert codecommit_repo.name == repo
+
+    # --- console
+    print(console.codecommit.get_repo_arn(repo))
     print(console.codecommit.repositories)
 
     print(console.codecommit.get_repo(repo))
