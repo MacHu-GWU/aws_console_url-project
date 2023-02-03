@@ -6,6 +6,11 @@ from aws_console_url.tests import console
 def test():
     stack = "CDKToolkit"
     change_set_id = "arn:aws:cloudformation:us-east-1:669508176277:changeSet/cdk-deploy-change-set/c78e670d-9563-47ef-a121-df2cf4baf369"
+
+    # --- arn
+    print(console.cloudformation.get_stack_arn(stack))
+
+    # --- console
     print(console.cloudformation.stacks)
     print(console.cloudformation.stacksets)
     print(console.cloudformation.exports)
