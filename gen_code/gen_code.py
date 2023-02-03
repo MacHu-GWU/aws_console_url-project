@@ -7,7 +7,7 @@ Automatically generate the api.py file
 import importlib
 from pathlib import Path
 from jinja2 import Template
-from aws_console_url.builder import ConsoleUrlBuilder, ArnBuilder
+from aws_console_url.model import Service, Resource
 
 dir_here = Path(__file__).absolute().parent
 dir_project_root = dir_here.parent
@@ -21,7 +21,7 @@ for path in dir_srv.glob("*.py"):
 
 # --- console
 subclasses = sorted(
-    ConsoleUrlBuilder.__subclasses__(),
+    Service.__subclasses__(),
     key=lambda subclass: subclass.__module__,
 )
 module_and_class_list = []
@@ -38,7 +38,7 @@ path_console_py.write_text(template.render(module_and_class_list=module_and_clas
 
 # --- arn
 subclasses = sorted(
-    ArnBuilder.__subclasses__(),
+    Resource.__subclasses__(),
     key=lambda subclass: subclass.__module__,
 )
 module_and_class_list = []

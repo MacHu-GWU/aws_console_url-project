@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import console
+from aws_console_url.tests import resource, console
 
 
 def test():
-    table = "dynamodb-cache"
+    # resource
+    table1 = "aws_console_url_test_hash_key_only"
+    table2 = "aws_console_url_test_hash_and_range_key"
+
+    dynamodb_table = resource.DynamoDBTable.from_arn(
+        resource.DynamoDBTable.make(console.aws_account_id, console.aws_region, table1).arn
+    )
+    assert dynamodb_table.name == table1
+
+    # console
+    print(console.dynamodb.get_table_arn(table1))
+    print(console.dynamodb.get_table_arn(table2))
+
     print(console.dynamodb.tables)
-    print(console.dynamodb.get_table_overview(table))
-    print(console.dynamodb.get_table_items(table))
-    print(console.dynamodb.get_item_details(table, "my_db_credential"))
-    print(console.dynamodb.get_item_details(
-        table="data-quality-governor-dev-statistics-tracker",
-        hash_key="s3://aws-data-lab-sanhe-for-everything/poc/2022-02-01-aws_data_quality_governor/person-pii/",
-        range_key="2022-02-09",
-    ))
+    print(console.dynamodb.get_table_overview(table1))
+    print(console.dynamodb.get_table_items(table1))
+
+    print(console.dynamodb.get_item_details(table1, "pk-1"))
+    print(console.dynamodb.get_item_details(table2, "pk-1", "sk-1"))
 
 
 if __name__ == "__main__":
