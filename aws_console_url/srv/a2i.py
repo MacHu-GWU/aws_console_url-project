@@ -1,12 +1,40 @@
 # -*- coding: utf-8 -*-
 
+import typing as T
 import dataclasses
 
-from ..builder import ConsoleUrlBuilder
+from ..model import Resource, BaseServiceResourceV1, Service
 
 
 @dataclasses.dataclass(frozen=True)
-class A2I(ConsoleUrlBuilder):
+class BaseSageMakerResource(BaseServiceResourceV1):
+    name: T.Optional[str] = dataclasses.field(default=None)
+
+    _SERVICE_NAME = "sagemaker"
+
+
+@dataclasses.dataclass(frozen=True)
+class GroundTruthPrivateTeam(BaseSageMakerResource):
+    _RESOURCE_TYPE = "workteam/private-crowd"
+
+
+@dataclasses.dataclass(frozen=True)
+class A2IFlowDefinition(BaseSageMakerResource):
+    _RESOURCE_TYPE = "flow-definition"
+
+
+@dataclasses.dataclass(frozen=True)
+class A2IHumanTaskUI(BaseSageMakerResource):
+    _RESOURCE_TYPE = "human-task-ui"
+
+
+@dataclasses.dataclass(frozen=True)
+class A2IHumanLoop(BaseSageMakerResource):
+    _RESOURCE_TYPE = "human-loop"
+
+
+@dataclasses.dataclass(frozen=True)
+class A2I(Service):
     _AWS_SERVICE = "a2i"
 
     # --- Human Review Workflows
@@ -16,15 +44,14 @@ class A2I(ConsoleUrlBuilder):
             f"{self._service_root}/home?region={self._region}#/human-review-workflows"
         )
 
-    def to_human_review_workflow_arn(self, name) -> str:
-        return f"arn:aws:sagemaker:{self._region}:{self._account_id}:flow-definition/{name}"
+    def get_human_review_workflow_arn(self, name: str) -> str:
+        return A2IFlowDefinition.make(self._account_id, self._region, name=name).arn
 
-    def to_human_review_workflow_name(self, arn) -> str:
-        return arn.split("/")[-1]
+    def _human_review_workflow_arn_to_name(self, arn: str) -> str:
+        return A2IFlowDefinition.from_arn(arn).name
 
     def get_human_review_workflow(self, name_or_arn: str) -> str:
-        name = self._ensure_name(name_or_arn, self.to_human_review_workflow_name)
-        "https://us-east-1.console.aws.amazon.com/a2i/home?region=us-east-1#/human-review-workflows/verisk-deduplicate"
+        name = self._ensure_name(name_or_arn, self._human_review_workflow_arn_to_name)
         return f"{self._service_root}/home?region={self._region}#/human-review-workflows/{name}"
 
     # --- Worker Task Templates
@@ -32,24 +59,22 @@ class A2I(ConsoleUrlBuilder):
     def worker_task_templates(self) -> str:
         return f"{self._service_root}/home?region={self._region}#/worker-task-templates"
 
-    def to_worker_task_template_arn(self, name) -> str:
-        return (
-            f"arn:aws:sagemaker:{self._region}:{self._account_id}:human-task-ui/{name}"
-        )
+    def get_worker_task_template_arn(self, name: str) -> str:
+        return A2IHumanTaskUI.make(self._account_id, self._region, name=name).arn
 
-    def to_worker_task_template_name(self, arn) -> str:
-        return arn.split("/")[-1]
+    def _worker_task_template_arn_to_name(self, arn: str) -> str:
+        return A2IHumanTaskUI.from_arn(arn).name
 
     def get_worker_task_template(self, name_or_arn: str) -> str:
-        name = self._ensure_name(name_or_arn, self.to_worker_task_template_name)
+        name = self._ensure_name(name_or_arn, self._worker_task_template_arn_to_name)
         return f"{self._service_root}/home?region={self._region}#/worker-task-templates/{name}"
 
     # --- Human Loop
-    def to_human_loop_arn(self, name) -> str:
-        return f"arn:aws:sagemaker:{self._region}:{self._account_id}:human-loop/{name}"
+    def get_human_loop_arn(self, name: str) -> str:
+        return A2IHumanLoop.make(self._account_id, self._region, name=name).arn
 
-    def to_human_loop_name(self, arn) -> str:
-        return arn.split("/")[-1]
+    def _human_loop_arn_to_name(self, arn: str) -> str:
+        return A2IHumanTaskUI.from_arn(arn).name
 
     def get_human_loop(
         self,
@@ -57,10 +82,10 @@ class A2I(ConsoleUrlBuilder):
         human_loop_name_or_arn: str,
     ) -> str:
         flow_name = self._ensure_name(
-            flow_name_or_arn, self.to_human_review_workflow_name
+            flow_name_or_arn, self._human_review_workflow_arn_to_name
         )
         human_loop_name = self._ensure_name(
-            human_loop_name_or_arn, self.to_human_loop_name
+            human_loop_name_or_arn, self._human_loop_arn_to_name
         )
         return (
             f"{self._service_root}/home?region={self._region}#/human-review-workflows"

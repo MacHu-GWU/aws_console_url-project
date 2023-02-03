@@ -53,8 +53,11 @@ class Resource:
 class BaseServiceResourceV1(Resource):
     name: T.Optional[str] = dataclasses.field(default=None)
 
-    _service_name: str = ""
-    _resource_type: str = ""
+    _service_name: T.Optional[str] = dataclasses.field(default=None)
+    _resource_type: T.Optional[str] = dataclasses.field(default=None)
+
+    _SERVICE_NAME: T.Optional[str] = None
+    _RESOURCE_TYPE: T.Optional[str] = None
 
     @classmethod
     def make(
@@ -67,6 +70,8 @@ class BaseServiceResourceV1(Resource):
             aws_account_id=aws_account_id,
             aws_region=aws_region,
             name=name,
+            _service_name=cls._SERVICE_NAME,
+            _resource_type=cls._RESOURCE_TYPE,
         )
 
     @property
@@ -78,7 +83,7 @@ class BaseServiceResourceV1(Resource):
         parts = arn.split(":")
         aws_account_id = parts[4]
         aws_region = parts[3]
-        name = parts[5].split("/")[1]
+        name = parts[5].split("/")[-1]
         return cls.make(aws_account_id, aws_region, name)
 
 
