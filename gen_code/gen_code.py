@@ -5,6 +5,7 @@ Automatically generate the api.py file
 """
 
 import importlib
+import typing as T
 from pathlib import Path
 from jinja2 import Template
 from aws_console_url.model import Service, Resource
@@ -37,8 +38,28 @@ path_console_py = dir_project_root / "aws_console_url" / "console.py"
 path_console_py.write_text(template.render(module_and_class_list=module_and_class_list))
 
 # --- arn
+def find_all_subclass(
+    base_klass,
+    recursive: bool = True,
+    _results: T.Optional[list] = None,
+) -> list:
+    """
+    Recursively find all subclass of a base class.
+    """
+    if _results is None:
+        _results = list()
+    for klass in base_klass.__subclasses__():
+        _results.append(klass)
+        if recursive:
+            find_all_subclass(klass, recursive=recursive, _results=_results)
+    return _results
+
+
 subclasses = sorted(
-    Resource.__subclasses__(),
+    filter(
+        lambda klass: not klass.__name__.startswith("Base"),
+        find_all_subclass(Resource, recursive=True),
+    ),
     key=lambda subclass: subclass.__module__,
 )
 module_and_class_list = []
@@ -50,4 +71,6 @@ for subclass in subclasses:
 path_resource_py_template = dir_here.joinpath("resource.py.tpl")
 template = Template(path_resource_py_template.read_text())
 path_resource_py = dir_project_root / "aws_console_url" / "resource.py"
-path_resource_py.write_text(template.render(module_and_class_list=module_and_class_list))
+path_resource_py.write_text(
+    template.render(module_and_class_list=module_and_class_list)
+)
