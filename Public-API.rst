@@ -96,6 +96,15 @@ dynamodb
 - ``aws_console_url.AWSConsole.dynamodb.get_table_overview(table: str)``
 - ``aws_console_url.AWSConsole.dynamodb.tables``
 
+ec2
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.ec2.amis``
+- ``aws_console_url.AWSConsole.ec2.filter_amis_by_name(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.ec2.filter_instances_by_name(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.ec2.get_ami(image_id: str)``
+- ``aws_console_url.AWSConsole.ec2.get_instance(instance_id: str)``
+- ``aws_console_url.AWSConsole.ec2.instances``
+
 glue
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.glue.classifiers``
@@ -142,6 +151,13 @@ sqs
 - ``aws_console_url.AWSConsole.sqs.get_queue_send_and_receive_message(name: str)``
 - ``aws_console_url.AWSConsole.sqs.get_queue_url(name: str)``
 - ``aws_console_url.AWSConsole.sqs.queues``
+
+ssm
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.ssm.filter_parameters(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.ssm.get_parameter(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ssm.get_parameter_arn(name: str)``
+- ``aws_console_url.AWSConsole.ssm.parameters``
 
 step_function
 ------------------------------------------------------------------------------

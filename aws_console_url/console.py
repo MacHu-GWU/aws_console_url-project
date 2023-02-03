@@ -13,10 +13,13 @@ from .srv.cloudformation import CloudFormation
 from .srv.codebuild import CodeBuild
 from .srv.codecommit import CodeCommit
 from .srv.dynamodb import Dynamodb
+from .srv.ec2 import EC2
 from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
+from .srv.s3 import S3
 from .srv.sqs import SQS
+from .srv.ssm import SSM
 from .srv.step_function import StepFunction
 
 
@@ -61,6 +64,10 @@ class AWSConsole:
         return Dynamodb._from_aws_console(self)
     
     @cached_property
+    def ec2(self) -> EC2:
+        return EC2._from_aws_console(self)
+    
+    @cached_property
     def glue(self) -> Glue:
         return Glue._from_aws_console(self)
     
@@ -73,8 +80,16 @@ class AWSConsole:
         return Iam._from_aws_console(self)
     
     @cached_property
+    def s3(self) -> S3:
+        return S3._from_aws_console(self)
+    
+    @cached_property
     def sqs(self) -> SQS:
         return SQS._from_aws_console(self)
+    
+    @cached_property
+    def ssm(self) -> SSM:
+        return SSM._from_aws_console(self)
     
     @cached_property
     def step_function(self) -> StepFunction:

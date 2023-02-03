@@ -23,5 +23,6 @@ from .srv.iam import IamUser
 from .srv.iam import IamRole
 from .srv.iam import IamPolicy
 from .srv.sqs import SQSQueue
+from .srv.ssm import SSMParameter
 from .srv.step_function import StepFunctionStatemachine
 from .srv.step_function import StepFunctionStatemachineExecution

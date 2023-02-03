@@ -87,4 +87,4 @@ def test():
 if __name__ == "__main__":
     from aws_console_url.tests import run_cov_test
 
-    run_cov_test(__file__, "aws_console_url.srv.awslambda", preview=False)
+    run_cov_test(__file__, "aws_console_url.srv.step_function", preview=False)
