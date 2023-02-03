@@ -3,36 +3,14 @@
 import typing as T
 import dataclasses
 
-from ..model import Resource, Service
+from ..model import Resource, BaseServiceResourceV1, Service
 
 
 @dataclasses.dataclass(frozen=True)
-class BaseGlueResource(Resource):
+class BaseGlueResource(BaseServiceResourceV1):
     name: T.Optional[str] = dataclasses.field(default=None)
 
-    _resource_type = ""
-
-    @classmethod
-    def make(
-        cls, aws_account_id: str, aws_region: str, name: str
-    ) -> "BaseGlueResource":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-        )
-
-    @property
-    def arn(self) -> str:
-        return f"arn:aws:glue:{self.aws_region}:{self.aws_account_id}:{self._resource_type}/{self.name}"
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "BaseGlueResource":
-        parts = arn.split(":")
-        aws_account_id = parts[4]
-        aws_region = parts[3]
-        name = parts[5].split("/")[1]
-        return cls.make(aws_account_id, aws_region, name)
+    _service_name = "glue"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -41,8 +19,38 @@ class GlueDatabase(BaseGlueResource):
 
 
 @dataclasses.dataclass(frozen=True)
-class GlueTable(BaseGlueResource):
-    _resource_type = "table"
+class GlueTable(Resource):
+    database: T.Optional[str] = dataclasses.field(default=None)
+    table: T.Optional[str] = dataclasses.field(default=None)
+
+    @classmethod
+    def make(
+        cls,
+        aws_account_id: str,
+        aws_region: str,
+        database: str,
+        table: str,
+    ) -> "GlueTable":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+            database=database,
+            table=table,
+        )
+
+    @property
+    def arn(self) -> str:
+        return f"arn:aws:glue:{self.aws_region}:{self.aws_account_id}:table/{self.database}/{self.table}"
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "GlueTable":
+        parts = arn.split(":")
+        aws_account_id = parts[4]
+        aws_region = parts[3]
+        chunks = parts[5].split("/")
+        database = chunks[1]
+        table = chunks[2]
+        return cls.make(aws_account_id, aws_region, database, table)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -78,8 +86,8 @@ class Glue(Service):
     def get_database_arn(self, name: str) -> str:
         return GlueDatabase.make(self._account_id, self._region, name).arn
 
-    def get_table_arn(self, name: str) -> str:
-        return GlueTable.make(self._account_id, self._region, name).arn
+    def get_table_arn(self, database: str, table: str) -> str:
+        return GlueTable.make(self._account_id, self._region, database, table).arn
 
     def get_job_arn(self, name: str) -> str:
         return GlueJob.make(self._account_id, self._region, name).arn

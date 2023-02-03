@@ -48,26 +48,38 @@ class Resource:
         """
         raise NotImplementedError
 
-    # @classmethod
-    # def _make(
-    #     cls,
-    #     aws_account_id: T.Optional[str],
-    #     aws_region: T.Optional[str],
-    # ) -> "Resource":
-    #     return cls(
-    #         aws_account_id=aws_account_id,
-    #         aws_region=aws_region,
-    #     )
-    #
-    # @classmethod
-    # def _from_aws_resource(cls, aws_resource: "AWSResource") -> "Resource":
-    #     """
-    #     Create a builder from AWSConsole object.
-    #     """
-    #     return cls._make(
-    #         aws_account_id=aws_resource.aws_account_id,
-    #         aws_region=aws_resource.aws_region,
-    #     )
+
+@dataclasses.dataclass(frozen=True)
+class BaseServiceResourceV1(Resource):
+    name: T.Optional[str] = dataclasses.field(default=None)
+
+    _service_name: str = ""
+    _resource_type: str = ""
+
+    @classmethod
+    def make(
+        cls,
+        aws_account_id: str,
+        aws_region: str,
+        name: str,
+    ) -> "BaseServiceResourceV1":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+            name=name,
+        )
+
+    @property
+    def arn(self) -> str:
+        return f"arn:aws:{self._service_name}:{self.aws_region}:{self.aws_account_id}:{self._resource_type}/{self.name}"
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "BaseServiceResourceV1":
+        parts = arn.split(":")
+        aws_account_id = parts[4]
+        aws_region = parts[3]
+        name = parts[5].split("/")[1]
+        return cls.make(aws_account_id, aws_region, name)
 
 
 @dataclasses.dataclass(frozen=True)

@@ -9,6 +9,7 @@ def test():
     job = "simple-json-to-parquet"
     crawler = "simple_json_to_parquet"
 
+    # --- arn
     glue_database = resource.GlueDatabase.from_arn(
         resource.GlueDatabase.make(
             console.aws_account_id, console.aws_region, database
@@ -16,6 +17,11 @@ def test():
     )
     assert glue_database.name == database
 
+    print(console.glue.get_database_arn(database))
+    print(console.glue.get_table_arn(database, table))
+    print(console.glue.get_job_arn(job))
+    print(console.glue.get_crawler_arn(crawler))
+    # --- console
     print(console.glue.databases)
     print(console.glue.tables)
     print(console.glue.jobs)
