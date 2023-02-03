@@ -52,7 +52,8 @@ subclasses = sorted(
     key=lambda subclass: subclass.__module__,
 )
 module_and_class_list = []
-public_api_list = []
+public_apis: T.Dict[str, T.List[str]] = dict()
+
 for subclass in subclasses:
     module_name = subclass.__module__.split(".")[-1]
     class_name = subclass.__name__
@@ -70,7 +71,10 @@ for subclass in subclasses:
             public_api = f"aws_console_url.AWSConsole.{module_name}.{method_name}{args}"
         else:
             public_api = f"aws_console_url.AWSConsole.{module_name}.{method_name}"
-        public_api_list.append(public_api)
+        try:
+            public_apis[module_name].append(public_api)
+        except:
+            public_apis[module_name] = [public_api,]
 
 # console.py
 path_template = dir_here.joinpath("console.py.tpl")
@@ -82,7 +86,7 @@ path_console_py.write_text(template.render(module_and_class_list=module_and_clas
 path_template = dir_here.joinpath("Public-API.rst.tpl")
 template = Template(path_template.read_text())
 path_public_api_rst = dir_project_root / "Public-API.rst"
-path_public_api_rst.write_text(template.render(public_api_list=public_api_list))
+path_public_api_rst.write_text(template.render(public_apis=public_apis))
 
 # --- arn
 subclasses = sorted(
