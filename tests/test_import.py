@@ -22,7 +22,7 @@ def test():
     _ = aws.sqs
 
     aws_res = aws_console_url.resource
-    _ = aws_res.LambdaFunctionArn
+    _ = aws_res.LambdaFunction
 
 
 if __name__ == "__main__":

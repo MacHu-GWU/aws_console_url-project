@@ -51,7 +51,7 @@
 
 Welcome to ``aws_console_url`` Documentation
 ==============================================================================
-``aws_console_url`` allow you to generate AWS console URL for debugging with Python. For quick start, you can check this `Jupyter Notebook <https://github.com/MacHu-GWU/aws_console_url-project/blob/main/usage-examples.ipynb>`_. Also, you can find more examples in `unit test <./tests/srv>`_.
+``aws_console_url`` allow you to generate AWS console URL for debugging. For quick start, you can check this `Jupyter Notebook <https://github.com/MacHu-GWU/aws_console_url-project/blob/main/usage-examples.ipynb>`_. Also, you can find the full list of public api in `Public API Full List <./Public-API.rst>`_
 
 
 .. _install:
