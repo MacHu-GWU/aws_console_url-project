@@ -3,37 +3,13 @@
 import typing as T
 import dataclasses
 
-from ..model import Resource, Service
+from ..model import Resource, BaseServiceResourceV1, Service
 
 
 @dataclasses.dataclass(frozen=True)
-class DynamoDBTable(Resource):
-    name: T.Optional[str] = dataclasses.field(default=None)
-
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        name: str
-    ) -> "DynamoDBTable":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-        )
-
-    @property
-    def arn(self) -> str:
-        return f"arn:aws:dynamodb:{self.aws_region}:{self.aws_account_id}:table/{self.name}"
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "DynamoDBTable":
-        parts = arn.split(":")
-        aws_account_id = parts[4]
-        aws_region = parts[3]
-        name = parts[5].split("/")[1]
-        return cls.make(aws_account_id, aws_region, name)
+class DynamoDBTable(BaseServiceResourceV1):
+    _SERVICE_NAME = "dynamodb"
+    _RESOURCE_TYPE = "table"
 
 
 @dataclasses.dataclass(frozen=True)

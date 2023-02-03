@@ -12,6 +12,7 @@ def test():
         resource.DynamoDBTable.make(console.aws_account_id, console.aws_region, table1).arn
     )
     assert dynamodb_table.name == table1
+    assert "None" not in dynamodb_table.arn
 
     # --- console
     print(console.dynamodb.get_table_arn(table1))
