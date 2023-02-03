@@ -4,7 +4,7 @@ from aws_console_url.tests import resource, console
 
 
 def test():
-    # resource
+    # --- resource
     table1 = "aws_console_url_test_hash_key_only"
     table2 = "aws_console_url_test_hash_and_range_key"
 
@@ -13,7 +13,7 @@ def test():
     )
     assert dynamodb_table.name == table1
 
-    # console
+    # --- console
     print(console.dynamodb.get_table_arn(table1))
     print(console.dynamodb.get_table_arn(table2))
 
