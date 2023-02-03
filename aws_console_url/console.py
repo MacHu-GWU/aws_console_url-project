@@ -19,6 +19,7 @@ from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
 from .srv.s3 import S3
+from .srv.sagemaker import SageMaker
 from .srv.secretmanager import SecretManager
 from .srv.sqs import SQS
 from .srv.ssm import SSM
@@ -88,6 +89,10 @@ class AWSConsole:
     @cached_property
     def s3(self) -> S3:
         return S3._from_aws_console(self)
+    
+    @cached_property
+    def sagemaker(self) -> SageMaker:
+        return SageMaker._from_aws_console(self)
     
     @cached_property
     def secretmanager(self) -> SecretManager:

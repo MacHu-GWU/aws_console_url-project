@@ -2,6 +2,7 @@
 
 Release and Version History
 ==============================================================================
+NOTE: version < 1.0.0 should be considered as unstable
 
 
 Backlog (TODO)
@@ -13,6 +14,25 @@ Backlog (TODO)
 **Bugfixes**
 
 **Miscellaneous**
+
+
+0.4.1 (2023-02-03)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add ec2 service
+- add ssm service
+- add secret manager service
+- add ecr service
+
+
+0.3.1 (2023-02-03)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- refactor the public API
+- add step function service
+- add a list of public API
 
 
 0.2.1 (2023-01-15)

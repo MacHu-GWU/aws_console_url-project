@@ -13,5 +13,5 @@ try:
 
     from .console import AWSConsole
     from . import resource as aws_resource
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     pass
