@@ -24,6 +24,7 @@ Backlog (TODO)
 - add ssm service
 - add secret manager service
 - add ecr service
+- add sagemaker service
 
 
 0.3.1 (2023-02-03)
