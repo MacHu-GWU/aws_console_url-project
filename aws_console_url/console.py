@@ -17,6 +17,7 @@ from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
 from .srv.sqs import SQS
+from .srv.step_function import StepFunction
 
 
 @dataclasses.dataclass
@@ -74,4 +75,8 @@ class AWSConsole:
     @cached_property
     def sqs(self) -> SQS:
         return SQS._from_aws_console(self)
+    
+    @cached_property
+    def step_function(self) -> StepFunction:
+        return StepFunction._from_aws_console(self)
     
