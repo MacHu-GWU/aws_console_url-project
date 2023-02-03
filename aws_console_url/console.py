@@ -18,6 +18,7 @@ from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
 from .srv.s3 import S3
+from .srv.secretmanager import SecretManager
 from .srv.sqs import SQS
 from .srv.ssm import SSM
 from .srv.step_function import StepFunction
@@ -82,6 +83,10 @@ class AWSConsole:
     @cached_property
     def s3(self) -> S3:
         return S3._from_aws_console(self)
+    
+    @cached_property
+    def secretmanager(self) -> SecretManager:
+        return SecretManager._from_aws_console(self)
     
     @cached_property
     def sqs(self) -> SQS:

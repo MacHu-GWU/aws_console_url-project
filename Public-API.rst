@@ -144,6 +144,12 @@ iam
 - ``aws_console_url.AWSConsole.iam.roles``
 - ``aws_console_url.AWSConsole.iam.users``
 
+secretmanager
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.secretmanager.filter_secrets(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.secretmanager.get_secret(name: str)``
+- ``aws_console_url.AWSConsole.secretmanager.secrets``
+
 sqs
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.sqs.get_queue(name: str)``
