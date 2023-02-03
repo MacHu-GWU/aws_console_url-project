@@ -150,6 +150,15 @@ iam
 - ``aws_console_url.AWSConsole.iam.roles``
 - ``aws_console_url.AWSConsole.iam.users``
 
+sagemaker
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.sagemaker.batch_transform_jobs``
+- ``aws_console_url.AWSConsole.sagemaker.inference_endpoints``
+- ``aws_console_url.AWSConsole.sagemaker.models``
+- ``aws_console_url.AWSConsole.sagemaker.notebooks``
+- ``aws_console_url.AWSConsole.sagemaker.processing_jobs``
+- ``aws_console_url.AWSConsole.sagemaker.training_jobs``
+
 secretmanager
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.secretmanager.filter_secrets(facets: Union[str, List[str]])``
