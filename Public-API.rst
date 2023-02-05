@@ -150,6 +150,12 @@ iam
 - ``aws_console_url.AWSConsole.iam.roles``
 - ``aws_console_url.AWSConsole.iam.users``
 
+s3
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.s3.buckets``
+- ``aws_console_url.AWSConsole.s3.get_console_url(bucket: Union[str, NoneType] = None, prefix: Union[str, NoneType] = None, s3_uri: Union[str, NoneType] = None)``
+- ``aws_console_url.AWSConsole.s3.get_s3_select_console_url(bucket: Union[str, NoneType] = None, key: Union[str, NoneType] = None, s3_uri: Union[str, NoneType] = None)``
+
 sagemaker
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.sagemaker.batch_transform_jobs``
@@ -189,3 +195,24 @@ step_function
 - ``aws_console_url.AWSConsole.step_function.get_state_machine_view_tab(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.step_function.get_state_machine_visual_editor(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.step_function.state_machines``
+
+vpc
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.vpc.elastic_ips``
+- ``aws_console_url.AWSConsole.vpc.endpoints``
+- ``aws_console_url.AWSConsole.vpc.filter_elastic_ips(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_endpoints(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_internet_gateways(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_nat_gateways(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_network_acls(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_route_tables(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_security_groups(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_subnets(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.filter_vpcs(facets: Union[str, List[str]])``
+- ``aws_console_url.AWSConsole.vpc.internet_gateways``
+- ``aws_console_url.AWSConsole.vpc.nat_gateways``
+- ``aws_console_url.AWSConsole.vpc.network_acls``
+- ``aws_console_url.AWSConsole.vpc.route_tables``
+- ``aws_console_url.AWSConsole.vpc.security_groups``
+- ``aws_console_url.AWSConsole.vpc.subnets``
+- ``aws_console_url.AWSConsole.vpc.vpcs``

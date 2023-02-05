@@ -11,6 +11,7 @@ def test():
     aws = aws_console_url.AWSConsole()
 
     
+    _ = aws.vpc
     _ = aws.dynamodb
     _ = aws.codecommit
     _ = aws.iam
@@ -25,7 +26,7 @@ def test():
     _ = aws.sagemaker
     _ = aws.ec2
     _ = aws.ecr
-    # _ = aws.s3
+    _ = aws.s3
     _ = aws.awslambda
     _ = aws.ssm
 
