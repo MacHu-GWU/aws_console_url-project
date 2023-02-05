@@ -24,6 +24,7 @@ from .srv.secretmanager import SecretManager
 from .srv.sqs import SQS
 from .srv.ssm import SSM
 from .srv.step_function import StepFunction
+from .srv.vpc import VPC
 
 
 @dataclasses.dataclass
@@ -109,4 +110,8 @@ class AWSConsole:
     @cached_property
     def step_function(self) -> StepFunction:
         return StepFunction._from_aws_console(self)
+    
+    @cached_property
+    def vpc(self) -> VPC:
+        return VPC._from_aws_console(self)
     

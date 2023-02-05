@@ -169,7 +169,7 @@ class Service:
     @property
     def _service_root(self) -> str:
         """
-        Example: https://us-east-1.console.aws.amazon.com/s3
+        Example: https://us-east-1.console.aws.amazon.com/ec2
         """
         return f"{self._root_url}/{self._aws_service}"
 
