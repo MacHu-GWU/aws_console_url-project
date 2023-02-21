@@ -6,6 +6,8 @@ from .srv.a2i import A2IHumanLoop
 from .srv.awslambda import LambdaFunction
 from .srv.awslambda import LambdaLayer
 from .srv.cloudformation import CloudFormationStack
+from .srv.cloudwatch import CloudwatchLogGroup
+from .srv.cloudwatch import CloudwatchLogStream
 from .srv.codebuild import CodeBuildProject
 from .srv.codebuild import CodeBuildRun
 from .srv.codecommit import CodeCommitRepository

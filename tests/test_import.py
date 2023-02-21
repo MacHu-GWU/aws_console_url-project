@@ -24,6 +24,7 @@ def test():
     _ = aws.step_function
     _ = aws.a2i
     _ = aws.sagemaker
+    _ = aws.cloudwatch
     _ = aws.ec2
     _ = aws.ecr
     _ = aws.s3
@@ -39,6 +40,8 @@ def test():
     _ = aws_res.LambdaFunction
     _ = aws_res.LambdaLayer
     _ = aws_res.CloudFormationStack
+    _ = aws_res.CloudwatchLogGroup
+    _ = aws_res.CloudwatchLogStream
     _ = aws_res.CodeBuildProject
     _ = aws_res.CodeBuildRun
     _ = aws_res.CodeCommitRepository

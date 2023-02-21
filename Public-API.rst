@@ -53,6 +53,18 @@ cloudformation
 - ``aws_console_url.AWSConsole.cloudformation.stacks``
 - ``aws_console_url.AWSConsole.cloudformation.stacksets``
 
+cloudwatch
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.cloudwatch.filter_log_event(group_name: str, stream_name: str, pattern: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.filter_log_event_by_lambda_request_id(func_name: str, request_id: str, lookback_seconds: int = 86400)``
+- ``aws_console_url.AWSConsole.cloudwatch.filter_log_groups(pattern: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.filter_log_streams(group_name: str, pattern: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.get_log_group(name: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.get_log_group_arn(name: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.get_log_group_log_streams_tab(name: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.get_log_stream(group_name: str, stream_name: str)``
+- ``aws_console_url.AWSConsole.cloudwatch.log_groups``
+
 codebuild
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.codebuild.build_history``
