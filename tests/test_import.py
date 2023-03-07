@@ -40,6 +40,7 @@ def test():
     _ = aws_res.LambdaFunction
     _ = aws_res.LambdaLayer
     _ = aws_res.CloudFormationStack
+    _ = aws_res.CloudFormationStackSet
     _ = aws_res.CloudwatchLogGroup
     _ = aws_res.CloudwatchLogStream
     _ = aws_res.CodeBuildProject

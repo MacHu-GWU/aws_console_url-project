@@ -9,6 +9,13 @@ from ..model import Resource, Service
 
 @dataclasses.dataclass(frozen=True)
 class CloudFormationStack(Resource):
+    """
+    Example:
+
+    - name: CDKToolkit
+    - short_id: b518e0f0-750b-11ed-859b-1208b06dceb3
+    - arn: arn:aws:cloudformation:us-east-1:111122223333:stack/CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
+    """
     name: T.Optional[str] = dataclasses.field(default=None)
     short_id: T.Optional[str] = dataclasses.field(default=None)
 
@@ -52,6 +59,55 @@ class CloudFormationStack(Resource):
     def from_stack_id(cls, stack_id: str) -> "CloudFormationStack":
         return cls.from_arn(stack_id)
 
+
+@dataclasses.dataclass(frozen=True)
+class CloudFormationStackSet(Resource):
+    """
+    Example:
+
+    - name: landing-zone-s3
+    - short_id: 5bf3c555-6fea-4474-83e7-56f541f8bd39
+    - arn: arn:aws:cloudformation:us-east-1:111122223333:stackset/landing-zone-s3:5bf3c555-6fea-4474-83e7-56f541f8bd39
+    """
+    name: T.Optional[str] = dataclasses.field(default=None)
+    short_id: T.Optional[str] = dataclasses.field(default=None)
+
+    @classmethod
+    def make(
+        cls,
+        aws_account_id: str,
+        aws_region: str,
+        name: str,
+        short_id: str,
+    ) -> "CloudFormationStackSet":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+            name=name,
+            short_id=short_id,
+        )
+
+    @property
+    def arn(self) -> str:
+        return (
+            f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stackset"
+            f"/{self.name}:{self.short_id}"
+        )
+
+    @property
+    def stack_set_id(self) -> str:
+        return f"{self.name}:{self.short_id}"
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "CloudFormationStackSet":
+        parts = arn.split(":")
+        aws_account_id = parts[4]
+        aws_region = parts[3]
+        chunks = parts[5].split("/")
+        name = chunks[1]
+        short_id = parts[6]
+        return cls.make(aws_account_id, aws_region, name, short_id)
+    
 
 @dataclasses.dataclass(frozen=True)
 class CloudFormation(Service):
