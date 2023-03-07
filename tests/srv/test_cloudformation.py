@@ -28,8 +28,11 @@ def test_stack():
     # --- console
     print(console.cloudformation.stacks)
     print(console.cloudformation.stacksets)
+    print(console.cloudformation.stacksets_self_managed)
+    print(console.cloudformation.stacksets_service_managed)
     print(console.cloudformation.exports)
 
+    print(console.cloudformation.filter_stack(stack_name))
     print(console.cloudformation.get_stack(stack_name))
     print(console.cloudformation.get_stack_info(stack_name))
     print(console.cloudformation.get_stack_events(stack_name))
@@ -62,6 +65,43 @@ def test_stack_set():
     assert stack_set.arn == stack_set_arn
     assert "None" not in stack_set.arn
     assert stack_set.stack_set_id == f"{stack_set_name}:{stack_set_short_id}"
+
+    # --- console
+    from boto_session_manager import BotoSesManager
+    from aws_console_url import AWSConsole
+
+    bsm = BotoSesManager(profile_name="awshsh_app_dev_us_east_1")
+
+    console = AWSConsole(
+        aws_account_id=bsm.aws_account_id,
+        aws_region=bsm.aws_region,
+        bsm=bsm,
+    )
+    print(
+        console.cloudformation.get_stack_set_info(
+            stack_set_name, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_instances(
+            stack_set_name, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_operations(
+            stack_set_name, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_parameters(
+            stack_set_name, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_template(
+            stack_set_name, is_service_managed=True
+        )
+    )
 
 
 if __name__ == "__main__":
