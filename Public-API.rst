@@ -36,6 +36,9 @@ awslambda
 cloudformation
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.cloudformation.exports``
+- ``aws_console_url.AWSConsole.cloudformation.filter_self_managed_stack_set(name: str)``
+- ``aws_console_url.AWSConsole.cloudformation.filter_service_managed_stack_set(name: str)``
+- ``aws_console_url.AWSConsole.cloudformation.filter_stack(name: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_change_set(name: str, change_set_id: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_change_set_changes(name: str, change_set_id: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_change_set_hooks(name: str, change_set_id: str)``
@@ -50,8 +53,16 @@ cloudformation
 - ``aws_console_url.AWSConsole.cloudformation.get_stack_outputs(name: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_stack_parameters(name: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_stack_resources(name: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_arn(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_info(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_instances(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_operations(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_parameters(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_template(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
 - ``aws_console_url.AWSConsole.cloudformation.stacks``
 - ``aws_console_url.AWSConsole.cloudformation.stacksets``
+- ``aws_console_url.AWSConsole.cloudformation.stacksets_self_managed``
+- ``aws_console_url.AWSConsole.cloudformation.stacksets_service_managed``
 
 cloudwatch
 ------------------------------------------------------------------------------
