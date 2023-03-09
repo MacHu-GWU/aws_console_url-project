@@ -16,6 +16,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.7.2 (2023-03-09)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- cloudformation ``get_stack`` method now take name or arn.
+
+
 0.7.1 (2023-03-07)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
