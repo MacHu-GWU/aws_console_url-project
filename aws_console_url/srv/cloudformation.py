@@ -150,61 +150,64 @@ class CloudFormation(Service):
     def get_stack_arn(self, name: str) -> str:
         return self._get_stack_id(name)
 
+    def ensure_arn(self, name_or_arn: str) -> str:
+        return self._ensure_arn(name_or_arn, self._get_stack_id)
+
     # --------------------------------------------------------------------------
     # specific CloudFormation Stack detail pages
     # --------------------------------------------------------------------------
-    def _stack_tab(self, name: str, tab: str) -> str:
-        stack_id = self._get_stack_id(name)
+    def _stack_tab(self, name_or_arn: str, tab: str) -> str:
+        stack_id = self.ensure_arn(name_or_arn)
         return (
             f"{self._service_root}/home?region={self._region}#"
             f"/stacks/{tab}?stackId={stack_id}"
         )
 
-    def get_stack(self, name: str) -> str:
-        return self.get_stack_info(name)
+    def get_stack(self, name_or_arn: str) -> str:
+        return self.get_stack_info(name_or_arn)
 
-    def get_stack_info(self, name: str) -> str:
-        return self._stack_tab(name, "stackinfo")
+    def get_stack_info(self, name_or_arn: str) -> str:
+        return self._stack_tab(name_or_arn, "stackinfo")
 
-    def get_stack_events(self, name: str) -> str:
-        return self._stack_tab(name, "events")
+    def get_stack_events(self, name_or_arn: str) -> str:
+        return self._stack_tab(name_or_arn, "events")
 
-    def get_stack_resources(self, name: str) -> str:
-        return self._stack_tab(name, "resources")
+    def get_stack_resources(self, name_or_arn: str) -> str:
+        return self._stack_tab(name_or_arn, "resources")
 
-    def get_stack_outputs(self, name: str) -> str:
-        return self._stack_tab(name, "outputs")
+    def get_stack_outputs(self, name_or_arn: str) -> str:
+        return self._stack_tab(name_or_arn, "outputs")
 
-    def get_stack_parameters(self, name: str) -> str:
-        return self._stack_tab(name, "parameters")
+    def get_stack_parameters(self, name_or_arn: str) -> str:
+        return self._stack_tab(name_or_arn, "parameters")
 
-    def get_stack_changesets(self, name: str) -> str:
-        return self._stack_tab(name, "changesets")
+    def get_stack_changesets(self, name_or_arn: str) -> str:
+        return self._stack_tab(name_or_arn, "changesets")
 
-    def _change_set_tab(self, name: str, change_set_id: str, tab: str) -> str:
-        stack_id = self._get_stack_id(name)
+    def _change_set_tab(self, stack_name_or_arn: str, change_set_id: str, tab: str) -> str:
+        stack_id = self.ensure_arn(stack_name_or_arn)
         return (
             f"{self._service_root}/home?region={self._region}#"
             f"/stacks/changesets/{tab}?stackId={stack_id}&changeSetId={change_set_id}"
         )
 
-    def get_change_set(self, name: str, change_set_id: str) -> str:
-        return self.get_change_set_changes(name, change_set_id)
+    def get_change_set(self, stack_name_or_arn: str, change_set_id: str) -> str:
+        return self.get_change_set_changes(stack_name_or_arn, change_set_id)
 
-    def get_change_set_changes(self, name: str, change_set_id: str) -> str:
-        return self._change_set_tab(name, change_set_id, "changes")
+    def get_change_set_changes(self, stack_name_or_arn: str, change_set_id: str) -> str:
+        return self._change_set_tab(stack_name_or_arn, change_set_id, "changes")
 
-    def get_change_set_inputs(self, name: str, change_set_id: str) -> str:
-        return self._change_set_tab(name, change_set_id, "inputs")
+    def get_change_set_inputs(self, stack_name_or_arn: str, change_set_id: str) -> str:
+        return self._change_set_tab(stack_name_or_arn, change_set_id, "inputs")
 
-    def get_change_set_template(self, name: str, change_set_id: str) -> str:
-        return self._change_set_tab(name, change_set_id, "template")
+    def get_change_set_template(self, stack_name_or_arn: str, change_set_id: str) -> str:
+        return self._change_set_tab(stack_name_or_arn, change_set_id, "template")
 
-    def get_change_set_json(self, name: str, change_set_id: str) -> str:
-        return self._change_set_tab(name, change_set_id, "json")
+    def get_change_set_json(self, stack_name_or_arn: str, change_set_id: str) -> str:
+        return self._change_set_tab(stack_name_or_arn, change_set_id, "json")
 
-    def get_change_set_hooks(self, name: str, change_set_id: str) -> str:
-        return self._change_set_tab(name, change_set_id, "hooks")
+    def get_change_set_hooks(self, stack_name_or_arn: str, change_set_id: str) -> str:
+        return self._change_set_tab(stack_name_or_arn, change_set_id, "hooks")
 
     def filter_self_managed_stack_set(self, name: str) -> str:
         return (

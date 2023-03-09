@@ -52,8 +52,8 @@ def test_stack():
 def test_stack_set():
     aws_account_id = "111122223333"
     aws_region = "us-east-1"
-    stack_set_name = "landing-zone-s3"
-    stack_set_short_id = "5bf3c555-6fea-4474-83e7-56f541f8bd39"
+    stack_set_name = "org-infra-common-tier"
+    stack_set_short_id = "28fbd0a2-aced-40bf-9361-ef1c74d56e51"
     stack_set_arn = f"arn:aws:cloudformation:{aws_region}:{aws_account_id}:stackset/{stack_set_name}:{stack_set_short_id}"
 
     stack_set = resource.CloudFormationStackSet.from_arn(
@@ -70,7 +70,7 @@ def test_stack_set():
     from boto_session_manager import BotoSesManager
     from aws_console_url import AWSConsole
 
-    bsm = BotoSesManager(profile_name="awshsh_app_dev_us_east_1")
+    bsm = BotoSesManager(profile_name="awshsh_infra_us_east_1")
 
     console = AWSConsole(
         aws_account_id=bsm.aws_account_id,
