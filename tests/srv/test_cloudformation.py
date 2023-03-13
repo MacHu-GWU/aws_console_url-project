@@ -52,8 +52,8 @@ def test_stack():
 def test_stack_set():
     aws_account_id = "111122223333"
     aws_region = "us-east-1"
-    stack_set_name = "org-infra-common-tier"
-    stack_set_short_id = "28fbd0a2-aced-40bf-9361-ef1c74d56e51"
+    stack_set_name = "aws-landing-zone-dev-common-s3-bucket"
+    stack_set_short_id = "b4015052-fa61-4dc4-a496-565e1bec0052"
     stack_set_arn = f"arn:aws:cloudformation:{aws_region}:{aws_account_id}:stackset/{stack_set_name}:{stack_set_short_id}"
 
     stack_set = resource.CloudFormationStackSet.from_arn(
@@ -84,12 +84,12 @@ def test_stack_set():
     )
     print(
         console.cloudformation.get_stack_set_instances(
-            stack_set_name, is_service_managed=True
+            stack_set.stack_set_id, is_service_managed=True
         )
     )
     print(
         console.cloudformation.get_stack_set_operations(
-            stack_set_name, is_service_managed=True
+            stack_set.arn, is_service_managed=True
         )
     )
     print(

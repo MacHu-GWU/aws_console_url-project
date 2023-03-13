@@ -73,6 +73,8 @@ class CloudFormationStackSet(Resource):
 
     name: T.Optional[str] = dataclasses.field(default=None)
     short_id: T.Optional[str] = dataclasses.field(default=None)
+    permission_model_is_self_managed: bool = dataclasses.field(default=False)
+    permission_model_is_service_managed: bool = dataclasses.field(default=False)
 
     @classmethod
     def make(
@@ -81,12 +83,16 @@ class CloudFormationStackSet(Resource):
         aws_region: str,
         name: str,
         short_id: str,
+        permission_model_is_self_managed: bool = False,
+        permission_model_is_service_managed: bool = False,
     ) -> "CloudFormationStackSet":
         return cls(
             aws_account_id=aws_account_id,
             aws_region=aws_region,
             name=name,
             short_id=short_id,
+            permission_model_is_self_managed=permission_model_is_self_managed,
+            permission_model_is_service_managed=permission_model_is_service_managed,
         )
 
     @property
@@ -101,14 +107,43 @@ class CloudFormationStackSet(Resource):
         return f"{self.name}:{self.short_id}"
 
     @classmethod
-    def from_arn(cls, arn: str) -> "CloudFormationStackSet":
+    def parse_arn(cls, arn: str) -> T.Tuple[str, str, str, str]:
+        """
+        :return: (aws_account_id, aws_region, name, short_id)
+        """
         parts = arn.split(":")
         aws_account_id = parts[4]
         aws_region = parts[3]
         chunks = parts[5].split("/")
         name = chunks[1]
         short_id = parts[6]
+        return aws_account_id, aws_region, name, short_id
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "CloudFormationStackSet":
+        aws_account_id, aws_region, name, short_id = cls.parse_arn(arn)
         return cls.make(aws_account_id, aws_region, name, short_id)
+
+    @classmethod
+    def from_describe_stack_set_response(cls, data: dict) -> "CloudFormationStackSet":
+        """
+        Create a "CloudFormationStackSet" object from the response of the
+        ``describe_stack_set`` API.
+
+        Reference:
+
+        - describe_stack_set: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_stack_set.html
+        """
+        aws_account_id, aws_region, name, short_id = cls.parse_arn(data["StackSetARN"])
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+            name=name,
+            short_id=short_id,
+            permission_model_is_self_managed=data["PermissionModel"] == "SELF_MANAGED",
+            permission_model_is_service_managed=data["PermissionModel"]
+            == "SERVICE_MANAGED",
+        )
 
 
 @dataclasses.dataclass(frozen=True)
@@ -184,7 +219,9 @@ class CloudFormation(Service):
     def get_stack_changesets(self, name_or_arn: str) -> str:
         return self._stack_tab(name_or_arn, "changesets")
 
-    def _change_set_tab(self, stack_name_or_arn: str, change_set_id: str, tab: str) -> str:
+    def _change_set_tab(
+        self, stack_name_or_arn: str, change_set_id: str, tab: str
+    ) -> str:
         stack_id = self.ensure_arn(stack_name_or_arn)
         return (
             f"{self._service_root}/home?region={self._region}#"
@@ -200,7 +237,9 @@ class CloudFormation(Service):
     def get_change_set_inputs(self, stack_name_or_arn: str, change_set_id: str) -> str:
         return self._change_set_tab(stack_name_or_arn, change_set_id, "inputs")
 
-    def get_change_set_template(self, stack_name_or_arn: str, change_set_id: str) -> str:
+    def get_change_set_template(
+        self, stack_name_or_arn: str, change_set_id: str
+    ) -> str:
         return self._change_set_tab(stack_name_or_arn, change_set_id, "template")
 
     def get_change_set_json(self, stack_name_or_arn: str, change_set_id: str) -> str:
@@ -221,13 +260,16 @@ class CloudFormation(Service):
             f"/stacksets?permissions=service&filteringText={name}"
         )
 
+    # --------------------------------------------------------------------------
+    # specific CloudFormation StackSet detail pages
+    # --------------------------------------------------------------------------
     @lru_cache(maxsize=32)
-    def get_stack_set_arn(
+    def _get_stack_set_object(
         self,
         name: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
-    ) -> str:
+    ) -> CloudFormationStackSet:
         if is_self_managed:  # pragma: no cover
             call_as = "SELF"
         elif is_service_managed:  # pragma: no cover
@@ -240,46 +282,81 @@ class CloudFormation(Service):
             StackSetName=name,
             CallAs=call_as,
         )
-        arn = response["StackSet"]["StackSetARN"]
-        return arn
+        return CloudFormationStackSet.from_describe_stack_set_response(
+            response["StackSet"]
+        )
 
-    # --------------------------------------------------------------------------
-    # specific CloudFormation StackSet detail pages
-    # --------------------------------------------------------------------------
-    def _get_stack_set(
+    def get_stack_set_arn(
         self,
         name: str,
+        is_self_managed: bool = False,
+        is_service_managed: bool = False,
+    ) -> str:
+        stack_set = self._get_stack_set_object(
+            name,
+            is_self_managed=is_self_managed,
+            is_service_managed=is_service_managed,
+        )
+        return stack_set.arn
+
+    def _get_stack_set(
+        self,
+        name_or_id_or_arn: str,
         tab: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
     ) -> str:
-        stack_set_arn = self.get_stack_set_arn(
-            name=name,
-            is_self_managed=is_self_managed,
-            is_service_managed=is_service_managed,
-        )
-        stack_set = CloudFormationStackSet.from_arn(stack_set_arn)
-        if is_self_managed:  # pragma: no cover
-            permissions = "self"
-        elif is_service_managed:  # pragma: no cover
-            permissions = "service"
-        else:  # pragma: no cover
-            raise ValueError(
-                "Must specify either is_self_managed or is_service_managed"
+        """
+        Internal method to get the URL for a specific tab of a CloudFormation StackSet
+        """
+        if name_or_id_or_arn.startswith("arn:"):
+            stack_set_id = CloudFormationStackSet.from_arn(
+                name_or_id_or_arn
+            ).stack_set_id
+            if is_self_managed:  # pragma: no cover
+                permissions = "self"
+            elif is_service_managed:  # pragma: no cover
+                permissions = "service"
+            else:  # pragma: no cover
+                raise ValueError(
+                    "Must specify either is_self_managed or is_service_managed"
+                )
+        elif ":" in name_or_id_or_arn:
+            stack_set_id = name_or_id_or_arn
+            if is_self_managed:  # pragma: no cover
+                permissions = "self"
+            elif is_service_managed:  # pragma: no cover
+                permissions = "service"
+            else:  # pragma: no cover
+                raise ValueError(
+                    "Must specify either is_self_managed or is_service_managed"
+                )
+        else:
+            stack_set = self._get_stack_set_object(
+                name=name_or_id_or_arn,
+                is_self_managed=is_self_managed,
+                is_service_managed=is_service_managed,
             )
+            stack_set_id = stack_set.stack_set_id
+            if stack_set.permission_model_is_self_managed:  # pragma: no cover
+                permissions = "self"
+            elif stack_set.permission_model_is_service_managed:  # pragma: no cover
+                permissions = "service"
+            else:  # pragma: no cover
+                raise NotImplementedError()
         return (
             f"{self._service_root}/home?region={self._region}#"
-            f"/stacksets/{stack_set.stack_set_id}/{tab}?permissions={permissions}"
+            f"/stacksets/{stack_set_id}/{tab}?permissions={permissions}"
         )
 
     def get_stack_set_info(
         self,
-        name: str,
+        name_or_id_or_arn: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
     ) -> str:
         return self._get_stack_set(
-            name=name,
+            name_or_id_or_arn=name_or_id_or_arn,
             tab="info",
             is_self_managed=is_self_managed,
             is_service_managed=is_service_managed,
@@ -287,12 +364,12 @@ class CloudFormation(Service):
 
     def get_stack_set_instances(
         self,
-        name: str,
+        name_or_id_or_arn: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
     ) -> str:
         return self._get_stack_set(
-            name=name,
+            name_or_id_or_arn=name_or_id_or_arn,
             tab="stacks",
             is_self_managed=is_self_managed,
             is_service_managed=is_service_managed,
@@ -300,12 +377,12 @@ class CloudFormation(Service):
 
     def get_stack_set_operations(
         self,
-        name: str,
+        name_or_id_or_arn: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
     ) -> str:
         return self._get_stack_set(
-            name=name,
+            name_or_id_or_arn=name_or_id_or_arn,
             tab="operations",
             is_self_managed=is_self_managed,
             is_service_managed=is_service_managed,
@@ -313,12 +390,12 @@ class CloudFormation(Service):
 
     def get_stack_set_parameters(
         self,
-        name: str,
+        name_or_id_or_arn: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
     ) -> str:
         return self._get_stack_set(
-            name=name,
+            name_or_id_or_arn=name_or_id_or_arn,
             tab="parameters",
             is_self_managed=is_self_managed,
             is_service_managed=is_service_managed,
@@ -326,12 +403,12 @@ class CloudFormation(Service):
 
     def get_stack_set_template(
         self,
-        name: str,
+        name_or_id_or_arn: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
     ) -> str:
         return self._get_stack_set(
-            name=name,
+            name_or_id_or_arn=name_or_id_or_arn,
             tab="template",
             is_self_managed=is_self_managed,
             is_service_managed=is_service_managed,

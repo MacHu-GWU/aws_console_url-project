@@ -35,30 +35,31 @@ awslambda
 
 cloudformation
 ------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.cloudformation.ensure_arn(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.cloudformation.exports``
 - ``aws_console_url.AWSConsole.cloudformation.filter_self_managed_stack_set(name: str)``
 - ``aws_console_url.AWSConsole.cloudformation.filter_service_managed_stack_set(name: str)``
 - ``aws_console_url.AWSConsole.cloudformation.filter_stack(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_change_set(name: str, change_set_id: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_change_set_changes(name: str, change_set_id: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_change_set_hooks(name: str, change_set_id: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_change_set_inputs(name: str, change_set_id: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_change_set_json(name: str, change_set_id: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_change_set_template(name: str, change_set_id: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack(name: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_change_set(stack_name_or_arn: str, change_set_id: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_change_set_changes(stack_name_or_arn: str, change_set_id: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_change_set_hooks(stack_name_or_arn: str, change_set_id: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_change_set_inputs(stack_name_or_arn: str, change_set_id: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_change_set_json(stack_name_or_arn: str, change_set_id: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_change_set_template(stack_name_or_arn: str, change_set_id: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_stack_arn(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_changesets(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_events(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_info(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_outputs(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_parameters(name: str)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_resources(name: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_changesets(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_events(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_info(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_outputs(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_parameters(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_resources(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.cloudformation.get_stack_set_arn(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_info(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_instances(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_operations(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_parameters(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
-- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_template(name: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_info(name_or_id_or_arn: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_instances(name_or_id_or_arn: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_operations(name_or_id_or_arn: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_parameters(name_or_id_or_arn: str, is_self_managed: bool = False, is_service_managed: bool = False)``
+- ``aws_console_url.AWSConsole.cloudformation.get_stack_set_template(name_or_id_or_arn: str, is_self_managed: bool = False, is_service_managed: bool = False)``
 - ``aws_console_url.AWSConsole.cloudformation.stacks``
 - ``aws_console_url.AWSConsole.cloudformation.stacksets``
 - ``aws_console_url.AWSConsole.cloudformation.stacksets_self_managed``
