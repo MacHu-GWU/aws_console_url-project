@@ -102,7 +102,7 @@ class StepFunction(Service):
         Ref: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/stepfunctions.html#SFN.Client.describe_state_machine
         """
         arn = self._ensure_arn(name_or_arn, self.get_state_machine_arn)
-        return self._bsm.stepfunctions_client.describe_state_machine(
+        return self._bsm.sfn_client.describe_state_machine(
             stateMachineArn=arn,
         )
 

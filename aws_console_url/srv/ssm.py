@@ -48,6 +48,8 @@ class SSM(Service):
 
     def get_parameter(self, name_or_arn: str) -> str:
         name = self._ensure_name(name_or_arn, self._parameter_arn_to_name)
+        if name.startswith("/"):
+            name = name[1:]
         return (
             f"{self._service_root}/parameters"
             f"/{name}/description?region={self._region}&tab=Table"

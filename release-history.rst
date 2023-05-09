@@ -16,6 +16,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.7.4 (2023-05-09)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Bugfixes**
+
+- fix a bug that when SSM parameter has a prefix "/", the console url is not correct.
+
+
 0.7.3 (2023-03-13)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Minor Improvements**
