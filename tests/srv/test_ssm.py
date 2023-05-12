@@ -14,9 +14,12 @@ def test():
 
     print(console.ssm.filter_parameters(param_name))
     print(console.ssm.get_parameter(param_name))
+    assert console.ssm.get_parameter_arn(param_name).endswith("parameter/test_aws_console_url")
 
     print(console.ssm.filter_parameters(param_name1))
     print(console.ssm.get_parameter(param_name1))
+    assert console.ssm.get_parameter_arn(param_name1).endswith("parameter/test_aws_console_url")
+
 
 
 if __name__ == "__main__":

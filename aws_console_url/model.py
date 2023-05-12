@@ -76,14 +76,25 @@ class BaseServiceResourceV1(Resource):
 
     @property
     def arn(self) -> str:
-        return f"arn:aws:{self._service_name}:{self.aws_region}:{self.aws_account_id}:{self._resource_type}/{self.name}"
+        if self.name.startswith("/"):
+            name = self.name[1:]
+        else:
+            name = self.name
+        return f"arn:aws:{self._service_name}:{self.aws_region}:{self.aws_account_id}:{self._resource_type}/{name}"
 
     @classmethod
     def from_arn(cls, arn: str) -> "BaseServiceResourceV1":
         parts = arn.split(":")
         aws_account_id = parts[4]
         aws_region = parts[3]
-        name = parts[5].split("/")[-1]
+        name = parts[5].replace(cls._RESOURCE_TYPE, "")
+        slash_count = name.count("/")
+        if slash_count == 0:
+            raise NotImplementedError
+        elif slash_count == 1:
+            name = name[1:]
+        else:
+            pass
         return cls.make(aws_account_id, aws_region, name)
 
 
