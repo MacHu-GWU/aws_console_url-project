@@ -4,16 +4,16 @@ from aws_console_url.tests import resource, console
 
 
 def test():
-    flow_name = "a2i-playbook"
-    flow_arn = "arn:aws:sagemaker:us-east-1:669508176277:flow-definition/a2i-playbook"
+    flow_name = "simple-hil-sbx"
+    flow_arn = "arn:aws:sagemaker:us-east-1:669508176277:flow-definition/simple-hil-sbx"
 
-    task_template_name = "a2i-playbook"
+    task_template_name = "simple-hil-sbx"
     task_template_arn = (
-        "arn:aws:sagemaker:us-east-1:669508176277:human-task-ui/a2i-playbook"
+        "arn:aws:sagemaker:us-east-1:669508176277:human-task-ui/simple-hil-sbx"
     )
 
-    human_loop_name = "59ce7219-d80b-4067-a0d8-f17e6a227136"
-    human_loop_arn = "arn:aws:sagemaker:us-east-1:669508176277:human-loop/59ce7219-d80b-4067-a0d8-f17e6a227136"
+    human_loop_name = "cfff6f-91760069b4893543fd97e758f921de6b-84deb8faf352"
+    human_loop_arn = "arn:aws:sagemaker:us-east-1:669508176277:human-loop/cfff6f-91760069b4893543fd97e758f921de6b-84deb8faf352"
 
     # --- arn
     flow_def = resource.A2IFlowDefinition.from_arn(
