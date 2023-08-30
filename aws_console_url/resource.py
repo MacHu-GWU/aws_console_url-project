@@ -7,8 +7,8 @@ from .srv.awslambda import LambdaFunction
 from .srv.awslambda import LambdaLayer
 from .srv.batch import BatchComputeEnvironment
 from .srv.batch import BatchJobQueue
-from .srv.batch import BatchJobDefinition
 from .srv.batch import BatchJob
+from .srv.batch import BatchJobDefinition
 from .srv.cloudformation import CloudFormationStack
 from .srv.cloudformation import CloudFormationStackSet
 from .srv.cloudwatch import CloudwatchLogGroup
@@ -32,6 +32,8 @@ from .srv.iam import IamUserGroup
 from .srv.iam import IamUser
 from .srv.iam import IamRole
 from .srv.iam import IamPolicy
+from .srv.sns import SNSTopic
+from .srv.sns import SNSSubscription
 from .srv.sqs import SQSQueue
 from .srv.ssm import SSMParameter
 from .srv.step_function import StepFunctionStatemachine

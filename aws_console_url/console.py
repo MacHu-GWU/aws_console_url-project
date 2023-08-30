@@ -24,6 +24,7 @@ from .srv.iam import Iam
 from .srv.s3 import S3
 from .srv.sagemaker import SageMaker
 from .srv.secretmanager import SecretManager
+from .srv.sns import SNS
 from .srv.sqs import SQS
 from .srv.ssm import SSM
 from .srv.step_function import StepFunction
@@ -113,6 +114,10 @@ class AWSConsole:
     @cached_property
     def secretmanager(self) -> SecretManager:
         return SecretManager._from_aws_console(self)
+    
+    @cached_property
+    def sns(self) -> SNS:
+        return SNS._from_aws_console(self)
     
     @cached_property
     def sqs(self) -> SQS:

@@ -32,6 +32,7 @@ def test():
     _ = aws.awslambda
     _ = aws.ssm
     _ = aws.ecs
+    _ = aws.sns
 
     aws_res = aws_console_url.resource
 
@@ -43,8 +44,8 @@ def test():
     _ = aws_res.LambdaLayer
     _ = aws_res.BatchComputeEnvironment
     _ = aws_res.BatchJobQueue
-    _ = aws_res.BatchJobDefinition
     _ = aws_res.BatchJob
+    _ = aws_res.BatchJobDefinition
     _ = aws_res.CloudFormationStack
     _ = aws_res.CloudFormationStackSet
     _ = aws_res.CloudwatchLogGroup
@@ -68,6 +69,8 @@ def test():
     _ = aws_res.IamUser
     _ = aws_res.IamRole
     _ = aws_res.IamPolicy
+    _ = aws_res.SNSTopic
+    _ = aws_res.SNSSubscription
     _ = aws_res.SQSQueue
     _ = aws_res.SSMParameter
     _ = aws_res.StepFunctionStatemachine

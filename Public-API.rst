@@ -233,6 +233,15 @@ secretmanager
 - ``aws_console_url.AWSConsole.secretmanager.get_secret(name: str)``
 - ``aws_console_url.AWSConsole.secretmanager.secrets``
 
+sns
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.sns.get_subscription(topic_name_or_subscription_arn: str, subscription_id: Union[str, NoneType] = None)``
+- ``aws_console_url.AWSConsole.sns.get_subscription_arn(topic_name: str, subscription_id: str)``
+- ``aws_console_url.AWSConsole.sns.get_topic(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.sns.get_topic_arn(name: str)``
+- ``aws_console_url.AWSConsole.sns.subscriptions``
+- ``aws_console_url.AWSConsole.sns.topics``
+
 sqs
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.sqs.get_queue(name: str)``
