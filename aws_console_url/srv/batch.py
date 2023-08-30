@@ -3,7 +3,7 @@
 import typing as T
 import dataclasses
 
-from ..model import BaseServiceResourceV1, Service
+from ..model import BaseServiceResourceV1, BaseServiceResourceV2, Service
 
 
 @dataclasses.dataclass(frozen=True)
@@ -19,7 +19,7 @@ class BatchJobQueue(BaseServiceResourceV1):
 
 
 @dataclasses.dataclass(frozen=True)
-class BatchJobDefinition(BaseServiceResourceV1):
+class BatchJobDefinition(BaseServiceResourceV2):
     _SERVICE_NAME = "batch"
     _RESOURCE_TYPE = "job-definition"
 
@@ -52,7 +52,10 @@ class Batch(Service):
 
     def get_job_definition_arn(self, name: str, revision: int) -> str:
         return BatchJobDefinition.make(
-            self._account_id, self._region, f"{name}:{revision}"
+            self._account_id,
+            self._region,
+            name,
+            str(revision),
         ).arn
 
     def get_job_arn(self, job_id: str) -> str:
