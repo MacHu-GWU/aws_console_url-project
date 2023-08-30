@@ -50,6 +50,10 @@ class Resource:
 
 @dataclasses.dataclass(frozen=True)
 class BaseServiceResourceV1(Resource):
+    """
+    Such as arn:aws:dynamodb:us-east-1:111122223333:table/my-dynamodb-table
+    """
+
     name: T.Optional[str] = dataclasses.field(default=None)
 
     _service_name: T.Optional[str] = dataclasses.field(default=None)
@@ -75,7 +79,9 @@ class BaseServiceResourceV1(Resource):
 
     @property
     def arn(self) -> str:
-        if self.name.startswith("/"):
+        if self.name.startswith(
+            "/"
+        ):  # some aws resources (like parameter store) has a leading slash
             name = self.name[1:]
         else:
             name = self.name
@@ -95,6 +101,55 @@ class BaseServiceResourceV1(Resource):
         else:
             pass
         return cls.make(aws_account_id, aws_region, name)
+
+
+@dataclasses.dataclass(frozen=True)
+class BaseServiceResourceV2(Resource):
+    """
+    Example arn:aws:ecs:us-east-1:111122223333:table/task-definition/my-task:1
+    """
+
+    name: T.Optional[str] = dataclasses.field(default=None)
+    version: T.Optional[str] = dataclasses.field(default=None)
+
+    _service_name: T.Optional[str] = dataclasses.field(default=None)
+    _resource_type: T.Optional[str] = dataclasses.field(default=None)
+
+    _SERVICE_NAME: T.Optional[str] = None
+    _RESOURCE_TYPE: T.Optional[str] = None
+
+    @classmethod
+    def make(
+        cls,
+        aws_account_id: str,
+        aws_region: str,
+        name: str,
+        version: str,
+    ) -> "BaseServiceResourceV2":
+        return cls(
+            aws_account_id=aws_account_id,
+            aws_region=aws_region,
+            name=name,
+            version=version,
+            _service_name=cls._SERVICE_NAME,
+            _resource_type=cls._RESOURCE_TYPE,
+        )
+
+    @property
+    def arn(self) -> str:
+        return (
+            f"arn:aws:{self._service_name}:{self.aws_region}:{self.aws_account_id}"
+            f":{self._resource_type}/{self.name}:{self.version}"
+        )
+
+    @classmethod
+    def from_arn(cls, arn: str) -> "BaseServiceResourceV2":
+        parts = arn.split(":", 6)
+        aws_account_id = parts[4]
+        aws_region = parts[3]
+        resource_type, name = parts[5].split("/")
+        version = parts[6]
+        return cls.make(aws_account_id, aws_region, name, version)
 
 
 @dataclasses.dataclass(frozen=True)

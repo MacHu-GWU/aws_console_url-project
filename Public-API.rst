@@ -13,6 +13,7 @@ a2i
 - ``aws_console_url.AWSConsole.a2i.get_worker_task_template(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.a2i.get_worker_task_template_arn(name: str)``
 - ``aws_console_url.AWSConsole.a2i.human_review_workflows``
+- ``aws_console_url.AWSConsole.a2i.human_review_workforces``
 - ``aws_console_url.AWSConsole.a2i.worker_task_templates``
 
 awslambda
@@ -32,6 +33,21 @@ awslambda
 - ``aws_console_url.AWSConsole.awslambda.get_layer(name: str, version: int = 1)``
 - ``aws_console_url.AWSConsole.awslambda.get_layer_arn(name: str, version: int)``
 - ``aws_console_url.AWSConsole.awslambda.layers``
+
+batch
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.batch.compute_environments``
+- ``aws_console_url.AWSConsole.batch.get_compute_environment(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.batch.get_compute_environment_arn(name: str)``
+- ``aws_console_url.AWSConsole.batch.get_job(job_id_or_arn: str)``
+- ``aws_console_url.AWSConsole.batch.get_job_arn(job_id: str)``
+- ``aws_console_url.AWSConsole.batch.get_job_definition(name_or_arn: str, revision: Union[int, NoneType] = None)``
+- ``aws_console_url.AWSConsole.batch.get_job_definition_arn(name: str, revision: int)``
+- ``aws_console_url.AWSConsole.batch.get_job_queue(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.batch.get_job_queue_arn(name: str)``
+- ``aws_console_url.AWSConsole.batch.job_definitions``
+- ``aws_console_url.AWSConsole.batch.job_queues``
+- ``aws_console_url.AWSConsole.batch.jobs``
 
 cloudformation
 ------------------------------------------------------------------------------
@@ -134,6 +150,28 @@ ecr
 - ``aws_console_url.AWSConsole.ecr.get_repo(name: str)``
 - ``aws_console_url.AWSConsole.ecr.get_repo_uri(name: str)``
 - ``aws_console_url.AWSConsole.ecr.repos``
+
+ecs
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.ecs.clusters``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_arn(name: str)``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_cluster_metrics(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_infrastructure(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_scheduled_tasks(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_services(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_tags(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_cluster_tasks(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_task_configuration(cluster_name_or_arn: str, task_id: str)``
+- ``aws_console_url.AWSConsole.ecs.get_task_definition_arn(name: str, revision: int)``
+- ``aws_console_url.AWSConsole.ecs.get_task_definition_revision_containers(name_or_arn: str, revision: Union[int, NoneType] = None)``
+- ``aws_console_url.AWSConsole.ecs.get_task_definition_revision_json(name_or_arn: str, revision: Union[int, NoneType] = None)``
+- ``aws_console_url.AWSConsole.ecs.get_task_definition_revision_storage(name_or_arn: str, revision: Union[int, NoneType] = None)``
+- ``aws_console_url.AWSConsole.ecs.get_task_definition_revision_tags(name_or_arn: str, revision: Union[int, NoneType] = None)``
+- ``aws_console_url.AWSConsole.ecs.get_task_definition_revisions(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.ecs.get_task_logs(cluster_name_or_arn: str, task_id: str)``
+- ``aws_console_url.AWSConsole.ecs.get_task_networking(cluster_name_or_arn: str, task_id: str)``
+- ``aws_console_url.AWSConsole.ecs.get_task_tags(cluster_name_or_arn: str, task_id: str)``
+- ``aws_console_url.AWSConsole.ecs.task_definitions``
 
 glue
 ------------------------------------------------------------------------------

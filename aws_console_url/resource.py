@@ -18,6 +18,8 @@ from .srv.codebuild import CodeBuildRun
 from .srv.codecommit import CodeCommitRepository
 from .srv.dynamodb import DynamoDBTable
 from .srv.ecr import ECRRepo
+from .srv.ecs import ECSCluster
+from .srv.ecs import ECSTaskDefinition
 from .srv.glue import GlueDatabase
 from .srv.glue import GlueJob
 from .srv.glue import GlueCrawler

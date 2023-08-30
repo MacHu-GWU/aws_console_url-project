@@ -17,6 +17,7 @@ from .srv.codecommit import CodeCommit
 from .srv.dynamodb import Dynamodb
 from .srv.ec2 import EC2
 from .srv.ecr import ECR
+from .srv.ecs import ECS
 from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
@@ -48,15 +49,15 @@ class AWSConsole:
     @cached_property
     def a2i(self) -> A2I:
         return A2I._from_aws_console(self)
-
+    
     @cached_property
     def awslambda(self) -> AWSLambda:
         return AWSLambda._from_aws_console(self)
-
+    
     @cached_property
     def batch(self) -> Batch:
         return Batch._from_aws_console(self)
-
+    
     @cached_property
     def cloudformation(self) -> CloudFormation:
         return CloudFormation._from_aws_console(self)
@@ -84,6 +85,10 @@ class AWSConsole:
     @cached_property
     def ecr(self) -> ECR:
         return ECR._from_aws_console(self)
+    
+    @cached_property
+    def ecs(self) -> ECS:
+        return ECS._from_aws_console(self)
     
     @cached_property
     def glue(self) -> Glue:

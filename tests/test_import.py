@@ -18,6 +18,7 @@ def test():
     _ = aws.sqs
     _ = aws.secretmanager
     _ = aws.cloudformation
+    _ = aws.batch
     _ = aws.ground_truth
     _ = aws.codebuild
     _ = aws.glue
@@ -30,6 +31,7 @@ def test():
     _ = aws.s3
     _ = aws.awslambda
     _ = aws.ssm
+    _ = aws.ecs
 
     aws_res = aws_console_url.resource
 
@@ -39,6 +41,10 @@ def test():
     _ = aws_res.A2IHumanLoop
     _ = aws_res.LambdaFunction
     _ = aws_res.LambdaLayer
+    _ = aws_res.BatchComputeEnvironment
+    _ = aws_res.BatchJobQueue
+    _ = aws_res.BatchJobDefinition
+    _ = aws_res.BatchJob
     _ = aws_res.CloudFormationStack
     _ = aws_res.CloudFormationStackSet
     _ = aws_res.CloudwatchLogGroup
@@ -48,6 +54,8 @@ def test():
     _ = aws_res.CodeCommitRepository
     _ = aws_res.DynamoDBTable
     _ = aws_res.ECRRepo
+    _ = aws_res.ECSCluster
+    _ = aws_res.ECSTaskDefinition
     _ = aws_res.GlueDatabase
     _ = aws_res.GlueJob
     _ = aws_res.GlueCrawler
