@@ -212,6 +212,17 @@ iam
 - ``aws_console_url.AWSConsole.iam.roles``
 - ``aws_console_url.AWSConsole.iam.users``
 
+rds
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.rds.databases``
+- ``aws_console_url.AWSConsole.rds.db_parameter_groups``
+- ``aws_console_url.AWSConsole.rds.db_subnet_groups``
+- ``aws_console_url.AWSConsole.rds.get_database_cluster(identifier: str)``
+- ``aws_console_url.AWSConsole.rds.get_database_instance(identifier: str)``
+- ``aws_console_url.AWSConsole.rds.get_db_parameter_group(name: str)``
+- ``aws_console_url.AWSConsole.rds.get_db_subnet_group(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.rds.snapshots``
+
 s3
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.s3.buckets``

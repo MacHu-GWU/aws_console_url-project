@@ -21,6 +21,7 @@ from .srv.ecs import ECS
 from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
+from .srv.rds import RDS
 from .srv.s3 import S3
 from .srv.sagemaker import SageMaker
 from .srv.secretmanager import SecretManager
@@ -102,6 +103,10 @@ class AWSConsole:
     @cached_property
     def iam(self) -> Iam:
         return Iam._from_aws_console(self)
+    
+    @cached_property
+    def rds(self) -> RDS:
+        return RDS._from_aws_console(self)
     
     @cached_property
     def s3(self) -> S3:

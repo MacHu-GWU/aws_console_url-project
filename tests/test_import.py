@@ -12,6 +12,7 @@ def test():
 
     
     _ = aws.vpc
+    _ = aws.rds
     _ = aws.dynamodb
     _ = aws.codecommit
     _ = aws.iam

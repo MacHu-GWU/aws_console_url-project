@@ -16,6 +16,16 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+0.8.1 (2023-08-30)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add aws batch service
+- add aws ecs service
+- add rds service
+- add sns service
+
+
 0.7.6 (2023-07-10)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Bugfixes**
