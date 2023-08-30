@@ -14,6 +14,7 @@ from .srv.cloudformation import CloudFormation
 from .srv.cloudwatch import CloudWatch
 from .srv.codebuild import CodeBuild
 from .srv.codecommit import CodeCommit
+from .srv.codepipeline import CodePipeline
 from .srv.dynamodb import Dynamodb
 from .srv.ec2 import EC2
 from .srv.ecr import ECR
@@ -75,6 +76,10 @@ class AWSConsole:
     @cached_property
     def codecommit(self) -> CodeCommit:
         return CodeCommit._from_aws_console(self)
+    
+    @cached_property
+    def codepipeline(self) -> CodePipeline:
+        return CodePipeline._from_aws_console(self)
     
     @cached_property
     def dynamodb(self) -> Dynamodb:

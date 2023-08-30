@@ -22,6 +22,7 @@ Backlog (TODO)
 
 - add aws batch service
 - add aws ecs service
+- add codepipeline service
 - add rds service
 - add sns service
 

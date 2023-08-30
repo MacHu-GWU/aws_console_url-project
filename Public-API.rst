@@ -128,6 +128,13 @@ codecommit
 - ``aws_console_url.AWSConsole.codecommit.get_repo_tags(repo: str)``
 - ``aws_console_url.AWSConsole.codecommit.repositories``
 
+codepipeline
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.codepipeline.get_pipeline(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.codepipeline.get_pipeline_execution(pipeline_name: str, execution_id: str)``
+- ``aws_console_url.AWSConsole.codepipeline.get_pipeline_execution_history(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.codepipeline.pipelines``
+
 dynamodb
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.dynamodb.get_item_details(table: str, hash_key: Any, range_key: Union[Any, NoneType] = None)``
@@ -221,6 +228,7 @@ rds
 - ``aws_console_url.AWSConsole.rds.get_database_instance(identifier: str)``
 - ``aws_console_url.AWSConsole.rds.get_db_parameter_group(name: str)``
 - ``aws_console_url.AWSConsole.rds.get_db_subnet_group(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.rds.get_snapshot(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.rds.snapshots``
 
 s3

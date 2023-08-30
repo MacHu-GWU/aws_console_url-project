@@ -29,6 +29,7 @@ def test():
     _ = aws.cloudwatch
     _ = aws.ec2
     _ = aws.ecr
+    _ = aws.codepipeline
     _ = aws.s3
     _ = aws.awslambda
     _ = aws.ssm
