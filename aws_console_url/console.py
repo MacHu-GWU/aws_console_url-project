@@ -9,6 +9,7 @@ from .compat import cached_property
 
 from .srv.a2i import A2I
 from .srv.awslambda import AWSLambda
+from .srv.batch import Batch
 from .srv.cloudformation import CloudFormation
 from .srv.cloudwatch import CloudWatch
 from .srv.codebuild import CodeBuild
@@ -47,11 +48,15 @@ class AWSConsole:
     @cached_property
     def a2i(self) -> A2I:
         return A2I._from_aws_console(self)
-    
+
     @cached_property
     def awslambda(self) -> AWSLambda:
         return AWSLambda._from_aws_console(self)
-    
+
+    @cached_property
+    def batch(self) -> Batch:
+        return Batch._from_aws_console(self)
+
     @cached_property
     def cloudformation(self) -> CloudFormation:
         return CloudFormation._from_aws_console(self)

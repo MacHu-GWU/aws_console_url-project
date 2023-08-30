@@ -7,7 +7,6 @@ from boto_session_manager import BotoSesManager
 
 if T.TYPE_CHECKING:  # pragma: no cover
     from .console import AWSConsole
-    from .resource import AWSResource
 
 
 @dataclasses.dataclass(frozen=True)

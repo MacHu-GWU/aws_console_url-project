@@ -5,6 +5,10 @@ from .srv.a2i import A2IHumanTaskUI
 from .srv.a2i import A2IHumanLoop
 from .srv.awslambda import LambdaFunction
 from .srv.awslambda import LambdaLayer
+from .srv.batch import BatchComputeEnvironment
+from .srv.batch import BatchJobQueue
+from .srv.batch import BatchJobDefinition
+from .srv.batch import BatchJob
 from .srv.cloudformation import CloudFormationStack
 from .srv.cloudformation import CloudFormationStackSet
 from .srv.cloudwatch import CloudwatchLogGroup
