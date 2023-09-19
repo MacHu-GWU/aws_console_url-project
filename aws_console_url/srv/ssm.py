@@ -3,7 +3,7 @@
 import typing as T
 import dataclasses
 
-from ..model import Resource, BaseServiceResourceV1, Service
+from ..model import BaseServiceResourceV1, Service
 
 
 @dataclasses.dataclass(frozen=True)
@@ -30,9 +30,7 @@ class SSM(Service):
     # --- dashboard
     @property
     def parameters(self) -> str:
-        return (
-            f"{self._service_root}/parameters/?region={self._region}&tab=Table"
-        )
+        return f"{self._service_root}/parameters/?region={self._region}&tab=Table"
 
     # --- table
     def filter_parameters(self, facets: T.Union[str, T.List[str]]) -> str:
@@ -40,7 +38,12 @@ class SSM(Service):
             facets = [
                 facets,
             ]
-        search = ",".join([f"Name:Contains:{facet}" for facet in facets])
+        new_facets = []
+        for facet in facets:
+            if facet.startswith("/"):
+                facet = facet[1:]
+            new_facets.append(facet)
+        search = ",".join([f"Name:Contains:{facet}" for facet in new_facets])
         return (
             f"{self._service_root}/parameters"
             f"/?region={self._region}&tab=Table#list_parameter_filters={search}"

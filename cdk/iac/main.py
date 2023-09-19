@@ -12,6 +12,7 @@ from .iam import IamMixin
 from .s3 import S3Mixin
 from .sns import SNSMixin
 from .sqs import SQSMixin
+from .ssm import SSMMixin
 
 
 class MainStack(
@@ -21,6 +22,7 @@ class MainStack(
     S3Mixin,
     SNSMixin,
     SQSMixin,
+    SSMMixin,
 ):
     def __init__(
         self,
@@ -38,3 +40,4 @@ class MainStack(
         self.mk_s3()
         self.mk_sns()
         self.mk_sqs()
+        self.mk_ssm()
