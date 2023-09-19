@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import resource, console, prefix_snake
 
 
 def test():
-    name = "aws_console_url_test"
+    name = f"{prefix_snake}_test"
 
     # --- resource
     assert resource.IamRole.make(console.aws_account_id, name).is_service_role is False
@@ -18,26 +18,29 @@ def test():
     assert iam_policy.name == name
 
     # --- console
-
+    print("-" * 80)
     print(console.iam.get_user_group_arn(name))
     print(console.iam.get_user_arn(name))
     print(console.iam.get_role_arn(name))
     print(console.iam.get_policy_arn(name))
 
+    print("-" * 80)
     print(console.iam.groups)
     print(console.iam.users)
     print(console.iam.roles)
     print(console.iam.policies)
 
+    print("-" * 80)
     print(console.iam.get_user_group(name))
     print(console.iam.get_user(name))
     print(console.iam.get_role(name))
     print(console.iam.get_policy(name))
 
-    print(console.iam.get_user_group(f"arn:aws:iam::669508176277:group/{name}"))
-    print(console.iam.get_user(f"arn:aws:iam::669508176277:user/{name}"))
-    print(console.iam.get_role(f"arn:aws:iam::669508176277:role/{name}"))
-    print(console.iam.get_policy(f"arn:aws:iam::669508176277:policy/{name}"))
+    print("-" * 80)
+    print(console.iam.get_user_group(f"arn:aws:iam::{console.aws_account_id}:group/{name}"))
+    print(console.iam.get_user(f"arn:aws:iam::{console.aws_account_id}:user/{name}"))
+    print(console.iam.get_role(f"arn:aws:iam::{console.aws_account_id}:role/{name}"))
+    print(console.iam.get_policy(f"arn:aws:iam::{console.aws_account_id}:policy/{name}"))
 
 
 if __name__ == "__main__":
