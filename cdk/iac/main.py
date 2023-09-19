@@ -7,6 +7,7 @@ This module is the CloudFormation stack definition.
 import aws_cdk as cdk
 from constructs import Construct
 
+from .awslambda import LambdaMixin
 from .iam import IamMixin
 from .s3 import S3Mixin
 from .sns import SNSMixin
@@ -15,6 +16,7 @@ from .sqs import SQSMixin
 
 class MainStack(
     cdk.Stack,
+    LambdaMixin,
     IamMixin,
     S3Mixin,
     SNSMixin,
@@ -31,6 +33,7 @@ class MainStack(
         self.prefix_slug = prefix.replace("_", "-")
         self.prefix_snake = prefix.replace("-", "_")
 
+        self.mk_lambda()
         self.mk_iam()
         self.mk_s3()
         self.mk_sns()

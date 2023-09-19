@@ -143,15 +143,30 @@ class AWSLambda(Service):
     def functions(self) -> str:
         return f"{self._service_root}/home?region={self._region}#/functions"
 
-    def filter_functions(self, name: str) -> str:
-        return f"{self._service_root}/home?region={self._region}#/functions?fo=and&o0=%3A&v0={name}"
+    def filter_functions(
+        self,
+        facets: T.Union[str, T.List[str]],
+    ) -> str:
+        if isinstance(facets, str):
+            facets = [facets]
+        if len(facets) == 0:
+            raise ValueError("facets must not be empty")
+        query = "&".join([
+            f"&o{i}=%3A&v{i}={token}"
+            for i, token in enumerate(facets)
+        ])
+        return f"{self._service_root}/home?region={self._region}#/functions?fo=and&o0=%3A&{query}"
 
     @property
     def layers(self) -> str:
         return f"{self._service_root}/home?region={self._region}#/layers"
 
     # --- lambda function
-    def _get_function_tab(self, name: str, tab: str) -> str:
+    def _get_function_tab(self, name_or_arn: str, tab: str) -> str:
+        if name_or_arn.startswith("arn:"):
+            name = LambdaFunction.from_arn(name_or_arn).name
+        else:
+            name = name_or_arn
         return f"{self._service_root}/home?region={self._region}#/functions/{name}?tab={tab}"
 
     def get_function(self, name: str) -> str:
