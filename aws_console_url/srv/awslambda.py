@@ -151,10 +151,7 @@ class AWSLambda(Service):
             facets = [facets]
         if len(facets) == 0:
             raise ValueError("facets must not be empty")
-        query = "&".join([
-            f"&o{i}=%3A&v{i}={token}"
-            for i, token in enumerate(facets)
-        ])
+        query = "&".join([f"&o{i}=%3A&v{i}={token}" for i, token in enumerate(facets)])
         return f"{self._service_root}/home?region={self._region}#/functions?fo=and&o0=%3A&{query}"
 
     @property
@@ -169,37 +166,62 @@ class AWSLambda(Service):
             name = name_or_arn
         return f"{self._service_root}/home?region={self._region}#/functions/{name}?tab={tab}"
 
-    def get_function(self, name: str) -> str:
-        return self._get_function_tab(name, "code")
+    def get_function(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "code")
 
-    def get_function_code_tab(self, name: str) -> str:
-        return self._get_function_tab(name, "code")
+    def get_function_code_tab(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "code")
 
-    def get_function_test_tab(self, name: str) -> str:
-        return self._get_function_tab(name, "testing")
+    def get_function_test_tab(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "testing")
 
-    def get_function_monitor_tab(self, name: str) -> str:
-        return self._get_function_tab(name, "monitoring")
+    def get_function_monitor_tab(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "monitoring")
 
-    def get_function_config_tab(self, name: str) -> str:
-        return self._get_function_tab(name, "configure")
+    def get_function_config_tab(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "configure")
 
-    def get_function_alias_tab(self, name: str) -> str:
-        return self._get_function_tab(name, "aliases")
+    def get_function_alias_tab(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "aliases")
 
-    def get_function_version_tab(self, name: str) -> str:
-        return self._get_function_tab(name, "versions")
+    def get_function_version_tab(self, name_or_arn: str) -> str:
+        return self._get_function_tab(name_or_arn, "versions")
 
-    def get_function_version(self, name: str, version: int) -> str:
-        return (
-            f"{self._service_root}/home?region={self._region}#/functions/{name}/versions/{version}?tab=code"
-        )
+    def get_function_version(
+        self,
+        name: T.Optional[str] = None,
+        version: T.Optional[int] = None,
+        arn: T.Optional[str] = None,
+    ) -> str:
+        if arn is not None:
+            lbd_func = LambdaFunction.from_arn(arn)
+            name = lbd_func.name
+            version = lbd_func.version
+        return f"{self._service_root}/home?region={self._region}#/functions/{name}/versions/{version}?tab=code"
 
-    def get_function_alias(self, name: str, alias: str) -> str:
+    def get_function_alias(
+        self,
+        name: T.Optional[str] = None,
+        alias: T.Optional[str] = None,
+        arn: T.Optional[str] = None,
+    ) -> str:
+        if arn is not None:
+            lbd_func = LambdaFunction.from_arn(arn)
+            name = lbd_func.name
+            alias = lbd_func.alias
         return f"{self._service_root}/home?region={self._region}#/functions/{name}/aliases/{alias}?tab=configure"
 
     # --- layer
-    def get_layer(self, name: str, version: int=1) -> str:
+    def get_layer(
+        self,
+        name: T.Optional[str] = None,
+        version: T.Optional[int] = 1,
+        arn: T.Optional[str] = None,
+    ) -> str:
+        if arn is not None:
+            layer = LambdaLayer.from_arn(arn)
+            name = layer.name
+            version = layer.version
         return (
             f"{self._service_root}/home?region={self._region}#"
             f"/layers/{name}/versions/{version}?tab=versions"
