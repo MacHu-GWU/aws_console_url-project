@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import resource, console, prefix_snake
 
 
 def test():
-    name = "test"
+    name = f"{prefix_snake}_test"
 
     # --- resource
     queue = resource.SQSQueue.from_arn(
@@ -13,10 +13,13 @@ def test():
     assert queue.name == name
 
     # --- console
+    print(console.sqs.get_queue_arn(name))
+
     print(console.sqs.queues)
     print(console.sqs.get_queue(name))
+    print(console.sqs.get_queue(queue.arn))
     print(console.sqs.get_queue_url(name))
-    print(console.sqs.get_queue_arn(name))
+    print(console.sqs.get_queue_url(queue.arn))
     print(console.sqs.get_queue_send_and_receive_message(name))
 
 

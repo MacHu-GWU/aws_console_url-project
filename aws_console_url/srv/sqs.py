@@ -44,18 +44,55 @@ class SQS(Service):
     def queues(self) -> str:
         return f"{self._service_root}/home?region={self._region}#/queues"
 
-    def get_queue(self, name: str) -> str:
+    def _get_queue(
+        self,
+        aws_account_id: str,
+        aws_region: str,
+        name: str,
+    ) -> str:
         return (
-            f"{self._service_root}/home?region={self._region}#/queues"
-            f"/https%3A%2F%2Fsqs.{self._region}.amazonaws.com%2F{self._account_id}%2F{name}"
+            f"{self._service_root}/home?region={aws_region}#/queues"
+            f"/https%3A%2F%2Fsqs.{aws_region}.amazonaws.com%2F{aws_account_id}%2F{name}"
         )
 
-    def get_queue_url(self, name: str) -> str:
-        return f"https://sqs.{self._region}.amazonaws.com/{self._account_id}/{name}"
+    def get_queue(self, name_or_arn: str) -> str:
+        if name_or_arn.startswith("arn:"):
+            q = SQSQueue.from_arn(name_or_arn)
+            return self._get_queue(
+                aws_account_id=q.aws_account_id,
+                aws_region=q.aws_region,
+                name=q.name,
+            )
+        else:
+            return self._get_queue(
+                aws_account_id=self._account_id,
+                aws_region=self._region,
+                name=name_or_arn,
+            )
 
-    def get_queue_send_and_receive_message(self, name: str) -> str:
-        return (
-            f"{self._service_root}/home?region={self._region}#/queues"
-            f"/https%3A%2F%2Fsqs.{self._region}.amazonaws.com%2F{self._account_id}%2F{name}"
-            f"/send-receive"
-        )
+    def _get_queue_url(
+        self,
+        aws_account_id: str,
+        aws_region: str,
+        name: str,
+    ) -> str:
+        return f"https://sqs.{aws_region}.amazonaws.com/{aws_account_id}/{name}"
+
+    def get_queue_url(self, name_or_arn: str) -> str:
+        if name_or_arn.startswith("arn:"):
+            q = SQSQueue.from_arn(name_or_arn)
+            return self._get_queue_url(
+                aws_account_id=q.aws_account_id,
+                aws_region=q.aws_region,
+                name=q.name,
+            )
+        else:
+            return self._get_queue_url(
+                aws_account_id=self._account_id,
+                aws_region=self._region,
+                name=name_or_arn,
+            )
+
+    def get_queue_send_and_receive_message(self, name_or_arn: str) -> str:
+        base_url = self.get_queue(name_or_arn)
+        return f"{base_url}/send-receive"

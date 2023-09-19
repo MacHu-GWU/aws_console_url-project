@@ -10,6 +10,7 @@ from constructs import Construct
 from .iam import IamMixin
 from .s3 import S3Mixin
 from .sns import SNSMixin
+from .sqs import SQSMixin
 
 
 class MainStack(
@@ -17,6 +18,7 @@ class MainStack(
     IamMixin,
     S3Mixin,
     SNSMixin,
+    SQSMixin,
 ):
     def __init__(
         self,
@@ -32,3 +34,4 @@ class MainStack(
         self.mk_iam()
         self.mk_s3()
         self.mk_sns()
+        self.mk_sqs()
