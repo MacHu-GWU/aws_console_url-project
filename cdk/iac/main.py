@@ -10,6 +10,7 @@ from constructs import Construct
 from .awslambda import LambdaMixin
 from .iam import IamMixin
 from .s3 import S3Mixin
+from .secretmanager import SecretManagerMixin
 from .sns import SNSMixin
 from .sqs import SQSMixin
 from .ssm import SSMMixin
@@ -20,6 +21,7 @@ class MainStack(
     LambdaMixin,
     IamMixin,
     S3Mixin,
+    SecretManagerMixin,
     SNSMixin,
     SQSMixin,
     SSMMixin,
@@ -38,6 +40,7 @@ class MainStack(
         self.mk_lambda()
         self.mk_iam()
         self.mk_s3()
+        self.mk_secretsmanager()
         self.mk_sns()
         self.mk_sqs()
         self.mk_ssm()

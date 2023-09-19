@@ -71,6 +71,7 @@ def test():
     _ = aws_res.IamUser
     _ = aws_res.IamRole
     _ = aws_res.IamPolicy
+    _ = aws_res.SecretManagerSecret
     _ = aws_res.SNSTopic
     _ = aws_res.SNSSubscription
     _ = aws_res.SQSQueue
