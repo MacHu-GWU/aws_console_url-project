@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import resource, console, prefix
 
 
 def test():
-    topic_name = "BucketTemplatesFanout"
-    subscription_id = "b7e56a3c-3e88-4b08-8637-36c0a8ce5b8c"
+    topic_name = f"{prefix}_test"
+    subscription_id = "a07e1034-10c0-47a6-83c2-552cfcca42db"
 
     # --- resource
     topic = resource.SNSTopic.from_arn(
-        resource.SNSTopic.make(console.aws_account_id, console.aws_region, topic_name).arn
+        resource.SNSTopic.make(
+            console.aws_account_id, console.aws_region, topic_name
+        ).arn
     )
     subscription = resource.SNSSubscription.from_arn(
         resource.SNSSubscription.make(
@@ -24,8 +26,8 @@ def test():
     print(console.sns.topics)
     print(console.sns.subscriptions)
     print(console.sns.get_topic(topic_name))
-    print(console.sns.get_subscription(topic_name, subscription_id))
     print(console.sns.get_topic(topic.arn))
+    print(console.sns.get_subscription(topic_name, subscription_id))
     print(console.sns.get_subscription(subscription.arn))
 
 
