@@ -3,7 +3,6 @@
 import typing as T
 import os
 import textwrap
-import aws_cdk as cdk
 
 from aws_cdk import (
     aws_lambda as lambda_,
