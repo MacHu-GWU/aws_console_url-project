@@ -30,6 +30,42 @@ def test():
     print(console.vpc.filter_network_acls(facet))
     print(console.vpc.filter_security_groups(facet))
 
+    # --- specific
+    res = console.bsm.ec2_client.describe_vpcs()
+    vpc_id = None
+    lst = res.get("Vpcs", [])
+    for dct in lst:
+        if dct["InstanceTenancy"] == "default":
+            vpc_id = dct["VpcId"]
+            break
+    if vpc_id is None:
+        return
+    print(console.vpc.get_vpc(vpc_id))
+
+    res = console.bsm.ec2_client.describe_subnets()
+    lst = res.get("Subnets", [])
+    if lst:
+        subnet_id = lst[0]["SubnetId"]
+        print(console.vpc.get_subnet(subnet_id))
+
+    res = console.bsm.ec2_client.describe_route_tables()
+    lst = res.get("RouteTables", [])
+    if lst:
+        rtb_id = lst[0]["RouteTableId"]
+        print(console.vpc.get_route_table(rtb_id))
+
+    res = console.bsm.ec2_client.describe_vpc_endpoints()
+    lst = res.get("VpcEndpoints", [])
+    if lst:
+        vpce_id = lst[0]["VpcEndpointId"]
+        print(console.vpc.get_vpc_endpoint(vpce_id))
+
+    res = console.bsm.ec2_client.describe_security_groups()
+    lst = res.get("SecurityGroups", [])
+    if lst:
+        sg_id = lst[0]["GroupId"]
+        print(console.vpc.get_security_group(sg_id))
+
 
 if __name__ == "__main__":
     from aws_console_url.tests import run_cov_test
