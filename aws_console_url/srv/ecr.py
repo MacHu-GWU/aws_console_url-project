@@ -3,25 +3,15 @@
 import typing as T
 import dataclasses
 
-from ..model import Resource, Service
+from ..model import BaseServiceResourceV1, Service
 
 
 @dataclasses.dataclass(frozen=True)
-class ECRRepo(Resource):
+class ECRRepo(BaseServiceResourceV1):
     name: T.Optional[str] = dataclasses.field(default=None)
 
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        name: str,
-    ) -> "ECRRepo":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-        )
+    _SERVICE_NAME = "ecr"
+    _RESOURCE_TYPE = "repository"
 
     @property
     def uri(self) -> str:
@@ -47,9 +37,15 @@ class ECR(Service):
     _AWS_SERVICE = "ecr"
 
     # --- arn
+    def get_repo_arn(self, name: str) -> str:
+        """
+        Get ECR repository ARN.
+        """
+        return ECRRepo.make(self._account_id, self._region, name).arn
+
     def get_repo_uri(self, name: str) -> str:
         """
-        Get DynamoDB table ARN.
+        Get ECR repository URI.
         """
         return ECRRepo(self._account_id, self._region, name).uri
 

@@ -14,6 +14,7 @@ from .batch import BatchMixin
 from .cloudformation import CloudFormationMixin
 from .codecommit import CodeCommitMixin
 from .dynamodb import DynamoDBMixin
+from .ecr import ECRMixin
 from .iam import IamMixin
 from .s3 import S3Mixin
 from .secretmanager import SecretManagerMixin
@@ -30,6 +31,7 @@ class MainStack(
     CloudFormationMixin,
     CodeCommitMixin,
     DynamoDBMixin,
+    ECRMixin,
     IamMixin,
     S3Mixin,
     SecretManagerMixin,
@@ -54,8 +56,9 @@ class MainStack(
             # self.mk_batch()
             self.mk_cloudformation()
             # self.mk_codecommit()
-            # self.mk_iam()
             # self.mk_dynamodb()
+            # self.mk_ecr()
+            # self.mk_iam()
             # self.mk_s3()
             # self.mk_secretsmanager()
             # self.mk_sns()
@@ -70,8 +73,9 @@ class MainStack(
             self.mk_batch()
             # self.mk_cloudformation()
             self.mk_codecommit()
-            self.mk_iam()
             self.mk_dynamodb()
+            self.mk_ecr()
+            self.mk_iam()
             self.mk_s3()
             self.mk_secretsmanager()
             self.mk_sns()
