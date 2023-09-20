@@ -7,7 +7,10 @@ This module is the CloudFormation stack definition.
 import aws_cdk as cdk
 from constructs import Construct
 
+from .helper import HelperMixin
+
 from .awslambda import AWSLambdaMixin
+from .batch import BatchMixin
 from .cloudformation import CloudFormationMixin
 from .codecommit import CodeCommitMixin
 from .dynamodb import DynamoDBMixin
@@ -21,7 +24,9 @@ from .ssm import SSMMixin
 
 class MainStack(
     cdk.Stack,
+    HelperMixin,
     AWSLambdaMixin,
+    BatchMixin,
     CloudFormationMixin,
     CodeCommitMixin,
     DynamoDBMixin,
@@ -46,6 +51,7 @@ class MainStack(
         # --- bmt_infra account
         def make_bmt_infra():
             # self.mk_awslambda()
+            # self.mk_batch()
             self.mk_cloudformation()
             # self.mk_codecommit()
             # self.mk_iam()
@@ -61,6 +67,7 @@ class MainStack(
         # --- awshsh_app_dev account
         def make_awshsh_app_dev():
             self.mk_awslambda()
+            self.mk_batch()
             # self.mk_cloudformation()
             self.mk_codecommit()
             self.mk_iam()
