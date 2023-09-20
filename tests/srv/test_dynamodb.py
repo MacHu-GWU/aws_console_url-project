@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import resource, console, prefix_snake
 
 
 def test():
     # --- resource
-    table1 = "aws_console_url_test_hash_key_only"
-    table2 = "aws_console_url_test_hash_and_range_key"
+    table1 = f"{prefix_snake}_test_key_only"
+    table2 = f"{prefix_snake}_test_key_and_range"
 
-    dynamodb_table = resource.DynamoDBTable.from_arn(
-        resource.DynamoDBTable.make(console.aws_account_id, console.aws_region, table1).arn
-    )
-    assert dynamodb_table.name == table1
-    assert "None" not in dynamodb_table.arn
+    table1_arn = console.dynamodb.get_table_arn(table1)
+    table2_arn = console.dynamodb.get_table_arn(table2)
+
+    assert resource.DynamoDBTable.from_arn(table1_arn).arn == table1_arn
+    assert resource.DynamoDBTable.from_arn(table2_arn).arn == table2_arn
 
     # --- console
-    print(console.dynamodb.get_table_arn(table1))
-    print(console.dynamodb.get_table_arn(table2))
-
     print(console.dynamodb.tables)
     print(console.dynamodb.get_table_overview(table1))
     print(console.dynamodb.get_table_items(table1))
