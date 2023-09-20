@@ -9,6 +9,7 @@ from constructs import Construct
 
 from .awslambda import AWSLambdaMixin
 from .cloudformation import CloudFormationMixin
+from .codecommit import CodeCommitMixin
 from .dynamodb import DynamoDBMixin
 from .iam import IamMixin
 from .s3 import S3Mixin
@@ -22,6 +23,7 @@ class MainStack(
     cdk.Stack,
     AWSLambdaMixin,
     CloudFormationMixin,
+    CodeCommitMixin,
     DynamoDBMixin,
     IamMixin,
     S3Mixin,
@@ -45,6 +47,7 @@ class MainStack(
         def make_bmt_infra():
             # self.mk_awslambda()
             self.mk_cloudformation()
+            # self.mk_codecommit()
             # self.mk_iam()
             # self.mk_dynamodb()
             # self.mk_s3()
@@ -59,6 +62,7 @@ class MainStack(
         def make_awshsh_app_dev():
             self.mk_awslambda()
             # self.mk_cloudformation()
+            self.mk_codecommit()
             self.mk_iam()
             self.mk_dynamodb()
             self.mk_s3()

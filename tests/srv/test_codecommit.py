@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import resource, console, prefix_snake
 
 
 def test():
