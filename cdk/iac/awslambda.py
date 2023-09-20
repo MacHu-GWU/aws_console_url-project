@@ -12,8 +12,8 @@ if T.TYPE_CHECKING:
     from .main import MainStack
 
 
-class LambdaMixin:
-    def mk_lambda(self: "MainStack"):
+class AWSLambdaMixin:
+    def mk_awslambda(self: "MainStack"):
         self.lbd_func = lambda_.Function(
             self,
             "LambdaFunction",

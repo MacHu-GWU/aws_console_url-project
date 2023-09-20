@@ -3,6 +3,7 @@
 import typing as T
 import os
 
+import aws_cdk as cdk
 from aws_cdk import (
     aws_s3 as s3,
     aws_s3_deployment as s3_deployment,
@@ -18,6 +19,8 @@ class S3Mixin:
             self,
             "S3Bucket",
             bucket_name=f"{self.prefix_slug}-test",
+            auto_delete_objects=True,
+            removal_policy=cdk.RemovalPolicy.DESTROY,
         )
         self.s3_object = s3_deployment.BucketDeployment(
             self,
