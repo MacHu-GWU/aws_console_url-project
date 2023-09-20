@@ -14,6 +14,7 @@ class CloudFormationStack(Resource):
 
     - name: CDKToolkit
     - short_id: b518e0f0-750b-11ed-859b-1208b06dceb3
+    - long_name: CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
     - arn: arn:aws:cloudformation:us-east-1:111122223333:stack/CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
     """
 
@@ -34,6 +35,10 @@ class CloudFormationStack(Resource):
             name=name,
             short_id=short_id,
         )
+
+    @property
+    def long_name(self) -> str:
+        return f"{self.name}/{self.short_id}"
 
     @property
     def arn(self) -> str:
@@ -177,10 +182,33 @@ class CloudFormation(Service):
         )
 
     @lru_cache(maxsize=32)
-    def _get_stack_id(self, name: str) -> str:
-        response = self._bsm.cloudformation_client.describe_stacks(StackName=name)
-        arn = response["Stacks"][0]["StackId"]
-        return arn
+    def _get_stack_object(self, name: str) -> T.Optional[CloudFormationStack]:
+        res = self._bsm.cloudformation_client.describe_stacks(StackName=name)
+        stack_list = res.get("Stacks", [])
+        if len(stack_list) == 0:
+            return None
+        else:
+            return CloudFormationStack.from_stack_id(stack_list[0]["StackId"])
+
+    def _get_stack_object_from_any(
+        self,
+        name_or_short_name_or_arn: str,
+    ) -> T.Optional[CloudFormationStack]:
+        if name_or_short_name_or_arn.startswith("arn:"):
+            return CloudFormationStack.from_arn(name_or_short_name_or_arn)
+        elif "/" in name_or_short_name_or_arn:
+            name, short_id = name_or_short_name_or_arn.split("/", 1)
+            return CloudFormationStack.make(
+                aws_account_id=self._account_id,
+                aws_region=self._region,
+                name=name,
+                short_id=short_id,
+            )
+        else:
+            return self._get_stack_object(name_or_short_name_or_arn)
+
+    def _get_stack_id(self, name_or_short_name_or_arn: str) -> str:
+        return self._get_stack_object_from_any(name_or_short_name_or_arn).arn
 
     def get_stack_arn(self, name: str) -> str:
         return self._get_stack_id(name)
