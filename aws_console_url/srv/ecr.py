@@ -7,10 +7,14 @@ from ..model import BaseServiceResourceV1, Service
 
 
 @dataclasses.dataclass(frozen=True)
-class ECRRepo(BaseServiceResourceV1):
+class BaseECRResource(BaseServiceResourceV1):
+    _SERVICE_NAME = "ecr"
+
+
+@dataclasses.dataclass(frozen=True)
+class ECRRepo(BaseECRResource):
     name: T.Optional[str] = dataclasses.field(default=None)
 
-    _SERVICE_NAME = "ecr"
     _RESOURCE_TYPE = "repository"
 
     @property
