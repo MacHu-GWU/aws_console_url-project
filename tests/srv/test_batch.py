@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import console, resource
+from aws_console_url.tests import console, resource, prefix_snake
 
 
 def test():
-    ce = "awshsh-app-dev"
-    job_queue = "awshsh-app-dev-default"
-    job_def = "simple-batch-sbx"
+    ce = f"{prefix_snake}_test"
+    job_queue = f"{prefix_snake}_test"
+    job_def = f"{prefix_snake}_test"
     revision = 1
-    job_id = "9afe38df-69cb-4354-9b79-aedbb7c6f4ed"
+    job_name = "job1"
+
+    job_id = console.bsm.batch_client.list_jobs(
+        jobQueue=job_queue,
+        filters=[
+            dict(name="JOB_NAME", values=[job_name]),
+        ]
+    )["jobSummaryList"][0]["jobId"]
 
     # --- arn
     res_ce = resource.BatchComputeEnvironment.from_arn(
@@ -28,18 +35,23 @@ def test():
     assert res_job == resource.BatchJob.from_arn(res_job.arn)
 
     # --- console
+    print("-" * 80)
     print(console.batch.compute_environments)
     print(console.batch.job_queues)
     print(console.batch.job_definitions)
     print(console.batch.jobs)
-    print(console.batch.get_compute_environment(ce))
-    print(console.batch.get_job_queue(job_queue))
-    print(console.batch.get_job_definition(job_def, revision))
-    print(console.batch.get_job(job_id))
 
+    print("-" * 80)
+    print(console.batch.get_compute_environment(ce))
     print(console.batch.get_compute_environment(res_ce.arn))
+
+    print(console.batch.get_job_queue(job_queue))
     print(console.batch.get_job_queue(res_job_queue.arn))
+
+    print(console.batch.get_job_definition(job_def, revision))
     print(console.batch.get_job_definition(res_job_def.arn))
+
+    print(console.batch.get_job(job_id))
     print(console.batch.get_job(res_job.arn))
 
 

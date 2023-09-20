@@ -31,16 +31,13 @@ def test():
     print(console.vpc.filter_security_groups(facet))
 
     # --- specific
-    res = console.bsm.ec2_client.describe_vpcs()
-    vpc_id = None
+    res = console.bsm.ec2_client.describe_vpcs(
+        Filters=[dict(Name="is-default", Values=["true"])],
+    )
     lst = res.get("Vpcs", [])
-    for dct in lst:
-        if dct["InstanceTenancy"] == "default":
-            vpc_id = dct["VpcId"]
-            break
-    if vpc_id is None:
-        return
-    print(console.vpc.get_vpc(vpc_id))
+    if lst:
+        vpc_id = lst[0]["VpcId"]
+        print(console.vpc.get_vpc(vpc_id))
 
     res = console.bsm.ec2_client.describe_subnets()
     lst = res.get("Subnets", [])
