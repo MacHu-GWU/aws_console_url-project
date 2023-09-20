@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import resource, console, prefix_slug
 
 
 def test_stack():
@@ -53,58 +53,142 @@ def test_stack():
 
 
 def test_stack_set():
-    aws_account_id = "111122223333"
-    aws_region = "us-east-1"
-    stack_set_name = "aws-landing-zone-dev-common-s3-bucket"
-    stack_set_short_id = "b4015052-fa61-4dc4-a496-565e1bec0052"
-    stack_set_arn = f"arn:aws:cloudformation:{aws_region}:{aws_account_id}:stackset/{stack_set_name}:{stack_set_short_id}"
+    stack_set_self_managed = f"{prefix_slug}-test-self-managed"
+    stack_set_service_managed = f"{prefix_slug}-test-service-managed"
+    stack_set_self_managed_arn = console.cloudformation.get_stack_set_arn(
+        stack_set_self_managed,
+        is_self_managed=True,
+    )
+    stack_set_service_managed_arn = console.cloudformation.get_stack_set_arn(
+        stack_set_service_managed,
+        is_service_managed=True,
+    )
 
-    # stack_set = resource.CloudFormationStackSet.from_arn(
-    #     resource.CloudFormationStackSet.make(
-    #         aws_account_id, aws_region, stack_set_name, stack_set_short_id
-    #     ).arn
-    # )
-    # assert stack_set.name == stack_set_name
-    # assert stack_set.arn == stack_set_arn
-    # assert "None" not in stack_set.arn
-    # assert stack_set.stack_set_id == f"{stack_set_name}:{stack_set_short_id}"
-    #
-    # # --- console
-    # from boto_session_manager import BotoSesManager
-    # from aws_console_url import AWSConsole
-    #
-    # bsm = BotoSesManager(profile_name="awshsh_infra_us_east_1")
-    #
-    # console = AWSConsole(
-    #     aws_account_id=bsm.aws_account_id,
-    #     aws_region=bsm.aws_region,
-    #     bsm=bsm,
-    # )
-    # print(
-    #     console.cloudformation.get_stack_set_info(
-    #         stack_set_name, is_service_managed=True
-    #     )
-    # )
-    # print(
-    #     console.cloudformation.get_stack_set_instances(
-    #         stack_set.stack_set_id, is_service_managed=True
-    #     )
-    # )
-    # print(
-    #     console.cloudformation.get_stack_set_operations(
-    #         stack_set.arn, is_service_managed=True
-    #     )
-    # )
-    # print(
-    #     console.cloudformation.get_stack_set_parameters(
-    #         stack_set_name, is_service_managed=True
-    #     )
-    # )
-    # print(
-    #     console.cloudformation.get_stack_set_template(
-    #         stack_set_name, is_service_managed=True
-    #     )
-    # )
+    # aws_account_id = "111122223333"
+    # aws_region = "us-east-1"
+    # stack_set_name = "aws-landing-zone-dev-common-s3-bucket"
+    # stack_set_short_id = "b4015052-fa61-4dc4-a496-565e1bec0052"
+    # stack_set_arn = f"arn:aws:cloudformation:{aws_region}:{aws_account_id}:stackset/{stack_set_name}:{stack_set_short_id}"
+
+    assert (
+        resource.CloudFormationStackSet.from_arn(stack_set_self_managed_arn).name
+        == stack_set_self_managed
+    )
+    assert (
+        resource.CloudFormationStackSet.from_arn(stack_set_service_managed_arn).name
+        == stack_set_service_managed
+    )
+
+    # --- console
+    print("-" * 80)
+    print(
+        console.cloudformation.get_stack_set_info(
+            stack_set_self_managed, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_info(
+            stack_set_self_managed_arn, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_info(
+            stack_set_service_managed, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_info(
+            stack_set_service_managed_arn, is_service_managed=True
+        )
+    )
+
+    print("-" * 80)
+    print(
+        console.cloudformation.get_stack_set_instances(
+            stack_set_self_managed, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_instances(
+            stack_set_self_managed_arn, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_instances(
+            stack_set_service_managed, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_instances(
+            stack_set_service_managed_arn, is_service_managed=True
+        )
+    )
+
+    print("-" * 80)
+    print(
+        console.cloudformation.get_stack_set_operations(
+            stack_set_self_managed, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_operations(
+            stack_set_self_managed_arn, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_operations(
+            stack_set_service_managed, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_operations(
+            stack_set_service_managed_arn, is_service_managed=True
+        )
+    )
+
+    print("-" * 80)
+    print(
+        console.cloudformation.get_stack_set_parameters(
+            stack_set_self_managed, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_parameters(
+            stack_set_self_managed_arn, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_parameters(
+            stack_set_service_managed, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_parameters(
+            stack_set_service_managed_arn, is_service_managed=True
+        )
+    )
+
+    print("-" * 80)
+    print(
+        console.cloudformation.get_stack_set_template(
+            stack_set_self_managed, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_template(
+            stack_set_self_managed_arn, is_self_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_template(
+            stack_set_service_managed, is_service_managed=True
+        )
+    )
+    print(
+        console.cloudformation.get_stack_set_template(
+            stack_set_service_managed_arn, is_service_managed=True
+        )
+    )
 
 
 if __name__ == "__main__":

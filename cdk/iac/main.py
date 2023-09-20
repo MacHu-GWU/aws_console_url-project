@@ -39,11 +39,29 @@ class MainStack(
         self.prefix_slug = prefix.replace("_", "-")
         self.prefix_snake = prefix.replace("-", "_")
 
-        self.mk_awslambda()
-        self.mk_cloudformation()
-        self.mk_iam()
-        self.mk_s3()
-        self.mk_secretsmanager()
-        self.mk_sns()
-        self.mk_sqs()
-        self.mk_ssm()
+        # --- bmt_infra account
+        def make_bmt_infra():
+            # self.mk_awslambda()
+            self.mk_cloudformation()
+            # self.mk_iam()
+            # self.mk_s3()
+            # self.mk_secretsmanager()
+            # self.mk_sns()
+            # self.mk_sqs()
+            # self.mk_ssm()
+
+        make_bmt_infra()
+
+        # --- awshsh_app_dev account
+        def make_awshsh_app_dev():
+            self.mk_awslambda()
+            # self.mk_cloudformation()
+            self.mk_iam()
+            self.mk_s3()
+            self.mk_secretsmanager()
+            self.mk_sns()
+            self.mk_sqs()
+            self.mk_ssm()
+
+        # make_awshsh_app()
+

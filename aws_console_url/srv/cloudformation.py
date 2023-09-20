@@ -314,19 +314,6 @@ class CloudFormation(Service):
             response["StackSet"]
         )
 
-    def get_stack_set_arn(
-        self,
-        name: str,
-        is_self_managed: bool = False,
-        is_service_managed: bool = False,
-    ) -> str:
-        stack_set = self._get_stack_set_object(
-            name,
-            is_self_managed=is_self_managed,
-            is_service_managed=is_service_managed,
-        )
-        return stack_set.arn
-
     def _get_stack_set(
         self,
         name_or_id_or_arn: str,
@@ -376,6 +363,19 @@ class CloudFormation(Service):
             f"{self._service_root}/home?region={self._region}#"
             f"/stacksets/{stack_set_id}/{tab}?permissions={permissions}"
         )
+
+    def get_stack_set_arn(
+        self,
+        name: str,
+        is_self_managed: bool = False,
+        is_service_managed: bool = False,
+    ) -> str:
+        stack_set = self._get_stack_set_object(
+            name,
+            is_self_managed=is_self_managed,
+            is_service_managed=is_service_managed,
+        )
+        return stack_set.arn
 
     def get_stack_set_info(
         self,
