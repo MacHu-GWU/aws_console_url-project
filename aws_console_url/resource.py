@@ -16,6 +16,7 @@ from .srv.cloudwatch import CloudwatchLogStream
 from .srv.codebuild import CodeBuildProject
 from .srv.codebuild import CodeBuildRun
 from .srv.codecommit import CodeCommitRepository
+from .srv.codepipeline import CodePipelinePipeline
 from .srv.dynamodb import DynamoDBTable
 from .srv.ecr import ECRRepo
 from .srv.ecs import ECSCluster

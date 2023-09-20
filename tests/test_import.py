@@ -55,6 +55,7 @@ def test():
     _ = aws_res.CodeBuildProject
     _ = aws_res.CodeBuildRun
     _ = aws_res.CodeCommitRepository
+    _ = aws_res.CodePipelinePipeline
     _ = aws_res.DynamoDBTable
     _ = aws_res.ECRRepo
     _ = aws_res.ECSCluster
