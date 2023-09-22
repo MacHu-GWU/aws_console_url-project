@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import typing as T
 import dataclasses
 
 import aws_arns.api as aws_arns
@@ -36,15 +37,36 @@ class CloudWatch(Service):
     _AWS_SERVICE = "cloudwatch"
 
     # --- arn
+    def _get_log_group_obj(self, name_or_arn: str) -> aws_arns.res.CloudWatchLogGroup:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.CloudWatchLogGroup.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.CloudWatchLogGroup.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+            )
+
     def get_log_group_arn(
         self,
         name: str,
     ) -> str:
-        return aws_arns.res.CloudWatchLogGroup.new(
-            self._account_id,
-            self._region,
-            name,
-        ).to_arn()
+        return self._get_log_group_obj(name).to_arn()
+
+    def _get_log_stream_obj(
+        self,
+        stream_name_or_arn: str,
+        group_name: T.Optional[str],
+    ) -> aws_arns.res.CloudWatchLogGroupStream:
+        if stream_name_or_arn.startswith("arn:"):
+            return aws_arns.res.CloudWatchLogGroupStream.from_arn(stream_name_or_arn)
+        else:
+            return aws_arns.res.CloudWatchLogGroupStream.new(
+                self._account_id,
+                self._region,
+                log_group_name=group_name,
+                stream_name=stream_name_or_arn,
+            )
 
     # --- dashboard
     @property
@@ -93,24 +115,30 @@ class CloudWatch(Service):
             f"/log-events$3FfilterPattern$3D{pattern}$26start$3D-{lookback_seconds * 1000}"
         )
 
-    # --- lambda function
-    def _get_log_group_tab(self, name: str, tab: str) -> str:
-        name = encode_url(name)
+    # --- cloudwatch logs
+    def _get_log_group_tab(self, name_or_arn: str, tab: str) -> str:
+        log_group = self._get_log_group_obj(name_or_arn)
+        name = encode_url(log_group.log_group_name)
         return (
-            f"{self._service_root}/home?region={self._region}"
+            f"{self._service_root}/home?region={log_group.aws_region}"
             f"#logsV2:log-groups/log-group/{name}{tab}"
         )
 
-    def get_log_group(self, name: str) -> str:
-        return self._get_log_group_tab(name, "")
+    def get_log_group(self, name_or_arn: str) -> str:
+        return self._get_log_group_tab(name_or_arn, "")
 
-    def get_log_group_log_streams_tab(self, name: str) -> str:
-        return self._get_log_group_tab(name, "")
+    def get_log_group_log_streams_tab(self, name_or_arn: str) -> str:
+        return self._get_log_group_tab(name_or_arn, "")
 
-    def get_log_stream(self, group_name: str, stream_name: str) -> str:
-        group_name = encode_url(group_name)
-        stream_name = encode_url(stream_name)
+    def get_log_stream(
+        self,
+        stream_name_or_arn: str,
+        group_name: T.Optional[str],
+    ) -> str:
+        obj = self._get_log_stream_obj(stream_name_or_arn, group_name)
+        group_name = encode_url(obj.log_group_name)
+        stream_name = encode_url(obj.stream_name)
         return (
-            f"{self._service_root}/home?region={self._region}"
+            f"{self._service_root}/home?region={obj.aws_region}"
             f"#logsV2:log-groups/log-group/{group_name}/log-events/{stream_name}"
         )
