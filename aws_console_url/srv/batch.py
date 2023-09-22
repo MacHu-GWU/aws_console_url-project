@@ -13,34 +13,71 @@ class Batch(Service):
     _AWS_SERVICE = "batch"
 
     # --- arn
+    def _get_compute_environment_obj(
+        self,
+        name_or_arn: str,
+    ):
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.BatchComputeEnvironment.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.BatchComputeEnvironment.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+            )
+
+    def _get_job_queue_obj(
+        self,
+        name_or_arn: str,
+    ):
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.BatchJobQueue.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.BatchJobQueue.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+            )
+
+    def _get_job_definition_obj(
+        self,
+        name_or_arn: str,
+        revision: T.Optional[int] = None,
+    ):
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.BatchJobDefinition.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.BatchJobDefinition.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+                revision,
+            )
+
+    def _get_job_obj(
+        self,
+        job_id_or_arn: str,
+    ):
+        if job_id_or_arn.startswith("arn:"):
+            return aws_arns.res.BatchJob.from_arn(job_id_or_arn)
+        else:
+            return aws_arns.res.BatchJob.new(
+                self._account_id,
+                self._region,
+                job_id_or_arn,
+            )
+
     def get_compute_environment_arn(self, name: str) -> str:
-        return aws_arns.res.BatchComputeEnvironment.new(
-            self._account_id,
-            self._region,
-            name,
-        ).to_arn()
+        return self._get_compute_environment_obj(name).to_arn()
 
     def get_job_queue_arn(self, name: str) -> str:
-        return aws_arns.res.BatchJobQueue.new(
-            self._account_id,
-            self._region,
-            name,
-        ).to_arn()
+        return self._get_job_queue_obj(name).to_arn()
 
     def get_job_definition_arn(self, name: str, revision: int) -> str:
-        return aws_arns.res.BatchJobDefinition.new(
-            self._account_id,
-            self._region,
-            name,
-            revision,
-        ).to_arn()
+        return self._get_job_definition_obj(name, revision).to_arn()
 
     def get_job_arn(self, job_id: str) -> str:
-        return aws_arns.res.BatchJob.new(
-            self._account_id,
-            self._region,
-            job_id,
-        ).to_arn()
+        return self._get_job_obj(job_id).to_arn()
 
     # --- dashboard
     @property
@@ -59,23 +96,18 @@ class Batch(Service):
     def jobs(self) -> str:
         return f"{self._service_root}/home?region={self._region}#jobs"
 
-    def _arn_to_name(self, arn: str) -> str:
-        return arn.split("/")[-1]
-
     def get_compute_environment(self, name_or_arn: str) -> str:
-        name = self._ensure_name(name_or_arn, self._arn_to_name)
+        obj = self._get_compute_environment_obj(name_or_arn)
         return (
-            f"{self._service_root}/home?region={self._region}#compute-environments"
-            f"/detail/arn:aws:batch:{self._region}:{self._account_id}:compute-environment"
-            f"/{name}"
+            f"{self._service_root}/home?region={obj.aws_region}#compute-environments"
+            f"/detail/{obj.to_arn()}"
         )
 
     def get_job_queue(self, name_or_arn: str) -> str:
-        name = self._ensure_name(name_or_arn, self._arn_to_name)
+        obj = self._get_job_queue_obj(name_or_arn)
         return (
-            f"{self._service_root}/home?region={self._region}#queues"
-            f"/detail/arn:aws:batch:{self._region}:{self._account_id}:job-queue"
-            f"/{name}"
+            f"{self._service_root}/home?region={obj.aws_region}#queues"
+            f"/detail/{obj.to_arn()}"
         )
 
     def get_job_definition(
@@ -83,22 +115,12 @@ class Batch(Service):
         name_or_arn: str,
         revision: T.Optional[int] = None,
     ) -> str:
-        if name_or_arn.startswith("arn:"):
-            if revision is not None:  # pragma: no cover
-                raise ValueError("revision must be None if name_or_arn is an ARN")
-            else:
-                name_and_revision = name_or_arn.split("/")[-1]
-        else:
-            if revision is None:  # pragma: no cover
-                raise ValueError("revision must be specified if name_or_arn is a name")
-            else:
-                name_and_revision = f"{name_or_arn}:{revision}"
+        obj = self._get_job_definition_obj(name_or_arn, revision)
         return (
-            f"{self._service_root}/home?region={self._region}#job-definition"
-            f"/detail/arn:aws:batch:{self._region}:{self._account_id}:job-definition"
-            f"/{name_and_revision}"
+            f"{self._service_root}/home?region={obj.aws_region}#job-definition"
+            f"/detail/{obj.to_arn()}"
         )
 
     def get_job(self, job_id_or_arn: str) -> str:
-        job_id = self._ensure_name(job_id_or_arn, self._arn_to_name)
-        return f"{self._service_root}/home?region={self._region}#jobs/detail/{job_id}"
+        obj = self._get_job_obj(job_id_or_arn)
+        return f"{self._service_root}/home?region={obj.aws_region}#jobs/detail/{obj.batch_job_id}"
