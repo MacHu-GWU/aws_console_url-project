@@ -20,12 +20,12 @@ def test():
 
     print(console.codebuild.get_project(project_name))
     print(console.codebuild.get_project(project_arn))
-    print(console.codebuild.get_build_run(False, project_name, run_id))
-    print(console.codebuild.get_build_run(False, run_arn=run_arn))
-    print(console.codebuild.get_build_run_phase(False, project_name, run_id))
-    print(console.codebuild.get_build_run_phase(False, run_arn=run_arn))
-    print(console.codebuild.get_build_run_env_var(False, project_name, run_id))
-    print(console.codebuild.get_build_run_env_var(False, run_arn=run_arn))
+    print(console.codebuild.get_build_run(run_id, project_name, False))
+    print(console.codebuild.get_build_run(run_arn))
+    print(console.codebuild.get_build_run_phase(run_id, project_name, False))
+    print(console.codebuild.get_build_run_phase(run_arn))
+    print(console.codebuild.get_build_run_env_var(run_id, project_name, False))
+    print(console.codebuild.get_build_run_env_var(run_arn))
 
 
 

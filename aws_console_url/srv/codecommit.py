@@ -13,13 +13,6 @@ class CodeCommit(Service):
     _AWS_SERVICE = "codesuite/codecommit"
 
     # --- arn
-    def get_repo_arn(self, name: str) -> str:
-        return aws_arns.res.CodeCommitRepository.new(
-            self._account_id,
-            self._region,
-            name,
-        ).to_arn()
-
     def _get_repo_object(self, name_or_arn: str) -> aws_arns.res.CodeCommitRepository:
         if name_or_arn.startswith("arn:"):
             return aws_arns.res.CodeCommitRepository.from_arn(name_or_arn)
@@ -30,8 +23,8 @@ class CodeCommit(Service):
                 name_or_arn,
             )
 
-    def _repo_arn_to_name(self, arn: str) -> str:
-        return aws_arns.res.CodeCommitRepository.from_arn(arn).repo_name
+    def get_repo_arn(self, name: str) -> str:
+        return self._get_repo_object(name).to_arn()
 
     # --- dashboard
     @property

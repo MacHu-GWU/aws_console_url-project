@@ -14,7 +14,8 @@ class CodePipeline(Service):
 
     # arn
     def _get_pipeline_object(
-        self, name_or_arn: str
+        self,
+        name_or_arn: str,
     ) -> aws_arns.res.CodePipelinePipeline:
         if name_or_arn.startswith("arn:"):
             return aws_arns.res.CodePipelinePipeline.from_arn(name_or_arn)
@@ -26,11 +27,7 @@ class CodePipeline(Service):
             )
 
     def get_pipeline_arn(self, name: str) -> str:
-        return aws_arns.res.CodePipelinePipeline.new(
-            self._account_id,
-            self._region,
-            name,
-        ).to_arn()
+        return self._get_pipeline_object(name).to_arn()
 
     # build project
     @property
