@@ -17,6 +17,7 @@ from .dynamodb import DynamoDBMixin
 from .ecr import ECRMixin
 from .ecs import ECSMixin
 from .iam import IamMixin
+from .glue import GlueMixin
 from .s3 import S3Mixin
 from .secretmanager import SecretManagerMixin
 from .sns import SNSMixin
@@ -36,6 +37,7 @@ class MainStack(
     ECRMixin,
     ECSMixin,
     IamMixin,
+    GlueMixin,
     S3Mixin,
     SecretManagerMixin,
     SNSMixin,
@@ -64,6 +66,7 @@ class MainStack(
             # self.mk_ecr()
             # self.mk_ecs()
             # self.mk_iam()
+            # self.mk_glue()
             # self.mk_s3()
             # self.mk_secretsmanager()
             # self.mk_sns()
@@ -83,6 +86,7 @@ class MainStack(
             self.mk_ecr()
             self.mk_ecs()
             self.mk_iam()
+            self.mk_glue()
             self.mk_s3()
             self.mk_secretsmanager()
             self.mk_sns()

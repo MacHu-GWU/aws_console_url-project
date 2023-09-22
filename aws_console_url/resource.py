@@ -1,16 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .srv.dynamodb import DynamoDBTable
-from .srv.ecr import ECRRepo
-from .srv.ecs import ECSCluster
-from .srv.ecs import ECSTaskDefinition
-from .srv.glue import GlueDatabase
-from .srv.glue import GlueJob
-from .srv.glue import GlueCrawler
-from .srv.glue import GlueRegistry
-from .srv.glue import GlueSchema
-from .srv.glue import GlueWorkflow
-from .srv.glue import GlueTable
 from .srv.ground_truth import GroundTruthPrivateTeam
 from .srv.iam import IamUserGroup
 from .srv.iam import IamUser

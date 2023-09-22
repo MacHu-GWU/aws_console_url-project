@@ -37,21 +37,21 @@ class ECSMixin:
         )
         self.ecs_task_def.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
 
-        self.ecs_service = ecs.FargateService(
-            self,
-            "FargateService",
-            service_name=f"{self.prefix_snake}_test",
-            cluster=self.ecs_cluster,
-            task_definition=self.ecs_task_def,
-            capacity_provider_strategies=[
-                ecs.CapacityProviderStrategy(
-                    capacity_provider="FARGATE_SPOT",
-                    weight=2,
-                ),
-                ecs.CapacityProviderStrategy(
-                    capacity_provider="FARGATE",
-                    weight=1,
-                ),
-            ],
-        )
-        self.ecs_service.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
+        # self.ecs_service = ecs.FargateService(
+        #     self,
+        #     "FargateService",
+        #     service_name=f"{self.prefix_snake}_test",
+        #     cluster=self.ecs_cluster,
+        #     task_definition=self.ecs_task_def,
+        #     capacity_provider_strategies=[
+        #         ecs.CapacityProviderStrategy(
+        #             capacity_provider="FARGATE_SPOT",
+        #             weight=2,
+        #         ),
+        #         ecs.CapacityProviderStrategy(
+        #             capacity_provider="FARGATE",
+        #             weight=1,
+        #         ),
+        #     ],
+        # )
+        # self.ecs_service.apply_removal_policy(cdk.RemovalPolicy.DESTROY)
