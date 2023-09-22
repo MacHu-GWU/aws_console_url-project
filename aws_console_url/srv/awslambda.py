@@ -12,31 +12,54 @@ class AWSLambda(Service):
     _AWS_SERVICE = "lambda"
 
     # --- arn
+    def _get_function_obj(
+        self,
+        name_or_arn: str,
+        version: T.Optional[T.Union[str, int]] = None,
+        alias: T.Optional[str] = None,
+    ):
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.LambdaFunction.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.LambdaFunction.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+                version=version,
+                alias=alias,
+            )
+
     def get_function_arn(
         self,
         name: str,
         version: T.Optional[T.Union[str, int]] = None,
         alias: T.Optional[str] = None,
     ) -> str:
-        return aws_arns.res.LambdaFunction.new(
-            self._account_id,
-            self._region,
-            name,
-            version=version,
-            alias=alias,
-        ).to_arn()
+        return self._get_function_obj(name, version, alias).to_arn()
+
+    def _get_layer_obj(
+        self,
+        name_or_arn: str,
+        version: T.Optional[int] = None,
+    ):
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.LambdaLayer.from_arn(name_or_arn)
+        else:
+            if version is None:
+                raise ValueError
+            return aws_arns.res.LambdaLayer.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+                version=version,
+            )
 
     def get_layer_arn(
         self,
         name: str,
         version: int,
     ) -> str:
-        return aws_arns.res.LambdaLayer.new(
-            self._account_id,
-            self._region,
-            name,
-            version,
-        ).to_arn()
+        return self._get_layer_obj(name, version).to_arn()
 
     # --- dashboard
     @property
@@ -62,14 +85,15 @@ class AWSLambda(Service):
         return f"{self._service_root}/home?region={self._region}#/layers"
 
     # --- lambda function
-    def _get_function_tab(self, name_or_arn: str, tab: str) -> str:
-        if name_or_arn.startswith("arn:"):
-            name = aws_arns.res.LambdaFunction.from_arn(name_or_arn).name
-        else:
-            name = name_or_arn
+    def _get_function_tab(
+        self,
+        name_or_arn: str,
+        tab: str,
+    ) -> str:
+        lbd_func = self._get_function_obj(name_or_arn)
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/functions/{name}?tab={tab}"
+            f"{self._service_root}/home?region={lbd_func.aws_region}#"
+            f"/functions/{lbd_func.name}?tab={tab}"
         )
 
     def get_function(self, name_or_arn: str) -> str:
@@ -95,46 +119,34 @@ class AWSLambda(Service):
 
     def get_function_version(
         self,
-        name: T.Optional[str] = None,
+        name_or_arn: str,
         version: T.Optional[int] = None,
-        arn: T.Optional[str] = None,
     ) -> str:
-        if arn is not None:
-            lbd_func = aws_arns.res.LambdaFunction.from_arn(arn)
-            name = lbd_func.name
-            version = lbd_func.version
+        lbd_func = self._get_function_obj(name_or_arn, version=version)
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/functions/{name}/versions/{version}?tab=code"
+            f"{self._service_root}/home?region={lbd_func.aws_region}#"
+            f"/functions/{lbd_func.name}/versions/{lbd_func.version}?tab=code"
         )
 
     def get_function_alias(
         self,
-        name: T.Optional[str] = None,
+        name_or_arn: str,
         alias: T.Optional[str] = None,
-        arn: T.Optional[str] = None,
     ) -> str:
-        if arn is not None:
-            lbd_func = aws_arns.res.LambdaFunction.from_arn(arn)
-            name = lbd_func.name
-            alias = lbd_func.alias
+        lbd_func = self._get_function_obj(name_or_arn, alias=alias)
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/functions/{name}/aliases/{alias}?tab=configure"
+            f"{self._service_root}/home?region={lbd_func.aws_region}#"
+            f"/functions/{lbd_func.name}/aliases/{lbd_func.alias}?tab=configure"
         )
 
     # --- layer
     def get_layer(
         self,
-        name: T.Optional[str] = None,
-        version: T.Optional[int] = 1,
-        arn: T.Optional[str] = None,
+        name_or_arn: str,
+        version: T.Optional[int] = None,
     ) -> str:
-        if arn is not None:
-            layer = aws_arns.res.LambdaLayer.from_arn(arn)
-            name = layer.name
-            version = layer.version
+        lbd_layer = self._get_layer_obj(name_or_arn, version=version)
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/layers/{name}/versions/{version}?tab=versions"
+            f"{self._service_root}/home?region={lbd_layer.aws_region}#"
+            f"/layers/{lbd_layer.name}/versions/{lbd_layer.version}?tab=versions"
         )

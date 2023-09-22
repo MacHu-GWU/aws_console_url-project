@@ -37,12 +37,12 @@ def test():
     print(console.awslambda.get_function_version_tab(func_arn))
 
     print(console.awslambda.get_function_version(func, version))
-    print(console.awslambda.get_function_version(arn=version_arn))
+    print(console.awslambda.get_function_version(version_arn))
     print(console.awslambda.get_function_alias(func, alias))
-    print(console.awslambda.get_function_alias(arn=alias_arn))
+    print(console.awslambda.get_function_alias(alias_arn))
 
-    print(console.awslambda.get_layer(layer))
-    print(console.awslambda.get_layer(arn=layer_arn))
+    print(console.awslambda.get_layer(layer, layer_version))
+    print(console.awslambda.get_layer(layer_arn))
 
 
 if __name__ == "__main__":
