@@ -4,43 +4,20 @@ import typing as T
 import dataclasses
 from functools import lru_cache
 
-from ..model import BaseServiceResourceV1, Service
+import aws_arns.api as aws_arns
 
-
-@dataclasses.dataclass(frozen=True)
-class BaseSecretManagerResource(BaseServiceResourceV1):
-    _SERVICE_NAME = "secretsmanager"
-
-
-@dataclasses.dataclass(frozen=True)
-class SecretManagerSecret(BaseSecretManagerResource):
-    _RESOURCE_TYPE = "secret"
-
-    @property
-    def secret_name(self) -> str:
-        return "-".join(self.name.split("-")[:-1])
+from ..model import Service
 
 
 @dataclasses.dataclass(frozen=True)
 class SecretManager(Service):
     _AWS_SERVICE = "secretsmanager"
 
-    # --- arn
-    def get_secret_arn(self, name: str) -> str:
-        return SecretManagerSecret.make(self._account_id, self._region, name).arn
-
-    def secret_arn_to_secret_name(self, arn: str) -> str:
-        """
-        :return: secret name is the name you used to create the secret,
-            it is not the long name with random characters ``${secret_name}-ABCDEF``.
-        """
-        return SecretManagerSecret.from_arn(arn).secret_name
-
     @lru_cache(maxsize=32)
     def _get_secret_arn(
         self,
         secret_name: str,
-        include_planned_deletion: bool = False,
+        include_planned_deletion: bool = True,
     ) -> str:
         response = self._bsm.secretsmanager_client.list_secrets(
             IncludePlannedDeletion=include_planned_deletion,
@@ -51,6 +28,29 @@ class SecretManager(Service):
         )
         arn = response["SecretList"][0]["ARN"]
         return arn
+
+    def _get_secret_obj(
+        self,
+        name_or_arn: str,
+    ) -> aws_arns.res.SecretManagerSecret:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.SecretManagerSecret.from_arn(name_or_arn)
+        else:
+            parts = name_or_arn.split("-")
+            if len(parts[-1]) == 6:
+                return aws_arns.res.SecretManagerSecret.new(
+                    self._account_id,
+                    self._aws_region,
+                    name_or_arn,
+                )
+            else:
+                return aws_arns.res.SecretManagerSecret.from_arn(
+                    self._get_secret_arn(name_or_arn),
+                )
+
+    # --- arn
+    def get_secret_arn(self, name: str) -> str:
+        return self._get_secret_arn(name)
 
     # --- dashboard
     @property
@@ -70,5 +70,5 @@ class SecretManager(Service):
         )
 
     def get_secret(self, secret_name_or_arn: str) -> str:
-        name = self._ensure_name(secret_name_or_arn, self.secret_arn_to_secret_name)
-        return f"{self._service_root}/secret?name={name}&region={self._region}"
+        obj = self._get_secret_obj(name_or_arn=secret_name_or_arn)
+        return f"{self._service_root}/secret?name={obj.secret_name}&region={obj.aws_region}"
