@@ -15,6 +15,8 @@ with bsm.awscli():
         "deploy",
         "--require-approval",
         "never",
+        "--profile",
+        bsm.profile_name,
     ]
     subprocess.run(args, check=True)
 os.chdir(pwd)

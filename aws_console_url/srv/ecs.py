@@ -3,19 +3,9 @@
 import typing as T
 import dataclasses
 
-from ..model import BaseServiceResourceV1, BaseServiceResourceV2, Service
+import aws_arns.api as aws_arns
 
-
-@dataclasses.dataclass(frozen=True)
-class ECSCluster(BaseServiceResourceV1):
-    _SERVICE_NAME = "ecs"
-    _RESOURCE_TYPE = "cluster"
-
-
-@dataclasses.dataclass(frozen=True)
-class ECSTaskDefinition(BaseServiceResourceV2):
-    _SERVICE_NAME = "ecs"
-    _RESOURCE_TYPE = "task-definition"
+from ..model import Service
 
 
 @dataclasses.dataclass(frozen=True)
@@ -23,16 +13,55 @@ class ECS(Service):
     _AWS_SERVICE = "ecs/v2"
 
     # --- arn
+    def _get_cluster_obj(self, name_or_arn: str) -> aws_arns.res.EcsCluster:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.EcsCluster.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.EcsCluster.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+            )
+
+    def _get_task_definition_obj(
+        self,
+        name_or_arn: str,
+        revision: T.Optional[int] = None,
+    ) -> aws_arns.res.EcsTaskDefinition:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.EcsTaskDefinition.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.EcsTaskDefinition.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+                revision,
+            )
+
+    def _get_task_run_obj(
+        self,
+        task_short_id_or_arn: str,
+        cluster_name: T.Optional[str] = None,
+    ) -> aws_arns.res.EcsTaskRun:
+        if task_short_id_or_arn.startswith("arn:"):
+            return aws_arns.res.EcsTaskRun.from_arn(task_short_id_or_arn)
+        else:
+            if cluster_name is None: # pragma: no cover
+                raise ValueError("cluster_name is required when task_short_id_or_arn is not an ARN")
+            return aws_arns.res.EcsTaskRun.new(
+                self._account_id,
+                self._region,
+                f"{cluster_name}/{task_short_id_or_arn}",
+            )
+
     def get_cluster_arn(self, name: str) -> str:
-        return ECSCluster.make(self._account_id, self._region, name).arn
+        return self._get_cluster_obj(name).to_arn()
 
     def get_task_definition_arn(self, name: str, revision: int) -> str:
-        return ECSTaskDefinition.make(
-            self._account_id,
-            self._region,
-            name,
-            str(revision),
-        ).arn
+        return self._get_task_definition_obj(name, revision).to_arn()
+
+    def get_task_run_arn(self, cluster_name: str, task_short_id: str) -> str:
+        return self._get_task_run_obj(task_short_id, cluster_name).to_arn()
 
     # --- dashboard
     @property
@@ -47,8 +76,11 @@ class ECS(Service):
         return arn.split("/")[-1]
 
     def _get_cluster_tab(self, name_or_arn: str, tab: str) -> str:
-        name = self._ensure_name(name_or_arn, self._arn_to_name)
-        return f"{self._service_root}/clusters/{name}/{tab}?region={self._region}"
+        obj = self._get_cluster_obj(name_or_arn)
+        return (
+            f"{self._service_root}/clusters/{obj.cluster_name}"
+            f"/{tab}?region={obj.aws_region}"
+        )
 
     def get_cluster_services(self, name_or_arn: str) -> str:
         return self._get_cluster_tab(name_or_arn, "services")
@@ -68,13 +100,15 @@ class ECS(Service):
     def get_cluster_tags(self, name_or_arn: str) -> str:  # pragma: no cover
         return self._get_cluster_tab(name_or_arn, "tags")
 
-    def get_task_definition_revisions(self, name_or_arn: str) -> str:
+    def get_task_definition_revisions(
+        self,
+        name_or_arn: str,
+    ) -> str:
         if name_or_arn.startswith("arn:"):
-            name_and_revision = self._arn_to_name(name_or_arn)
-            name = name_and_revision.split(":")[0]
+            obj = self._get_task_definition_obj(name_or_arn)
         else:
-            name = name_or_arn
-        return f"{self._service_root}/task-definitions/" f"{name}?region={self._region}"
+            obj = self._get_task_definition_obj(name_or_arn, 1)
+        return f"{self._service_root}/task-definitions/{obj.task_name}?region={obj.aws_region}"
 
     def _get_task_definition_revision_tab(
         self,
@@ -82,20 +116,10 @@ class ECS(Service):
         name_or_arn: str,
         revision: T.Optional[int] = None,
     ) -> str:
-        if name_or_arn.startswith("arn:"):
-            if revision is not None:  # pragma: no cover
-                raise ValueError("revision must be None if name_or_arn is an ARN")
-            else:
-                name_and_revision = self._arn_to_name(name_or_arn)
-                name, revision = name_and_revision.split(":")
-        else:
-            if revision is None:  # pragma: no cover
-                raise ValueError("revision must be specified if name_or_arn is a name")
-            else:
-                name = name_or_arn
+        obj = self._get_task_definition_obj(name_or_arn, revision)
         return (
             f"{self._service_root}/task-definitions"
-            f"/{name}/{revision}/{tab}?region={self._region}"
+            f"/{obj.task_name}/{obj.version}/{tab}?region={obj.aws_region}"
         )
 
     def get_task_definition_revision_containers(
@@ -128,42 +152,43 @@ class ECS(Service):
     ) -> str:  # pragma: no cover
         return self._get_task_definition_revision_tab("tags", name_or_arn, revision)
 
-    def _get_task_tab(
+    def _get_task_run_tab(
         self,
-        cluster_name_or_arn: str,
-        task_id: str,
         tab: str,
+        task_short_id_or_arn: str,
+        cluster_name: T.Optional[str] = None,
     ) -> str:
-        cluster_name = self._ensure_name(cluster_name_or_arn, self._arn_to_name)
+        obj = self._get_task_run_obj(task_short_id_or_arn, cluster_name)
+        cluster_name, task_short_id = obj.run_id.split("/", 1)
         return (
             f"{self._service_root}/clusters/{cluster_name}/tasks"
-            f"/{task_id}/{tab}?region={self._region}"
+            f"/{task_short_id}/{tab}?region={obj.aws_region}"
         )
 
-    def get_task_configuration(
+    def get_task_run_configuration(
         self,
-        cluster_name_or_arn: str,
-        task_id: str,
+        task_short_id_or_arn: str,
+        cluster_name: T.Optional[str] = None,
     ) -> str:
-        return self._get_task_tab(cluster_name_or_arn, task_id, "configuration")
+        return self._get_task_run_tab("configuration", task_short_id_or_arn, cluster_name)
 
-    def get_task_logs(
+    def get_task_run_logs(
         self,
-        cluster_name_or_arn: str,
-        task_id: str,
+        task_short_id_or_arn: str,
+        cluster_name: T.Optional[str] = None,
     ) -> str:
-        return self._get_task_tab(cluster_name_or_arn, task_id, "logs")
+        return self._get_task_run_tab("logs", task_short_id_or_arn, cluster_name)
 
-    def get_task_networking(
+    def get_task_run_networking(
         self,
-        cluster_name_or_arn: str,
-        task_id: str,
+        task_short_id_or_arn: str,
+        cluster_name: T.Optional[str] = None,
     ) -> str:  # pragma: no cover
-        return self._get_task_tab(cluster_name_or_arn, task_id, "networking")
+        return self._get_task_run_tab("networking", task_short_id_or_arn, cluster_name)
 
-    def get_task_tags(
+    def get_task_run_tags(
         self,
-        cluster_name_or_arn: str,
-        task_id: str,
+        task_short_id_or_arn: str,
+        cluster_name: T.Optional[str] = None,
     ) -> str:  # pragma: no cover
-        return self._get_task_tab(cluster_name_or_arn, task_id, "tags")
+        return self._get_task_run_tab("tags", task_short_id_or_arn, cluster_name)

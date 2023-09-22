@@ -3,7 +3,6 @@ aws_console_url_venv/
 aws_console_url.egg-info/
 aws_console_url-*/
 tmp/
-cdk.out/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
