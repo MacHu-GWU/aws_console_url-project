@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console, prefix_snake
+from aws_console_url.tests import console, prefix_snake
 
 
 def test():
     param_name1 = f"{prefix_snake}_1"
     param_name2 = f"/{prefix_snake}_2"
-    param_arn1 = f"arn:aws:ssm:{console.aws_region}:{console.aws_account_id}:parameter/{param_name1}"
-    param_arn2 = f"arn:aws:ssm:{console.aws_region}:{console.aws_account_id}:parameter{param_name2}"
-    # --- resource
-    assert resource.SSMParameter.from_arn(param_arn1).arn == param_arn1
-    assert resource.SSMParameter.from_arn(param_arn2).arn == param_arn2
+    param_arn1 = console.ssm.get_parameter_arn(param_name1)
+    param_arn2 = console.ssm.get_parameter_arn(param_name2)
 
     # --- console
     print(console.ssm.parameters)

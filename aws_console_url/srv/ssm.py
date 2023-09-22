@@ -3,29 +3,28 @@
 import typing as T
 import dataclasses
 
-from ..model import BaseServiceResourceV1, Service
+import aws_arns.api as aws_arns
 
-
-@dataclasses.dataclass(frozen=True)
-class BaseSSMResource(BaseServiceResourceV1):
-    _SERVICE_NAME = "ssm"
-
-
-@dataclasses.dataclass(frozen=True)
-class SSMParameter(BaseSSMResource):
-    _RESOURCE_TYPE = "parameter"
+from ..model import Service
 
 
 @dataclasses.dataclass(frozen=True)
 class SSM(Service):
     _AWS_SERVICE = "systems-manager"
 
+    def _get_parameter_obj(self, name_or_arn: str) -> aws_arns.res.SSMParameter:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.SSMParameter.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.SSMParameter.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+            )
+
     # --- arn
     def get_parameter_arn(self, name: str) -> str:
-        return SSMParameter.make(self._account_id, self._region, name).arn
-
-    def _parameter_arn_to_name(self, arn: str) -> str:
-        return SSMParameter.from_arn(arn).name
+        return self._get_parameter_obj(name).to_arn()
 
     # --- dashboard
     @property
@@ -50,9 +49,11 @@ class SSM(Service):
         )
 
     def get_parameter(self, name_or_arn: str) -> str:
-        name = self._ensure_name(name_or_arn, self._parameter_arn_to_name)
-        if name.startswith("/"):
-            name = name[1:]
+        obj = self._get_parameter_obj(name_or_arn)
+        if obj.parameter_name.startswith("/"):
+            name = obj.parameter_name[1:]
+        else:
+            name = obj.parameter_name
         return (
             f"{self._service_root}/parameters"
             f"/{name}/description?region={self._region}&tab=Table"
