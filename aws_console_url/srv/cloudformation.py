@@ -9,150 +9,6 @@ import aws_arns.api as aws_arns
 from ..model import Service
 
 
-# @dataclasses.dataclass(frozen=True)
-# class CloudFormationStack(Resource):
-#     """
-#     Example:
-#
-#     - name: CDKToolkit
-#     - short_id: b518e0f0-750b-11ed-859b-1208b06dceb3
-#     - long_name: CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
-#     - arn: arn:aws:cloudformation:us-east-1:111122223333:stack/CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
-#     """
-#
-#     name: T.Optional[str] = dataclasses.field(default=None)
-#     short_id: T.Optional[str] = dataclasses.field(default=None)
-#
-#     @classmethod
-#     def make(
-#         cls,
-#         aws_account_id: str,
-#         aws_region: str,
-#         name: str,
-#         short_id: str,
-#     ) -> "CloudFormationStack":
-#         return cls(
-#             aws_account_id=aws_account_id,
-#             aws_region=aws_region,
-#             name=name,
-#             short_id=short_id,
-#         )
-#
-#     @property
-#     def long_name(self) -> str:
-#         return f"{self.name}/{self.short_id}"
-#
-#     @property
-#     def arn(self) -> str:
-#         return (
-#             f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stack"
-#             f"/{self.name}/{self.short_id}"
-#         )
-#
-#     @property
-#     def stack_id(self) -> str:
-#         return self.arn
-#
-#     @classmethod
-#     def from_arn(cls, arn: str) -> "CloudFormationStack":
-#         parts = arn.split(":")
-#         aws_account_id = parts[4]
-#         aws_region = parts[3]
-#         chunks = parts[5].split("/")
-#         name = chunks[1]
-#         short_id = chunks[2]
-#         return cls.make(aws_account_id, aws_region, name, short_id)
-#
-#     @classmethod
-#     def from_stack_id(cls, stack_id: str) -> "CloudFormationStack":
-#         return cls.from_arn(stack_id)
-
-
-# @dataclasses.dataclass(frozen=True)
-# class CloudFormationStackSet(Resource):
-#     """
-#     Example:
-#
-#     - name: landing-zone-s3
-#     - short_id: 5bf3c555-6fea-4474-83e7-56f541f8bd39
-#     - arn: arn:aws:cloudformation:us-east-1:111122223333:stackset/landing-zone-s3:5bf3c555-6fea-4474-83e7-56f541f8bd39
-#     """
-#
-#     name: T.Optional[str] = dataclasses.field(default=None)
-#     short_id: T.Optional[str] = dataclasses.field(default=None)
-#     permission_model_is_self_managed: bool = dataclasses.field(default=False)
-#     permission_model_is_service_managed: bool = dataclasses.field(default=False)
-#
-#     @classmethod
-#     def make(
-#         cls,
-#         aws_account_id: str,
-#         aws_region: str,
-#         name: str,
-#         short_id: str,
-#         permission_model_is_self_managed: bool = False,
-#         permission_model_is_service_managed: bool = False,
-#     ) -> "CloudFormationStackSet":
-#         return cls(
-#             aws_account_id=aws_account_id,
-#             aws_region=aws_region,
-#             name=name,
-#             short_id=short_id,
-#             permission_model_is_self_managed=permission_model_is_self_managed,
-#             permission_model_is_service_managed=permission_model_is_service_managed,
-#         )
-#
-#     @property
-#     def arn(self) -> str:
-#         return (
-#             f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stackset"
-#             f"/{self.name}:{self.short_id}"
-#         )
-#
-#     @property
-#     def stack_set_id(self) -> str:
-#         return f"{self.name}:{self.short_id}"
-#
-#     @classmethod
-#     def parse_arn(cls, arn: str) -> T.Tuple[str, str, str, str]:
-#         """
-#         :return: (aws_account_id, aws_region, name, short_id)
-#         """
-#         parts = arn.split(":")
-#         aws_account_id = parts[4]
-#         aws_region = parts[3]
-#         chunks = parts[5].split("/")
-#         name = chunks[1]
-#         short_id = parts[6]
-#         return aws_account_id, aws_region, name, short_id
-#
-#     @classmethod
-#     def from_arn(cls, arn: str) -> "CloudFormationStackSet":
-#         aws_account_id, aws_region, name, short_id = cls.parse_arn(arn)
-#         return cls.make(aws_account_id, aws_region, name, short_id)
-#
-#     @classmethod
-#     def from_describe_stack_set_response(cls, data: dict) -> "CloudFormationStackSet":
-#         """
-#         Create a "CloudFormationStackSet" object from the response of the
-#         ``describe_stack_set`` API.
-#
-#         Reference:
-#
-#         - describe_stack_set: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_stack_set.html
-#         """
-#         aws_account_id, aws_region, name, short_id = cls.parse_arn(data["StackSetARN"])
-#         return cls(
-#             aws_account_id=aws_account_id,
-#             aws_region=aws_region,
-#             name=name,
-#             short_id=short_id,
-#             permission_model_is_self_managed=data["PermissionModel"] == "SELF_MANAGED",
-#             permission_model_is_service_managed=data["PermissionModel"]
-#             == "SERVICE_MANAGED",
-#         )
-
-
 @dataclasses.dataclass(frozen=True)
 class CloudFormation(Service):
     _AWS_SERVICE = "cloudformation"
@@ -191,7 +47,8 @@ class CloudFormation(Service):
 
     @lru_cache(maxsize=32)
     def _get_stack_object(
-        self, stack_name: str
+        self,
+        stack_name: str,
     ) -> T.Optional[aws_arns.res.CloudFormationStack]:
         res = self._bsm.cloudformation_client.describe_stacks(StackName=stack_name)
         stack_list = res.get("Stacks", [])
@@ -217,23 +74,17 @@ class CloudFormation(Service):
         else:
             return self._get_stack_object(stack_name=name_or_short_name_or_arn)
 
-    def _get_stack_id(self, name_or_short_name_or_arn: str) -> str:
-        return self._get_stack_object_from_any(name_or_short_name_or_arn).to_arn()
-
     def get_stack_arn(self, name: str) -> str:
-        return self._get_stack_id(name)
-
-    def ensure_arn(self, name_or_arn: str) -> str:
-        return self._ensure_arn(name_or_arn, self._get_stack_id)
+        return self._get_stack_object_from_any(name).to_arn()
 
     # --------------------------------------------------------------------------
     # specific CloudFormation Stack detail pages
     # --------------------------------------------------------------------------
     def _stack_tab(self, name_or_arn: str, tab: str) -> str:
-        stack_id = self.ensure_arn(name_or_arn)
+        obj = self._get_stack_object_from_any(name_or_arn)
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/stacks/{tab}?stackId={stack_id}"
+            f"{self._service_root}/home?region={obj.aws_region}#"
+            f"/stacks/{tab}?stackId={obj.to_arn()}"
         )
 
     def get_stack(self, name_or_arn: str) -> str:
@@ -257,13 +108,29 @@ class CloudFormation(Service):
     def get_stack_changesets(self, name_or_arn: str) -> str:
         return self._stack_tab(name_or_arn, "changesets")
 
+    def _get_change_set_object(
+        self,
+        name_or_arn: str,
+    ) -> aws_arns.res.CloudFormationChangeSet:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.CloudFormationChangeSet.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.CloudFormationChangeSet.new(
+                aws_account_id=self._account_id,
+                aws_region=self._region,
+                fullname=name_or_arn,
+            )
+
     def _change_set_tab(
-        self, stack_name_or_arn: str, change_set_id: str, tab: str
+        self,
+        stack_name_or_arn: str,
+        change_set_id: str,
+        tab: str,
     ) -> str:
-        stack_id = self.ensure_arn(stack_name_or_arn)
+        stack = self._get_stack_object_from_any(stack_name_or_arn)
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/stacks/changesets/{tab}?stackId={stack_id}&changeSetId={change_set_id}"
+            f"{self._service_root}/home?region={stack.aws_region}#"
+            f"/stacks/changesets/{tab}?stackId={stack.to_arn()}&changeSetId={change_set_id}"
         )
 
     def get_change_set(self, stack_name_or_arn: str, change_set_id: str) -> str:
@@ -328,6 +195,21 @@ class CloudFormation(Service):
         stack_set_arn = res["StackSet"]["StackSetARN"]
         return aws_arns.res.CloudFormationStackSet.from_arn(stack_set_arn)
 
+    def _get_stack_set_object_from_anything(
+        self,
+        name_or_arn: str,
+        is_self_managed: bool = False,
+        is_service_managed: bool = False,
+    ) -> aws_arns.res.CloudFormationStackSet:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.CloudFormationStackSet.from_arn(name_or_arn)
+        else:
+            return self._get_stack_set_object(
+                name=name_or_arn,
+                is_self_managed=is_self_managed,
+                is_service_managed=is_service_managed,
+            )
+
     def _get_stack_set(
         self,
         name_or_id_or_arn: str,
@@ -338,44 +220,22 @@ class CloudFormation(Service):
         """
         Internal method to get the URL for a specific tab of a CloudFormation StackSet
         """
-        if name_or_id_or_arn.startswith("arn:"):
-            stack_set_id = aws_arns.res.CloudFormationStackSet.from_arn(
-                name_or_id_or_arn
-            ).stackset_id
-            if is_self_managed:  # pragma: no cover
-                permissions = "self"
-            elif is_service_managed:  # pragma: no cover
-                permissions = "service"
-            else:  # pragma: no cover
-                raise ValueError(
-                    "Must specify either is_self_managed or is_service_managed"
-                )
-        elif ":" in name_or_id_or_arn:
-            stack_set_id = name_or_id_or_arn
-            if is_self_managed:  # pragma: no cover
-                permissions = "self"
-            elif is_service_managed:  # pragma: no cover
-                permissions = "service"
-            else:  # pragma: no cover
-                raise ValueError(
-                    "Must specify either is_self_managed or is_service_managed"
-                )
-        else:
-            stack_set = self._get_stack_set_object(
-                name=name_or_id_or_arn,
-                is_self_managed=is_self_managed,
-                is_service_managed=is_service_managed,
+        stack_set = self._get_stack_set_object_from_anything(
+            name_or_arn=name_or_id_or_arn,
+            is_self_managed=is_self_managed,
+            is_service_managed=is_service_managed,
+        )
+        if is_self_managed:  # pragma: no cover
+            permissions = "self"
+        elif is_service_managed:  # pragma: no cover
+            permissions = "service"
+        else:  # pragma: no cover
+            raise ValueError(
+                "Must specify either is_self_managed or is_service_managed"
             )
-            stack_set_id = stack_set.stackset_id
-            if is_self_managed:  # pragma: no cover
-                permissions = "self"
-            elif is_service_managed:  # pragma: no cover
-                permissions = "service"
-            else:  # pragma: no cover
-                raise NotImplementedError()
         return (
-            f"{self._service_root}/home?region={self._region}#"
-            f"/stacksets/{stack_set_id}/{tab}?permissions={permissions}"
+            f"{self._service_root}/home?region={stack_set.aws_region}#"
+            f"/stacksets/{stack_set.to_arn()}/{tab}?permissions={permissions}"
         )
 
     def get_stack_set_arn(
