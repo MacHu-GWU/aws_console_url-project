@@ -14,12 +14,6 @@ def test():
     _ = aws.{{ module_name }}
     {%- endfor %}
 
-    aws_res = aws_console_url.resource
-
-    {% for class_name in resource_class_list %}
-    _ = aws_res.{{ class_name }}
-    {%- endfor %}
-
 
 if __name__ == "__main__":
     import os

@@ -153,7 +153,7 @@ def create_resource_py(
         template.render(module_and_resource_list=module_and_resource_list)
     )
 
-create_resource_py(resource_subclasses)
+# create_resource_py(resource_subclasses)
 
 def create_import_py(
     resource_subclasses: T.List[T.Type[Resource]],

@@ -4,7 +4,6 @@ import hashlib
 from boto_session_manager import BotoSesManager
 
 from ..console import AWSConsole
-from .. import resource
 from .helper import run_cov_test
 from . import paths
 
@@ -20,8 +19,6 @@ console = AWSConsole(
     aws_region=bsm.aws_region,
     bsm=bsm,
 )
-
-_ = resource
 
 sha256 = hashlib.sha256()
 sha256.update(f"{bsm.aws_account_id}-{bsm.aws_region}".encode("utf-8"))
