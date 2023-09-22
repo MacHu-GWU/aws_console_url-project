@@ -1,39 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import typing as T
 import dataclasses
 
-from ..model import BaseServiceResourceV1, Service
+import aws_arns.api as aws_arns
 
-
-@dataclasses.dataclass(frozen=True)
-class BaseECRResource(BaseServiceResourceV1):
-    _SERVICE_NAME = "ecr"
-
-
-@dataclasses.dataclass(frozen=True)
-class ECRRepo(BaseECRResource):
-    name: T.Optional[str] = dataclasses.field(default=None)
-
-    _RESOURCE_TYPE = "repository"
-
-    @property
-    def uri(self) -> str:
-        return (
-            f"{self.aws_account_id}.dkr.ecr.{self.aws_region}.amazonaws.com/{self.name}"
-        )
-
-    @classmethod
-    def from_uri(cls, uri: str) -> "ECRRepo":
-        domain, name = uri.split("/", 1)
-        parts = domain.split(".")
-        aws_account_id = parts[0]
-        aws_region = parts[3]
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-        )
+from ..model import Service
 
 
 @dataclasses.dataclass(frozen=True)
@@ -41,17 +12,29 @@ class ECR(Service):
     _AWS_SERVICE = "ecr"
 
     # --- arn
+    def _get_repo_object(self, name_or_arn_or_uri: str) -> aws_arns.res.EcrRepository:
+        if name_or_arn_or_uri.startswith("arn:"):
+            return aws_arns.res.EcrRepository.from_arn(name_or_arn_or_uri)
+        elif name_or_arn_or_uri[:12].isdigit():
+            return aws_arns.res.EcrRepository.from_uri(name_or_arn_or_uri)
+        else:
+            return aws_arns.res.EcrRepository.new(
+                self._account_id,
+                self._region,
+                name_or_arn_or_uri,
+            )
+
     def get_repo_arn(self, name: str) -> str:
         """
         Get ECR repository ARN.
         """
-        return ECRRepo.make(self._account_id, self._region, name).arn
+        return self._get_repo_object(name).to_arn()
 
     def get_repo_uri(self, name: str) -> str:
         """
         Get ECR repository URI.
         """
-        return ECRRepo(self._account_id, self._region, name).uri
+        return self._get_repo_object(name).uri
 
     # --- dashboard
     @property
@@ -59,5 +42,9 @@ class ECR(Service):
         return f"{self._service_root}/repositories?region={self._region}"
 
     # --- repo
-    def get_repo(self, name: str) -> str:
-        return f"{self._service_root}/repositories/private/{self._account_id}/{name}?region={self._region}"
+    def get_repo(self, name_or_arn_or_uri: str) -> str:
+        repo = self._get_repo_object(name_or_arn_or_uri)
+        return (
+            f"{self._service_root}/repositories/private"
+            f"/{repo.aws_account_id}/{repo.repo_name}?region={repo.aws_region}"
+        )
