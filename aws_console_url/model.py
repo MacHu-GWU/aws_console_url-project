@@ -51,7 +51,7 @@ class Resource:
 @dataclasses.dataclass(frozen=True)
 class BaseServiceResourceV1(Resource):
     """
-    Such as arn:aws:dynamodb:us-east-1:111122223333:table/my-dynamodb-table
+    Convention: arn:aws:${SERVICE_NAME}:us-east-1:111122223333:${RESOURCE_TYPE}/${RESOURCE_NAME}
     """
 
     name: T.Optional[str] = dataclasses.field(default=None)

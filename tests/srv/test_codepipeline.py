@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console, prefix_snake
+from aws_console_url.tests import console, prefix_snake
 
 
 def test():
@@ -9,9 +9,6 @@ def test():
     exec_id = console.bsm.codepipeline_client.list_pipeline_executions(
         pipelineName=pipeline,
     )["pipelineExecutionSummaries"][0]["pipelineExecutionId"]
-
-    # --- resource
-    assert resource.CodePipelinePipeline.from_arn(pipeline_arn).arn == pipeline_arn
 
     # --- console
     print(console.codepipeline.pipelines)

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import typing as T
 import dataclasses
 
-from ..model import Service, Resource
+import aws_arns.api as aws_arns
+
+from ..model import Service
 
 
 _url_escapes = [
@@ -17,66 +18,17 @@ _pattern_escapes = [
     ('"', "$2522"),
 ]
 
+
 def encode_url(name: str) -> str:
     for before, after in _url_escapes:
         name = name.replace(before, after)
     return name
 
+
 def encode_pattern(pattern: str) -> str:
     for before, after in _pattern_escapes:
         pattern = pattern.replace(before, after)
     return pattern
-
-@dataclasses.dataclass(frozen=True)
-class CloudwatchLogGroup(Resource):
-    name: T.Optional[str] = dataclasses.field(default=None)
-
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        name: str,
-    ) -> "CloudwatchLogGroup":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-        )
-
-    @property
-    def arn(self):
-        return f"arn:aws:logs:{self.aws_region}:{self.aws_account_id}:log-group:{self.name}:*"
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "CloudwatchLogGroup":
-        parts = arn.split(":")
-        return cls(
-            aws_account_id=parts[4],
-            aws_region=parts[3],
-            name=parts[6],
-        )
-
-
-@dataclasses.dataclass(frozen=True)
-class CloudwatchLogStream(Resource):
-    group_name: T.Optional[str] = dataclasses.field(default=None)
-    stream_name: T.Optional[str] = dataclasses.field(default=None)
-
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        group_name: str,
-        stream_name: str,
-    ) -> "CloudwatchLogStream":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            group_name=group_name,
-            stream_name=stream_name,
-        )
 
 
 @dataclasses.dataclass(frozen=True)
@@ -88,7 +40,11 @@ class CloudWatch(Service):
         self,
         name: str,
     ) -> str:
-        return CloudwatchLogGroup.make(self._account_id, self._region, name).arn
+        return aws_arns.res.CloudWatchLogGroup.new(
+            self._account_id,
+            self._region,
+            name,
+        ).to_arn()
 
     # --- dashboard
     @property

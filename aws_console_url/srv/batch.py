@@ -3,40 +3,9 @@
 import typing as T
 import dataclasses
 
-from ..model import BaseServiceResourceV1, BaseServiceResourceV2, Service
+import aws_arns.api as aws_arns
 
-
-@dataclasses.dataclass(frozen=True)
-class BatchComputeEnvironment(BaseServiceResourceV1):
-    _SERVICE_NAME = "batch"
-    _RESOURCE_TYPE = "compute-environment"
-
-
-@dataclasses.dataclass(frozen=True)
-class BatchJobQueue(BaseServiceResourceV1):
-    _SERVICE_NAME = "batch"
-    _RESOURCE_TYPE = "job-queue"
-
-
-@dataclasses.dataclass(frozen=True)
-class BatchJobDefinition(BaseServiceResourceV2):
-    _SERVICE_NAME = "batch"
-    _RESOURCE_TYPE = "job-definition"
-
-
-@dataclasses.dataclass(frozen=True)
-class BatchJob(BaseServiceResourceV1):
-    _SERVICE_NAME = "batch"
-    _RESOURCE_TYPE = "job"
-
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        job_id: str,
-    ):
-        return super().make(aws_account_id, aws_region, job_id)
+from ..model import Service
 
 
 @dataclasses.dataclass(frozen=True)
@@ -45,21 +14,33 @@ class Batch(Service):
 
     # --- arn
     def get_compute_environment_arn(self, name: str) -> str:
-        return BatchComputeEnvironment.make(self._account_id, self._region, name).arn
-
-    def get_job_queue_arn(self, name: str) -> str:
-        return BatchJobQueue.make(self._account_id, self._region, name).arn
-
-    def get_job_definition_arn(self, name: str, revision: int) -> str:
-        return BatchJobDefinition.make(
+        return aws_arns.res.BatchComputeEnvironment.new(
             self._account_id,
             self._region,
             name,
-            str(revision),
-        ).arn
+        ).to_arn()
+
+    def get_job_queue_arn(self, name: str) -> str:
+        return aws_arns.res.BatchJobQueue.new(
+            self._account_id,
+            self._region,
+            name,
+        ).to_arn()
+
+    def get_job_definition_arn(self, name: str, revision: int) -> str:
+        return aws_arns.res.BatchJobDefinition.new(
+            self._account_id,
+            self._region,
+            name,
+            revision,
+        ).to_arn()
 
     def get_job_arn(self, job_id: str) -> str:
-        return BatchJob.make(self._account_id, self._region, job_id).arn
+        return aws_arns.res.BatchJob.new(
+            self._account_id,
+            self._region,
+            job_id,
+        ).to_arn()
 
     # --- dashboard
     @property
@@ -120,6 +101,4 @@ class Batch(Service):
 
     def get_job(self, job_id_or_arn: str) -> str:
         job_id = self._ensure_name(job_id_or_arn, self._arn_to_name)
-        return (
-            f"{self._service_root}/home?region={self._region}#jobs" f"/detail/{job_id}"
-        )
+        return f"{self._service_root}/home?region={self._region}#jobs/detail/{job_id}"

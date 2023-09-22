@@ -1,22 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from .srv.a2i import A2IFlowDefinition
-from .srv.a2i import A2IHumanTaskUI
-from .srv.a2i import A2IHumanLoop
-from .srv.awslambda import LambdaFunction
-from .srv.awslambda import LambdaLayer
-from .srv.batch import BatchComputeEnvironment
-from .srv.batch import BatchJobQueue
-from .srv.batch import BatchJob
-from .srv.batch import BatchJobDefinition
-from .srv.cloudformation import CloudFormationStack
-from .srv.cloudformation import CloudFormationStackSet
-from .srv.cloudwatch import CloudwatchLogGroup
-from .srv.cloudwatch import CloudwatchLogStream
-from .srv.codebuild import CodeBuildProject
-from .srv.codebuild import CodeBuildRun
-from .srv.codecommit import CodeCommitRepository
-from .srv.codepipeline import CodePipelinePipeline
 from .srv.dynamodb import DynamoDBTable
 from .srv.ecr import ECRRepo
 from .srv.ecs import ECSCluster

@@ -4,151 +4,153 @@ import typing as T
 import dataclasses
 from functools import lru_cache
 
-from ..model import Resource, Service
+import aws_arns.api as aws_arns
+
+from ..model import Service
 
 
-@dataclasses.dataclass(frozen=True)
-class CloudFormationStack(Resource):
-    """
-    Example:
+# @dataclasses.dataclass(frozen=True)
+# class CloudFormationStack(Resource):
+#     """
+#     Example:
+#
+#     - name: CDKToolkit
+#     - short_id: b518e0f0-750b-11ed-859b-1208b06dceb3
+#     - long_name: CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
+#     - arn: arn:aws:cloudformation:us-east-1:111122223333:stack/CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
+#     """
+#
+#     name: T.Optional[str] = dataclasses.field(default=None)
+#     short_id: T.Optional[str] = dataclasses.field(default=None)
+#
+#     @classmethod
+#     def make(
+#         cls,
+#         aws_account_id: str,
+#         aws_region: str,
+#         name: str,
+#         short_id: str,
+#     ) -> "CloudFormationStack":
+#         return cls(
+#             aws_account_id=aws_account_id,
+#             aws_region=aws_region,
+#             name=name,
+#             short_id=short_id,
+#         )
+#
+#     @property
+#     def long_name(self) -> str:
+#         return f"{self.name}/{self.short_id}"
+#
+#     @property
+#     def arn(self) -> str:
+#         return (
+#             f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stack"
+#             f"/{self.name}/{self.short_id}"
+#         )
+#
+#     @property
+#     def stack_id(self) -> str:
+#         return self.arn
+#
+#     @classmethod
+#     def from_arn(cls, arn: str) -> "CloudFormationStack":
+#         parts = arn.split(":")
+#         aws_account_id = parts[4]
+#         aws_region = parts[3]
+#         chunks = parts[5].split("/")
+#         name = chunks[1]
+#         short_id = chunks[2]
+#         return cls.make(aws_account_id, aws_region, name, short_id)
+#
+#     @classmethod
+#     def from_stack_id(cls, stack_id: str) -> "CloudFormationStack":
+#         return cls.from_arn(stack_id)
 
-    - name: CDKToolkit
-    - short_id: b518e0f0-750b-11ed-859b-1208b06dceb3
-    - long_name: CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
-    - arn: arn:aws:cloudformation:us-east-1:111122223333:stack/CDKToolkit/b518e0f0-750b-11ed-859b-1208b06dceb3
-    """
 
-    name: T.Optional[str] = dataclasses.field(default=None)
-    short_id: T.Optional[str] = dataclasses.field(default=None)
-
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        name: str,
-        short_id: str,
-    ) -> "CloudFormationStack":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-            short_id=short_id,
-        )
-
-    @property
-    def long_name(self) -> str:
-        return f"{self.name}/{self.short_id}"
-
-    @property
-    def arn(self) -> str:
-        return (
-            f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stack"
-            f"/{self.name}/{self.short_id}"
-        )
-
-    @property
-    def stack_id(self) -> str:
-        return self.arn
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "CloudFormationStack":
-        parts = arn.split(":")
-        aws_account_id = parts[4]
-        aws_region = parts[3]
-        chunks = parts[5].split("/")
-        name = chunks[1]
-        short_id = chunks[2]
-        return cls.make(aws_account_id, aws_region, name, short_id)
-
-    @classmethod
-    def from_stack_id(cls, stack_id: str) -> "CloudFormationStack":
-        return cls.from_arn(stack_id)
-
-
-@dataclasses.dataclass(frozen=True)
-class CloudFormationStackSet(Resource):
-    """
-    Example:
-
-    - name: landing-zone-s3
-    - short_id: 5bf3c555-6fea-4474-83e7-56f541f8bd39
-    - arn: arn:aws:cloudformation:us-east-1:111122223333:stackset/landing-zone-s3:5bf3c555-6fea-4474-83e7-56f541f8bd39
-    """
-
-    name: T.Optional[str] = dataclasses.field(default=None)
-    short_id: T.Optional[str] = dataclasses.field(default=None)
-    permission_model_is_self_managed: bool = dataclasses.field(default=False)
-    permission_model_is_service_managed: bool = dataclasses.field(default=False)
-
-    @classmethod
-    def make(
-        cls,
-        aws_account_id: str,
-        aws_region: str,
-        name: str,
-        short_id: str,
-        permission_model_is_self_managed: bool = False,
-        permission_model_is_service_managed: bool = False,
-    ) -> "CloudFormationStackSet":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-            short_id=short_id,
-            permission_model_is_self_managed=permission_model_is_self_managed,
-            permission_model_is_service_managed=permission_model_is_service_managed,
-        )
-
-    @property
-    def arn(self) -> str:
-        return (
-            f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stackset"
-            f"/{self.name}:{self.short_id}"
-        )
-
-    @property
-    def stack_set_id(self) -> str:
-        return f"{self.name}:{self.short_id}"
-
-    @classmethod
-    def parse_arn(cls, arn: str) -> T.Tuple[str, str, str, str]:
-        """
-        :return: (aws_account_id, aws_region, name, short_id)
-        """
-        parts = arn.split(":")
-        aws_account_id = parts[4]
-        aws_region = parts[3]
-        chunks = parts[5].split("/")
-        name = chunks[1]
-        short_id = parts[6]
-        return aws_account_id, aws_region, name, short_id
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "CloudFormationStackSet":
-        aws_account_id, aws_region, name, short_id = cls.parse_arn(arn)
-        return cls.make(aws_account_id, aws_region, name, short_id)
-
-    @classmethod
-    def from_describe_stack_set_response(cls, data: dict) -> "CloudFormationStackSet":
-        """
-        Create a "CloudFormationStackSet" object from the response of the
-        ``describe_stack_set`` API.
-
-        Reference:
-
-        - describe_stack_set: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_stack_set.html
-        """
-        aws_account_id, aws_region, name, short_id = cls.parse_arn(data["StackSetARN"])
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-            short_id=short_id,
-            permission_model_is_self_managed=data["PermissionModel"] == "SELF_MANAGED",
-            permission_model_is_service_managed=data["PermissionModel"]
-            == "SERVICE_MANAGED",
-        )
+# @dataclasses.dataclass(frozen=True)
+# class CloudFormationStackSet(Resource):
+#     """
+#     Example:
+#
+#     - name: landing-zone-s3
+#     - short_id: 5bf3c555-6fea-4474-83e7-56f541f8bd39
+#     - arn: arn:aws:cloudformation:us-east-1:111122223333:stackset/landing-zone-s3:5bf3c555-6fea-4474-83e7-56f541f8bd39
+#     """
+#
+#     name: T.Optional[str] = dataclasses.field(default=None)
+#     short_id: T.Optional[str] = dataclasses.field(default=None)
+#     permission_model_is_self_managed: bool = dataclasses.field(default=False)
+#     permission_model_is_service_managed: bool = dataclasses.field(default=False)
+#
+#     @classmethod
+#     def make(
+#         cls,
+#         aws_account_id: str,
+#         aws_region: str,
+#         name: str,
+#         short_id: str,
+#         permission_model_is_self_managed: bool = False,
+#         permission_model_is_service_managed: bool = False,
+#     ) -> "CloudFormationStackSet":
+#         return cls(
+#             aws_account_id=aws_account_id,
+#             aws_region=aws_region,
+#             name=name,
+#             short_id=short_id,
+#             permission_model_is_self_managed=permission_model_is_self_managed,
+#             permission_model_is_service_managed=permission_model_is_service_managed,
+#         )
+#
+#     @property
+#     def arn(self) -> str:
+#         return (
+#             f"arn:aws:cloudformation:{self.aws_region}:{self.aws_account_id}:stackset"
+#             f"/{self.name}:{self.short_id}"
+#         )
+#
+#     @property
+#     def stack_set_id(self) -> str:
+#         return f"{self.name}:{self.short_id}"
+#
+#     @classmethod
+#     def parse_arn(cls, arn: str) -> T.Tuple[str, str, str, str]:
+#         """
+#         :return: (aws_account_id, aws_region, name, short_id)
+#         """
+#         parts = arn.split(":")
+#         aws_account_id = parts[4]
+#         aws_region = parts[3]
+#         chunks = parts[5].split("/")
+#         name = chunks[1]
+#         short_id = parts[6]
+#         return aws_account_id, aws_region, name, short_id
+#
+#     @classmethod
+#     def from_arn(cls, arn: str) -> "CloudFormationStackSet":
+#         aws_account_id, aws_region, name, short_id = cls.parse_arn(arn)
+#         return cls.make(aws_account_id, aws_region, name, short_id)
+#
+#     @classmethod
+#     def from_describe_stack_set_response(cls, data: dict) -> "CloudFormationStackSet":
+#         """
+#         Create a "CloudFormationStackSet" object from the response of the
+#         ``describe_stack_set`` API.
+#
+#         Reference:
+#
+#         - describe_stack_set: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_stack_set.html
+#         """
+#         aws_account_id, aws_region, name, short_id = cls.parse_arn(data["StackSetARN"])
+#         return cls(
+#             aws_account_id=aws_account_id,
+#             aws_region=aws_region,
+#             name=name,
+#             short_id=short_id,
+#             permission_model_is_self_managed=data["PermissionModel"] == "SELF_MANAGED",
+#             permission_model_is_service_managed=data["PermissionModel"]
+#             == "SERVICE_MANAGED",
+#         )
 
 
 @dataclasses.dataclass(frozen=True)
@@ -165,11 +167,17 @@ class CloudFormation(Service):
 
     @property
     def stacksets_self_managed(self) -> str:
-        return f"{self._service_root}/home?region={self._region}#/stacksets?permissions=self&filteringText="
+        return (
+            f"{self._service_root}/home?region={self._region}#"
+            f"/stacksets?permissions=self&filteringText="
+        )
 
     @property
     def stacksets_service_managed(self) -> str:
-        return f"{self._service_root}/home?region={self._region}#/stacksets?permissions=service&filteringText="
+        return (
+            f"{self._service_root}/home?region={self._region}#"
+            f"/stacksets?permissions=service&filteringText="
+        )
 
     @property
     def exports(self) -> str:
@@ -182,33 +190,35 @@ class CloudFormation(Service):
         )
 
     @lru_cache(maxsize=32)
-    def _get_stack_object(self, name: str) -> T.Optional[CloudFormationStack]:
-        res = self._bsm.cloudformation_client.describe_stacks(StackName=name)
+    def _get_stack_object(
+        self, stack_name: str
+    ) -> T.Optional[aws_arns.res.CloudFormationStack]:
+        res = self._bsm.cloudformation_client.describe_stacks(StackName=stack_name)
         stack_list = res.get("Stacks", [])
         if len(stack_list) == 0:
             return None
         else:
-            return CloudFormationStack.from_stack_id(stack_list[0]["StackId"])
+            return aws_arns.res.CloudFormationStack.from_arn(stack_list[0]["StackId"])
 
     def _get_stack_object_from_any(
         self,
         name_or_short_name_or_arn: str,
-    ) -> T.Optional[CloudFormationStack]:
+    ) -> T.Optional[aws_arns.res.CloudFormationStack]:
         if name_or_short_name_or_arn.startswith("arn:"):
-            return CloudFormationStack.from_arn(name_or_short_name_or_arn)
+            return aws_arns.res.CloudFormationStack.from_arn(name_or_short_name_or_arn)
         elif "/" in name_or_short_name_or_arn:
             name, short_id = name_or_short_name_or_arn.split("/", 1)
-            return CloudFormationStack.make(
+            return aws_arns.res.CloudFormationStack.new(
                 aws_account_id=self._account_id,
                 aws_region=self._region,
-                name=name,
+                stack_name=name,
                 short_id=short_id,
             )
         else:
-            return self._get_stack_object(name_or_short_name_or_arn)
+            return self._get_stack_object(stack_name=name_or_short_name_or_arn)
 
     def _get_stack_id(self, name_or_short_name_or_arn: str) -> str:
-        return self._get_stack_object_from_any(name_or_short_name_or_arn).arn
+        return self._get_stack_object_from_any(name_or_short_name_or_arn).to_arn()
 
     def get_stack_arn(self, name: str) -> str:
         return self._get_stack_id(name)
@@ -297,7 +307,12 @@ class CloudFormation(Service):
         name: str,
         is_self_managed: bool = False,
         is_service_managed: bool = False,
-    ) -> CloudFormationStackSet:
+    ) -> aws_arns.res.CloudFormationStackSet:
+        """
+        Reference:
+
+        - describe_stack_set: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/cloudformation/client/describe_stack_set.html
+        """
         if is_self_managed:  # pragma: no cover
             call_as = "SELF"
         elif is_service_managed:  # pragma: no cover
@@ -306,13 +321,12 @@ class CloudFormation(Service):
             raise ValueError(
                 "Must specify either is_self_managed or is_service_managed"
             )
-        response = self._bsm.cloudformation_client.describe_stack_set(
+        res = self._bsm.cloudformation_client.describe_stack_set(
             StackSetName=name,
             CallAs=call_as,
         )
-        return CloudFormationStackSet.from_describe_stack_set_response(
-            response["StackSet"]
-        )
+        stack_set_arn = res["StackSet"]["StackSetARN"]
+        return aws_arns.res.CloudFormationStackSet.from_arn(stack_set_arn)
 
     def _get_stack_set(
         self,
@@ -325,9 +339,9 @@ class CloudFormation(Service):
         Internal method to get the URL for a specific tab of a CloudFormation StackSet
         """
         if name_or_id_or_arn.startswith("arn:"):
-            stack_set_id = CloudFormationStackSet.from_arn(
+            stack_set_id = aws_arns.res.CloudFormationStackSet.from_arn(
                 name_or_id_or_arn
-            ).stack_set_id
+            ).stackset_id
             if is_self_managed:  # pragma: no cover
                 permissions = "self"
             elif is_service_managed:  # pragma: no cover
@@ -352,10 +366,10 @@ class CloudFormation(Service):
                 is_self_managed=is_self_managed,
                 is_service_managed=is_service_managed,
             )
-            stack_set_id = stack_set.stack_set_id
-            if stack_set.permission_model_is_self_managed:  # pragma: no cover
+            stack_set_id = stack_set.stackset_id
+            if is_self_managed:  # pragma: no cover
                 permissions = "self"
-            elif stack_set.permission_model_is_service_managed:  # pragma: no cover
+            elif is_service_managed:  # pragma: no cover
                 permissions = "service"
             else:  # pragma: no cover
                 raise NotImplementedError()
@@ -375,7 +389,7 @@ class CloudFormation(Service):
             is_self_managed=is_self_managed,
             is_service_managed=is_service_managed,
         )
-        return stack_set.arn
+        return stack_set.to_arn()
 
     def get_stack_set_info(
         self,

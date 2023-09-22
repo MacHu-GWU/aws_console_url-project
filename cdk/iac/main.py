@@ -21,6 +21,7 @@ from .secretmanager import SecretManagerMixin
 from .sns import SNSMixin
 from .sqs import SQSMixin
 from .ssm import SSMMixin
+from .stepfunction import StepFunctionMixin
 
 
 class MainStack(
@@ -38,6 +39,7 @@ class MainStack(
     SNSMixin,
     SQSMixin,
     SSMMixin,
+    StepFunctionMixin,
 ):
     def __init__(
         self,
@@ -64,6 +66,7 @@ class MainStack(
             # self.mk_sns()
             # self.mk_sqs()
             # self.mk_ssm()
+            # self.mk_stepfunction()
 
         # make_bmt_infra()
 
@@ -81,6 +84,7 @@ class MainStack(
             self.mk_sns()
             self.mk_sqs()
             self.mk_ssm()
+            self.mk_stepfunction()
 
         make_awshsh_app_dev()
 

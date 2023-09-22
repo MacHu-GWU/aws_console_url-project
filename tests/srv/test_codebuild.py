@@ -4,28 +4,14 @@ from aws_console_url.tests import resource, console, prefix_snake
 
 
 def test():
-    project_name = "aws_idp_doc_store-project"
-    run_id = "7ce187d9-887e-40c8-ba37-fa09f0c9b529"
+    project_name = "acu_e5f245a1_test"
+    project_arn = console.codebuild.get_build_project_arn(project_name)
+    run_id = "08805851-8a0a-4968-9d08-c7cc0623db7b"
+    run_arn = console.codebuild.get_build_run_arn(is_batch=False, project_name=project_name, run_id=run_id)
 
     # --- resource
-    build_project = resource.CodeBuildProject.from_arn(
-        resource.CodeBuildProject.make(
-            console.aws_account_id, console.aws_region, project_name
-        ).arn
-    )
-    assert build_project.name == project_name
-
-    build_run = resource.CodeBuildRun.from_arn(
-        resource.CodeBuildRun.make(
-            console.aws_account_id, console.aws_region, False, project_name, run_id
-        ).arn
-    )
-    assert build_run.project_name == project_name
 
     # --- console
-    print(console.codebuild.get_build_project_arn(project_name))
-    print(console.codebuild.get_build_run_arn(False, project_name, run_id))
-
     print(console.codebuild.build_projects)
     print(console.codebuild.build_history)
     print(console.codebuild.report_groups)
@@ -33,9 +19,14 @@ def test():
     print(console.codebuild.metrics)
 
     print(console.codebuild.get_project(project_name))
+    print(console.codebuild.get_project(project_arn))
     print(console.codebuild.get_build_run(False, project_name, run_id))
+    print(console.codebuild.get_build_run(False, run_arn=run_arn))
     print(console.codebuild.get_build_run_phase(False, project_name, run_id))
+    print(console.codebuild.get_build_run_phase(False, run_arn=run_arn))
     print(console.codebuild.get_build_run_env_var(False, project_name, run_id))
+    print(console.codebuild.get_build_run_env_var(False, run_arn=run_arn))
+
 
 
 if __name__ == "__main__":

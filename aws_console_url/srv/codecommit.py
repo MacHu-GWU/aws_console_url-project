@@ -3,34 +3,9 @@
 import typing as T
 import dataclasses
 
-from ..model import Resource, Service
+import aws_arns.api as aws_arns
 
-
-@dataclasses.dataclass(frozen=True)
-class CodeCommitRepository(Resource):
-    name: T.Optional[str] = dataclasses.field(default=None)
-
-    @classmethod
-    def make(
-        cls, aws_account_id: str, aws_region: str, name: str
-    ) -> "CodeCommitRepository":
-        return cls(
-            aws_account_id=aws_account_id,
-            aws_region=aws_region,
-            name=name,
-        )
-
-    @property
-    def arn(self) -> str:
-        return f"arn:aws:codecommit:{self.aws_region}:{self.aws_account_id}:{self.name}"
-
-    @classmethod
-    def from_arn(cls, arn: str) -> "CodeCommitRepository":
-        parts = arn.split(":")
-        aws_account_id = parts[4]
-        aws_region = parts[3]
-        name = parts[5]
-        return cls.make(aws_account_id, aws_region, name)
+from ..model import Service
 
 
 @dataclasses.dataclass(frozen=True)
@@ -39,7 +14,24 @@ class CodeCommit(Service):
 
     # --- arn
     def get_repo_arn(self, name: str) -> str:
-        return CodeCommitRepository(self._account_id, self._region, name).arn
+        return aws_arns.res.CodeCommitRepository.new(
+            self._account_id,
+            self._region,
+            name,
+        ).to_arn()
+
+    def _get_repo_object(self, name_or_arn: str) -> aws_arns.res.CodeCommitRepository:
+        if name_or_arn.startswith("arn:"):
+            return aws_arns.res.CodeCommitRepository.from_arn(name_or_arn)
+        else:
+            return aws_arns.res.CodeCommitRepository.new(
+                self._account_id,
+                self._region,
+                name_or_arn,
+            )
+
+    def _repo_arn_to_name(self, arn: str) -> str:
+        return aws_arns.res.CodeCommitRepository.from_arn(arn).repo_name
 
     # --- dashboard
     @property
@@ -47,54 +39,59 @@ class CodeCommit(Service):
         return f"{self._service_root}/repositories?"
 
     # --- repo
-    def get_repo(self, repo: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/browse?region={self._region}"
+    def get_repo(self, repo_or_arn: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/browse?region={repo.aws_region}"
 
-    def get_repo_prs(self, repo: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/pull-requests?region={self._region}&status=OPEN"
+    def get_repo_prs(self, repo_or_arn: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/pull-requests?region={repo.aws_region}&status=OPEN"
 
-    def get_repo_commits(self, repo: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/commits?region={self._region}"
+    def get_repo_commits(self, repo_or_arn: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/commits?region={repo.aws_region}"
 
-    def get_repo_branches(self, repo: str) -> str:
-        return (
-            f"{self._service_root}/repositories/{repo}/branches?region={self._region}"
-        )
+    def get_repo_branches(self, repo_or_arn: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/branches?region={repo.aws_region}"
 
-    def get_repo_tags(self, repo: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/tags?region={self._region}"
+    def get_repo_tags(self, repo_or_arn: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/tags?region={repo.aws_region}"
 
-    def get_repo_settings(self, repo: str) -> str:
-        return (
-            f"{self._service_root}/repositories/{repo}/settings?region={self._region}"
-        )
+    def get_repo_settings(self, repo_or_arn: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/settings?region={repo.aws_region}"
 
-    def _pr_tab(self, repo: str, pr_id: int, tab: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/pull-requests/{pr_id}/{tab}?region={self._region}"
+    def _pr_tab(self, repo_or_arn: str, pr_id: int, tab: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/pull-requests/{pr_id}/{tab}?region={repo.aws_region}"
 
-    def get_pr(self, repo: str, pr_id: int) -> str:
-        return self.get_pr_details(repo, pr_id)
+    def get_pr(self, repo_or_arn: str, pr_id: int) -> str:
+        return self.get_pr_details(repo_or_arn, pr_id)
 
-    def get_pr_details(self, repo: str, pr_id: int) -> str:
-        return self._pr_tab(repo, pr_id, "details")
+    def get_pr_details(self, repo_or_arn: str, pr_id: int) -> str:
+        return self._pr_tab(repo_or_arn, pr_id, "details")
 
-    def get_pr_activity(self, repo: str, pr_id: int) -> str:
-        return self._pr_tab(repo, pr_id, "activity")
+    def get_pr_activity(self, repo_or_arn: str, pr_id: int) -> str:
+        return self._pr_tab(repo_or_arn, pr_id, "activity")
 
-    def get_pr_changes(self, repo: str, pr_id: int) -> str:
-        return self._pr_tab(repo, pr_id, "changes")
+    def get_pr_changes(self, repo_or_arn: str, pr_id: int) -> str:
+        return self._pr_tab(repo_or_arn, pr_id, "changes")
 
-    def get_pr_commits(self, repo: str, pr_id: int) -> str:
-        return self._pr_tab(repo, pr_id, "commits")
+    def get_pr_commits(self, repo_or_arn: str, pr_id: int) -> str:
+        return self._pr_tab(repo_or_arn, pr_id, "commits")
 
-    def get_pr_approvals(self, repo: str, pr_id: int) -> str:
-        return self._pr_tab(repo, pr_id, "approvals")
+    def get_pr_approvals(self, repo_or_arn: str, pr_id: int) -> str:
+        return self._pr_tab(repo_or_arn, pr_id, "approvals")
 
-    def get_commit(self, repo: str, commit_id: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/commit/{commit_id}?region={self._region}"
+    def get_commit(self, repo_or_arn: str, commit_id: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/commit/{commit_id}?region={repo.aws_region}"
 
-    def _get_browse(self, repo: str, ref: str) -> str:
-        return f"{self._service_root}/repositories/{repo}/browse/{ref}?region={self._region}"
+    def _get_browse(self, repo_or_arn: str, ref: str) -> str:
+        repo = self._get_repo_object(repo_or_arn)
+        return f"{self._service_root}/repositories/{repo.repo_name}/browse/{ref}?region={repo.aws_region}"
 
     def _encode_path(self, path: T.Optional[str] = None) -> str:
         if path is None:
@@ -104,24 +101,28 @@ class CodeCommit(Service):
 
     def get_browse_commit(
         self,
-        repo: str,
+        repo_or_arn: str,
         commit_id: str,
         path: T.Optional[str] = None,
     ) -> str:
-        return self._get_browse(repo, commit_id + self._encode_path(path))
+        return self._get_browse(repo_or_arn, commit_id + self._encode_path(path))
 
     def get_browse_tag(
         self,
-        repo: str,
+        repo_or_arn: str,
         tag: str,
         path: T.Optional[str] = None,
     ) -> str:
-        return self._get_browse(repo, f"refs/tags/{tag}" + self._encode_path(path))
+        return self._get_browse(
+            repo_or_arn, f"refs/tags/{tag}" + self._encode_path(path)
+        )
 
     def get_browse_branch(
         self,
-        repo: str,
+        repo_or_arn: str,
         branch: str,
         path: T.Optional[str] = None,
     ) -> str:
-        return self._get_browse(repo, f"refs/heads/{branch}" + self._encode_path(path))
+        return self._get_browse(
+            repo_or_arn, f"refs/heads/{branch}" + self._encode_path(path)
+        )

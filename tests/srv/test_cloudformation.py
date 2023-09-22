@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console, prefix_slug
+from aws_console_url.tests import console, prefix_slug
 
 
 def test_stack():
     stack_name = "CDKToolkit"
     stack_obj = console.cloudformation._get_stack_object(stack_name)
-    stack_long_name = stack_obj.long_name
-    stack_short_id = stack_obj.short_id
-    stack_arn = stack_obj.arn
+    stack_arn = stack_obj.to_arn()
 
     res = console.bsm.cloudformation_client.describe_stacks(
         StackName=stack_name,
@@ -16,14 +14,7 @@ def test_stack():
     change_set_id = res["Stacks"][0]["ChangeSetId"]
 
     # --- arn
-    print(console.cloudformation.get_stack_arn(stack_name))
-
-    stack = resource.CloudFormationStack.from_arn(stack_arn)
-    assert stack == stack_obj
-    assert "None" not in stack.arn
-
-    stack = resource.CloudFormationStack.from_stack_id(stack.stack_id)
-    assert stack.arn == stack_arn
+    assert console.cloudformation.get_stack_arn(stack_name) == stack_arn
 
     # --- console
     print("-" * 80)
@@ -64,19 +55,17 @@ def test_stack_set():
         is_service_managed=True,
     )
 
-    # aws_account_id = "111122223333"
-    # aws_region = "us-east-1"
-    # stack_set_name = "aws-landing-zone-dev-common-s3-bucket"
-    # stack_set_short_id = "b4015052-fa61-4dc4-a496-565e1bec0052"
-    # stack_set_arn = f"arn:aws:cloudformation:{aws_region}:{aws_account_id}:stackset/{stack_set_name}:{stack_set_short_id}"
-
     assert (
-        resource.CloudFormationStackSet.from_arn(stack_set_self_managed_arn).name
-        == stack_set_self_managed
+        console.cloudformation.get_stack_set_arn(
+            stack_set_self_managed, is_self_managed=True
+        )
+        == stack_set_self_managed_arn
     )
     assert (
-        resource.CloudFormationStackSet.from_arn(stack_set_service_managed_arn).name
-        == stack_set_service_managed
+        console.cloudformation.get_stack_set_arn(
+            stack_set_service_managed, is_service_managed=True
+        )
+        == stack_set_service_managed_arn
     )
 
     # --- console
