@@ -48,9 +48,7 @@ class A2I(Service):
     # --- Worker Task Templates
     @property
     def worker_task_templates(self) -> str:
-        return (
-            f"{self._service_root}?region={self._region}#" f"/a2i/worker-task-templates"
-        )
+        return f"{self._service_root}?region={self._region}#/a2i/worker-task-templates"
 
     def get_worker_task_template_arn(self, name: str) -> str:
         return self._get_a2i_object(name, aws_arns.res.A2IWorkerTaskTemplate).to_arn()
