@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console, prefix_snake
+from aws_console_url.tests import console, prefix_snake
 
 
 def test():
-    project_name = "acu_e5f245a1_test"
+    project_name = f"{prefix_snake}_test"
     project_arn = console.codebuild.get_build_project_arn(project_name)
     run_id = "08805851-8a0a-4968-9d08-c7cc0623db7b"
     run_arn = console.codebuild.get_build_run_arn(is_batch=False, project_name=project_name, run_id=run_id)
