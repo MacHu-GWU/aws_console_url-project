@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from aws_console_url.tests import resource, console
+from aws_console_url.tests import console, prefix_snake
 
 
 def test():
-    db_cluster_id = "dbdatamart-powerusers-cluster-cluster-01"
-    db_instance_id = "edfred-platformdev-sbx-eu-west-1-pociot-pgdb"
-    snapshot_id = "solar-kpi-datamart-snapshot-manual-sbx"
-    db_subnet_group_name = "default"
-    db_parameter_group_name = "default-postgres-11"
-
-    # --- resource
+    db_cluster_id = f"{prefix_snake}_test"
+    db_instance_id = f"{prefix_snake}_test"
+    snapshot_id = f"{prefix_snake}_test"
+    db_subnet_group_name = f"{prefix_snake}_test"
+    db_parameter_group_name = f"{prefix_snake}_test"
 
     # --- console
     print(console.rds.databases)

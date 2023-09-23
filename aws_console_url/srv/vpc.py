@@ -125,24 +125,16 @@ class VPC(Service):
 
     def get_subnet(self, subnet_id: str) -> str:
         subnet_id = _normalize_subnet_id(subnet_id)
-        return (
-            f"{self._service_root}/home?region={self._region}#SubnetDetails:subnetId={subnet_id}"
-        )
+        return f"{self._service_root}/home?region={self._region}#SubnetDetails:subnetId={subnet_id}"
 
     def get_route_table(self, rtb_id: str) -> str:
         rtb_id = _normalize_route_table(rtb_id)
-        return (
-            f"{self._service_root}/home?region={self._region}#RouteTableDetails:RouteTableId={rtb_id}"
-        )
+        return f"{self._service_root}/home?region={self._region}#RouteTableDetails:RouteTableId={rtb_id}"
 
     def get_vpc_endpoint(self, vpce_id: str) -> str:
         vpce_id = _normalize_vpc_endpoint_id(vpce_id)
-        return (
-            f"{self._service_root}/home?region={self._region}#EndpointDetails:vpcEndpointId={vpce_id}"
-        )
+        return f"{self._service_root}/home?region={self._region}#EndpointDetails:vpcEndpointId={vpce_id}"
 
     def get_security_group(self, sg_id: str) -> str:
         sg_id = _normalize_security_group_id(sg_id)
-        return (
-            f"{self._service_root}/home?region={self._region}#SecurityGroup:groupId={sg_id}"
-        )
+        return f"{self._service_root}/home?region={self._region}#SecurityGroup:groupId={sg_id}"
