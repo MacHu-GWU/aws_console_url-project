@@ -155,7 +155,7 @@ def create_resource_py(
 
 # create_resource_py(resource_subclasses)
 
-def create_import_py(
+def create_test_api_py(
     resource_subclasses: T.List[T.Type[Resource]],
     module_name_list: T.List[str],
 ):
@@ -163,9 +163,9 @@ def create_import_py(
         resource_subclass.__name__
         for resource_subclass in resource_subclasses
     ]
-    path_template = dir_here.joinpath("test_import.py.tpl")
+    path_template = dir_here.joinpath("test_api.py.tpl")
     template = Template(path_template.read_text())
-    path_test_import_py = dir_project_root / "tests" / "test_import.py"
+    path_test_import_py = dir_project_root / "tests" / "test_api.py"
     path_test_import_py.write_text(
         template.render(
             module_name_list=module_name_list,
@@ -173,4 +173,4 @@ def create_import_py(
         )
     )
 
-create_import_py(resource_subclasses, module_name_list)
+create_test_api_py(resource_subclasses, module_name_list)

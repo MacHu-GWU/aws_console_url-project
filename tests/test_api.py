@@ -4,9 +4,7 @@ import pytest
 
 
 def test():
-    import aws_console_url
-
-    _ = aws_console_url.BotoSesManager
+    import aws_console_url.api as aws_console_url
 
     aws = aws_console_url.AWSConsole()
 
