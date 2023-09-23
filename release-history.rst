@@ -16,6 +16,17 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+1.0.1 (2023-09-22)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- 💥 First API stable release.
+- 💥 Removed the AWS resources object. The functionality is replaced by the `aws_arns <https://github.com/MacHu-GWU/aws_arns-project>`_ project.
+- Reworked the API,
+    - the main entry point is now ``import aws_console_url.api as aws_console_url``.
+    - most of get_xxx_resource() console url method takes both resource id or arn.
+
+
 0.8.1 (2023-08-30)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
