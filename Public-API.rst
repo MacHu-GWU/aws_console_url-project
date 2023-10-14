@@ -16,6 +16,18 @@ a2i
 - ``aws_console_url.AWSConsole.a2i.human_review_workforces``
 - ``aws_console_url.AWSConsole.a2i.worker_task_templates``
 
+athena
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.athena.capacity_reservations``
+- ``aws_console_url.AWSConsole.athena.data_catalogs``
+- ``aws_console_url.AWSConsole.athena.get_capacity_reservation(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.athena.get_capacity_reservation_arn(name: str)``
+- ``aws_console_url.AWSConsole.athena.get_data_catalog(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.athena.get_data_catalog_arn(name: str)``
+- ``aws_console_url.AWSConsole.athena.get_workgroup(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.athena.get_workgroup_arn(name: str)``
+- ``aws_console_url.AWSConsole.athena.workgroups``
+
 awslambda
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.awslambda.filter_functions(facets: Union[str, List[str]])``
@@ -199,6 +211,15 @@ ecs
 - ``aws_console_url.AWSConsole.ecs.get_task_run_networking(task_short_id_or_arn: str, cluster_name: Union[str, NoneType] = None)``
 - ``aws_console_url.AWSConsole.ecs.get_task_run_tags(task_short_id_or_arn: str, cluster_name: Union[str, NoneType] = None)``
 - ``aws_console_url.AWSConsole.ecs.task_definitions``
+
+eventbridge
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.eventbridge.event_buses``
+- ``aws_console_url.AWSConsole.eventbridge.event_rules``
+- ``aws_console_url.AWSConsole.eventbridge.get_event_bus(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.eventbridge.get_event_bus_arn(name: str)``
+- ``aws_console_url.AWSConsole.eventbridge.get_event_bus_rule(name_or_arn: str, bus_name: Union[str, NoneType] = None)``
+- ``aws_console_url.AWSConsole.eventbridge.get_event_rule(name_or_arn: str, bus_name: Union[str, NoneType] = None)``
 
 glue
 ------------------------------------------------------------------------------

@@ -8,6 +8,7 @@ from boto_session_manager import BotoSesManager
 from .compat import cached_property
 
 from .srv.a2i import A2I
+from .srv.athena import AWSAthena
 from .srv.awslambda import AWSLambda
 from .srv.batch import Batch
 from .srv.cloudformation import CloudFormation
@@ -19,6 +20,7 @@ from .srv.dynamodb import Dynamodb
 from .srv.ec2 import EC2
 from .srv.ecr import ECR
 from .srv.ecs import ECS
+from .srv.eventbridge import AWSEventBridge
 from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
@@ -52,6 +54,10 @@ class AWSConsole:
     @cached_property
     def a2i(self) -> A2I:
         return A2I._from_aws_console(self)
+    
+    @cached_property
+    def athena(self) -> AWSAthena:
+        return AWSAthena._from_aws_console(self)
     
     @cached_property
     def awslambda(self) -> AWSLambda:
@@ -96,6 +102,10 @@ class AWSConsole:
     @cached_property
     def ecs(self) -> ECS:
         return ECS._from_aws_console(self)
+    
+    @cached_property
+    def eventbridge(self) -> AWSEventBridge:
+        return AWSEventBridge._from_aws_console(self)
     
     @cached_property
     def glue(self) -> Glue:
