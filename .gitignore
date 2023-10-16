@@ -3,6 +3,7 @@ aws_console_url_venv/
 aws_console_url.egg-info/
 aws_console_url-*/
 tmp/
+test_the_magic_console_url.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
