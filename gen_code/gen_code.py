@@ -17,6 +17,7 @@ dir_here = Path(__file__).absolute().parent
 dir_project_root = dir_here.parent
 dir_srv = dir_project_root / "aws_console_url" / "srv"
 
+
 # locate all service module under /srv
 def list_all_service_module() -> T.List[str]:
     module_name_list = list()
@@ -122,6 +123,7 @@ def create_console_py(
         template.render(module_and_service_list=module_and_service_list)
     )
 
+
 create_console_py(service_subclasses)
 
 
@@ -133,35 +135,16 @@ def create_public_api_rst(
     path_public_api_rst = dir_project_root / "Public-API.rst"
     path_public_api_rst.write_text(template.render(public_apis=public_apis))
 
+
 create_public_api_rst(public_apis)
 
-
-def create_resource_py(
-    resource_subclasses: T.List[T.Type[Resource]],
-):
-    module_and_resource_list = []
-    for resource_subclass in resource_subclasses:
-        module_name = resource_subclass.__module__.split(".")[-1]
-        class_name = resource_subclass.__name__
-        module_and_resource_list.append((module_name, class_name))
-
-    # resource.py
-    path_resource_py_template = dir_here.joinpath("resource.py.tpl")
-    template = Template(path_resource_py_template.read_text())
-    path_resource_py = dir_project_root / "aws_console_url" / "resource.py"
-    path_resource_py.write_text(
-        template.render(module_and_resource_list=module_and_resource_list)
-    )
-
-# create_resource_py(resource_subclasses)
 
 def create_test_api_py(
     resource_subclasses: T.List[T.Type[Resource]],
     module_name_list: T.List[str],
 ):
     resource_class_list = [
-        resource_subclass.__name__
-        for resource_subclass in resource_subclasses
+        resource_subclass.__name__ for resource_subclass in resource_subclasses
     ]
     path_template = dir_here.joinpath("test_api.py.tpl")
     template = Template(path_template.read_text())
@@ -172,5 +155,6 @@ def create_test_api_py(
             resource_class_list=resource_class_list,
         )
     )
+
 
 create_test_api_py(resource_subclasses, module_name_list)

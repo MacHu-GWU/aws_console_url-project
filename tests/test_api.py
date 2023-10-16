@@ -17,8 +17,10 @@ def test():
     _ = aws.sqs
     _ = aws.secretmanager
     _ = aws.cloudformation
+    _ = aws.kinesis_firehose
     _ = aws.batch
     _ = aws.ground_truth
+    _ = aws.kinesis
     _ = aws.codebuild
     _ = aws.eventbridge
     _ = aws.glue
@@ -32,6 +34,7 @@ def test():
     _ = aws.codepipeline
     _ = aws.s3
     _ = aws.awslambda
+    _ = aws.kinesis_video
     _ = aws.ssm
     _ = aws.ecs
     _ = aws.sns

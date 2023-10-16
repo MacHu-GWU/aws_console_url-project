@@ -268,6 +268,27 @@ iam
 - ``aws_console_url.AWSConsole.iam.roles``
 - ``aws_console_url.AWSConsole.iam.users``
 
+kinesis
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.kinesis.data_streams``
+- ``aws_console_url.AWSConsole.kinesis.get_kinesis_stream_arn(name: str)``
+- ``aws_console_url.AWSConsole.kinesis.get_stream(name_or_arn: str)``
+
+kinesis_firehose
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.kinesis_firehose.delivery_streams``
+- ``aws_console_url.AWSConsole.kinesis_firehose.get_kinesis_firehose_delivery_stream(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.kinesis_firehose.get_kinesis_firehose_delivery_stream_arn(name: str)``
+
+kinesis_video
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.kinesis_video.channels``
+- ``aws_console_url.AWSConsole.kinesis_video.get_channel(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.kinesis_video.get_kinesis_video_channel_arn(name: str, creation_time: str)``
+- ``aws_console_url.AWSConsole.kinesis_video.get_kinesis_video_stream_arn(name: str, creation_time: str)``
+- ``aws_console_url.AWSConsole.kinesis_video.get_stream(name_or_arn: str)``
+- ``aws_console_url.AWSConsole.kinesis_video.streams``
+
 rds
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.rds.databases``

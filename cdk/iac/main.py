@@ -16,8 +16,11 @@ from .codecommit import CodeCommitMixin
 from .dynamodb import DynamoDBMixin
 from .ecr import ECRMixin
 from .ecs import ECSMixin
-from .iam import IamMixin
 from .glue import GlueMixin
+from .kinesis import KinesisMixin
+from .kinesis_firehose import KinesisFirehoseMixin
+from .kinesis_video import KinesisVideoMixin
+from .iam import IamMixin
 from .s3 import S3Mixin
 from .secretmanager import SecretManagerMixin
 from .sns import SNSMixin
@@ -36,8 +39,11 @@ class MainStack(
     DynamoDBMixin,
     ECRMixin,
     ECSMixin,
-    IamMixin,
     GlueMixin,
+    KinesisMixin,
+    KinesisFirehoseMixin,
+    KinesisVideoMixin,
+    IamMixin,
     S3Mixin,
     SecretManagerMixin,
     SNSMixin,
@@ -65,8 +71,11 @@ class MainStack(
             # self.mk_dynamodb()
             # self.mk_ecr()
             # self.mk_ecs()
-            # self.mk_iam()
             # self.mk_glue()
+            # self.mk_kinesis()
+            # self.mk_kinesis_firehose()
+            # self.mk_kinesis_video()
+            # self.mk_iam()
             # self.mk_s3()
             # self.mk_secretsmanager()
             # self.mk_sns()
@@ -85,9 +94,12 @@ class MainStack(
             self.mk_dynamodb()
             self.mk_ecr()
             self.mk_ecs()
-            self.mk_iam()
             self.mk_glue()
             self.mk_s3()
+            self.mk_kinesis()
+            self.mk_kinesis_firehose()
+            self.mk_kinesis_video()
+            self.mk_iam()
             self.mk_secretsmanager()
             self.mk_sns()
             self.mk_sqs()

@@ -16,6 +16,16 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+1.1.1 (2023-10-16)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add support for:
+    - kinesis stream.
+    - kinesis firehose delivery stream.
+    - kinesis video stream and channel.
+
+
 1.0.1 (2023-09-22)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

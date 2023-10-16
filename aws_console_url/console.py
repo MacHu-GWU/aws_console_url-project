@@ -24,6 +24,9 @@ from .srv.eventbridge import AWSEventBridge
 from .srv.glue import Glue
 from .srv.ground_truth import GroundTruth
 from .srv.iam import Iam
+from .srv.kinesis import AWSKinesis
+from .srv.kinesis_firehose import AWSKinesisFirehose
+from .srv.kinesis_video import AWSKinesisVideo
 from .srv.rds import RDS
 from .srv.s3 import S3
 from .srv.sagemaker import SageMaker
@@ -118,6 +121,18 @@ class AWSConsole:
     @cached_property
     def iam(self) -> Iam:
         return Iam._from_aws_console(self)
+    
+    @cached_property
+    def kinesis(self) -> AWSKinesis:
+        return AWSKinesis._from_aws_console(self)
+    
+    @cached_property
+    def kinesis_firehose(self) -> AWSKinesisFirehose:
+        return AWSKinesisFirehose._from_aws_console(self)
+    
+    @cached_property
+    def kinesis_video(self) -> AWSKinesisVideo:
+        return AWSKinesisVideo._from_aws_console(self)
     
     @cached_property
     def rds(self) -> RDS:
