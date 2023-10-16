@@ -52,7 +52,7 @@ class AWSEventBridge(Service):
                     rule_name=name_or_arn,
                 )
 
-    def get_event_bus_rule(
+    def get_event_bus_rule_arn(
         self,
         name_or_arn: str,
         bus_name: T.Optional[str] = None,
@@ -82,7 +82,12 @@ class AWSEventBridge(Service):
         bus_name: T.Optional[str] = None,
     ) -> str:
         obj = self._get_event_rule_obj(name_or_arn, bus_name)
+        if "/" in obj.resource_id:
+            event_bus_name, rule_name = obj.resource_id.split("/")
+        else:
+            event_bus_name = "default"
+            rule_name = obj.resource_id
         return (
             f"{self._service_root}/home?region={obj.aws_region}#"
-            f"/eventbus/{obj.event_bus_name}/rules/{obj.rule_name}"
+            f"/eventbus/{event_bus_name}/rules/{rule_name}"
         )

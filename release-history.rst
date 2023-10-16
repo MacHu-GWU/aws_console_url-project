@@ -21,6 +21,7 @@ Backlog (TODO)
 **Features and Improvements**
 
 - add support for:
+    - event bridge.
     - kinesis stream.
     - kinesis firehose delivery stream.
     - kinesis video stream and channel.

@@ -16,6 +16,7 @@ from .codecommit import CodeCommitMixin
 from .dynamodb import DynamoDBMixin
 from .ecr import ECRMixin
 from .ecs import ECSMixin
+from .eventbridge import EventBridgeMixin
 from .glue import GlueMixin
 from .kinesis import KinesisMixin
 from .kinesis_firehose import KinesisFirehoseMixin
@@ -39,6 +40,7 @@ class MainStack(
     DynamoDBMixin,
     ECRMixin,
     ECSMixin,
+    EventBridgeMixin,
     GlueMixin,
     KinesisMixin,
     KinesisFirehoseMixin,
@@ -71,6 +73,7 @@ class MainStack(
             # self.mk_dynamodb()
             # self.mk_ecr()
             # self.mk_ecs()
+            # self.mk_eventbridge()
             # self.mk_glue()
             # self.mk_kinesis()
             # self.mk_kinesis_firehose()
@@ -94,6 +97,7 @@ class MainStack(
             self.mk_dynamodb()
             self.mk_ecr()
             self.mk_ecs()
+            self.mk_eventbridge()
             self.mk_glue()
             self.mk_s3()
             self.mk_kinesis()

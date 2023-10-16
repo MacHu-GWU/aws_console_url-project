@@ -218,7 +218,7 @@ eventbridge
 - ``aws_console_url.AWSConsole.eventbridge.event_rules``
 - ``aws_console_url.AWSConsole.eventbridge.get_event_bus(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.eventbridge.get_event_bus_arn(name: str)``
-- ``aws_console_url.AWSConsole.eventbridge.get_event_bus_rule(name_or_arn: str, bus_name: Union[str, NoneType] = None)``
+- ``aws_console_url.AWSConsole.eventbridge.get_event_bus_rule_arn(name_or_arn: str, bus_name: Union[str, NoneType] = None)``
 - ``aws_console_url.AWSConsole.eventbridge.get_event_rule(name_or_arn: str, bus_name: Union[str, NoneType] = None)``
 
 glue
