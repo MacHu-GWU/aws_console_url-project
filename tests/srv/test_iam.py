@@ -5,6 +5,7 @@ from aws_console_url.tests import console, prefix_snake
 
 def test():
     name = f"{prefix_snake}_test"
+    inline_policy_name = f"{name}_inline_policy"
 
     # --- console
     print("-" * 80)
@@ -24,18 +25,16 @@ def test():
     print(console.iam.get_user(name))
     print(console.iam.get_role(name))
     print(console.iam.get_policy(name))
+    print(console.iam.get_user_inline_policy(name, inline_policy_name))
+    print(console.iam.get_role_inline_policy(name, inline_policy_name))
 
     print("-" * 80)
-    print(
-        console.iam.get_user_group(
-            f"arn:aws:iam::{console.aws_account_id}:group/{name}"
-        )
-    )
+    print(console.iam.get_user_group(f"arn:aws:iam::{console.aws_account_id}:group/{name}"))
     print(console.iam.get_user(f"arn:aws:iam::{console.aws_account_id}:user/{name}"))
     print(console.iam.get_role(f"arn:aws:iam::{console.aws_account_id}:role/{name}"))
-    print(
-        console.iam.get_policy(f"arn:aws:iam::{console.aws_account_id}:policy/{name}")
-    )
+    print(console.iam.get_policy(f"arn:aws:iam::{console.aws_account_id}:policy/{name}"))
+    print(console.iam.get_user_inline_policy(f"arn:aws:iam::{console.aws_account_id}:user/{name}", inline_policy_name))
+    print(console.iam.get_role_inline_policy(f"arn:aws:iam::{console.aws_account_id}:role/{name}", inline_policy_name))
 
 
 if __name__ == "__main__":

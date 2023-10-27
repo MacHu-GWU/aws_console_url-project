@@ -12,9 +12,9 @@ if T.TYPE_CHECKING:
 
 class IamMixin:
     def mk_iam(self: "MainStack"):
-        self.iam_policy = iam.ManagedPolicy(
+        self.iam_managed_policy = iam.ManagedPolicy(
             self,
-            "IamPolicy",
+            "IamManagedPolicy",
             managed_policy_name=f"{self.prefix_snake}_test",
             document=iam.PolicyDocument(
                 statements=[
@@ -27,13 +27,28 @@ class IamMixin:
             ),
         )
 
+        self.iam_inline_policy = iam.Policy(
+            self,
+            "IamInlinePolicy",
+            policy_name=f"{self.prefix_snake}_test_inline_policy",
+            document=iam.PolicyDocument(
+                statements=[
+                    iam.PolicyStatement(
+                        effect=iam.Effect.DENY,
+                        actions=["*"],
+                        resources=["*"],
+                    ),
+                ],
+            ),
+        )
         self.iam_role = iam.Role(
             self,
             "IamRole",
             role_name=f"{self.prefix_snake}_test",
             assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
-            managed_policies=[self.iam_policy],
+            managed_policies=[self.iam_managed_policy],
         )
+        self.iam_role.attach_inline_policy(self.iam_inline_policy)
 
         self.iam_group = iam.Group(
             self,
@@ -45,4 +60,6 @@ class IamMixin:
             self,
             "IamUser",
             user_name=f"{self.prefix_snake}_test",
+            managed_policies=[self.iam_managed_policy],
         )
+        self.iam_user.attach_inline_policy(self.iam_inline_policy)

@@ -6,6 +6,7 @@ import dataclasses
 import aws_arns.api as aws_arns
 
 from ..model import Service
+from ..utils import encode_arn_in_url
 
 
 T_IAM_OBJ = T.Union[
@@ -77,12 +78,45 @@ class Iam(Service):
 
     def get_user(self, name_or_arn: str) -> str:
         obj = self._get_iam_user_obj(name_or_arn)
-        return f"{self._root_url}/iam/home#/users/{obj.iam_user_name}"
+        return f"{self._service_root}/home?#/users/details/{obj.iam_user_name}?section=permissions"
 
     def get_role(self, name_or_arn: str) -> str:
         obj = self._get_iam_role_obj(name_or_arn)
         return f"{self._service_root}/home#/roles/details/{obj.iam_role_name}?section=permissions"
 
     def get_policy(self, name_or_arn: str) -> str:
-        obj = self._get_iam_user_obj(name_or_arn)
-        return f"{self._root_url}/iam/home#/policies/{obj.to_arn()}$jsonEditor"
+        """
+        Examples:
+
+        - AWS Managed Policy: https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/policies/details/arn%3Aaws%3Aiam%3A%3Aaws%3Apolicy%2FdAwsManagePolicy?section=permissions
+        - User Managed Policy: https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/policies/details/arn%3Aaws%3Aiam%3A%3A111122223333%3Apolicy%2Fservice-role%2Fmy-policy?section=permissions
+        """
+        obj = self._get_iam_policy_obj(name_or_arn)
+        return (
+            f"{self._service_root}/home?#/policies/details"
+            f"/{encode_arn_in_url(obj.to_arn())}?section=permissions"
+        )
+
+    def get_user_inline_policy(self, user_name_or_arn: str, policy_name: str) -> str:
+        """
+        Example:
+
+        - Role inline Policy: https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/users/details/iam-role-name/editPolicy/inline-policy-name?step=addPermissions
+        """
+        obj = self._get_iam_user_obj(user_name_or_arn)
+        return (
+            f"{self._service_root}/home?#/users/details"
+            f"/{obj.iam_user_name}/editPolicy/{policy_name}?step=addPermissions"
+        )
+
+    def get_role_inline_policy(self, role_name_or_arn: str, policy_name: str) -> str:
+        """
+        Example:
+
+        - Role inline Policy: https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/roles/details/iam-role-name/editPolicy/inline-policy-name?step=addPermissions
+        """
+        obj = self._get_iam_role_obj(role_name_or_arn)
+        return (
+            f"{self._root_url}/iamv2/home?#/roles/details"
+            f"/{obj.iam_role_name}/editPolicy/{policy_name}?step=addPermissions"
+        )

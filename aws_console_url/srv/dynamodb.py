@@ -6,6 +6,7 @@ import dataclasses
 import aws_arns.api as aws_arns
 
 from ..model import Service
+from ..utils import encode_arn_in_url
 
 
 @dataclasses.dataclass(frozen=True)
@@ -92,4 +93,17 @@ class Dynamodb(Service):
             f"{self._service_root}/home?region={obj.aws_region}"
             f"#edit-item?table={obj.table_name}"
             f"&itemMode=2&pk={hash_key}&{range_key_param}&route=ROUTE_ITEM_EXPLORER"
+        )
+
+    def get_table_export(self, table_or_arn: str, export_name: str) -> str:
+        obj = self._get_table_obj(table_or_arn)
+        export_arn = aws_arns.res.DynamodbTableExport.new(
+            obj.aws_account_id,
+            obj.aws_region,
+            obj.table_name,
+            export_name,
+        ).to_arn()
+        return (
+            f"{self._service_root}/home?region={obj.aws_region}"
+            f"#export?arn={encode_arn_in_url(export_arn)}"
         )

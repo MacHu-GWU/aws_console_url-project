@@ -31,6 +31,8 @@ def test():
     print(console.dynamodb.get_item_details(table2, "pk-1", "sk-1"))
     print(console.dynamodb.get_item_details(table2_arn, "pk-1", "sk-1"))
 
+    print(console.dynamodb.get_table_export(table1_arn, "01698413732527-834d9c72"))
+
 
 if __name__ == "__main__":
     from aws_console_url.tests import run_cov_test

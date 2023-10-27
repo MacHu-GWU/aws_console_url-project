@@ -16,3 +16,4 @@ Usage example::
 """
 
 from .console import AWSConsole
+from .utils import encode_arn_in_url

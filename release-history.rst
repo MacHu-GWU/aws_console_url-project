@@ -16,6 +16,21 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+1.2.1 (2023-10-27)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add support for:
+    - dynamodb table export
+    - iam user inline policy
+    - iam role inline policy
+
+**Bugfixes**
+
+- fix bug for:
+    - iam policy: we accidentally use the iam role object to construct the url
+
+
 1.1.1 (2023-10-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**
