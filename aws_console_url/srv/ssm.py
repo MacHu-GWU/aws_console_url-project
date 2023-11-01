@@ -31,6 +31,12 @@ class SSM(Service):
     def parameters(self) -> str:
         return f"{self._service_root}/parameters/?region={self._region}&tab=Table"
 
+    @property
+    def run_command_executing_commands(self) -> str:
+        return (
+            f"{self._service_root}/run-command/executing-commands?region={self._region}"
+        )
+
     # --- table
     def filter_parameters(self, facets: T.Union[str, T.List[str]]) -> str:
         if isinstance(facets, str):
@@ -58,3 +64,6 @@ class SSM(Service):
             f"{self._service_root}/parameters"
             f"/{name}/description?region={self._region}&tab=Table"
         )
+
+    def get_run_command_execution(self, command_id: str) -> str:
+        return f"{self._service_root}/run-command/{command_id}?region={self._region}"

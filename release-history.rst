@@ -16,6 +16,16 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+1.3.1 (2023-11-01)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add support for:
+    - apigateway v1 and v2
+    - kms
+    - system manager run command
+
+
 1.2.1 (2023-10-27)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

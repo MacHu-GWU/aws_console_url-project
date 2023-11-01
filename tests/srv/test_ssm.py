@@ -9,9 +9,14 @@ def test():
     param_arn1 = console.ssm.get_parameter_arn(param_name1)
     param_arn2 = console.ssm.get_parameter_arn(param_name2)
 
-    # --- console
-    print(console.ssm.parameters)
+    run_command_id = "875f8f80-dc5b-4e68-adb5-54f8fef8eb2e"
 
+    # --- console
+    print("-" * 80)
+    print(console.ssm.parameters)
+    print(console.ssm.run_command_executing_commands)
+
+    print("-" * 80)
     print(console.ssm.filter_parameters(param_name1))
     print(console.ssm.get_parameter(param_name1))
     print(console.ssm.get_parameter(param_arn1))
@@ -21,6 +26,8 @@ def test():
     print(console.ssm.get_parameter(param_name2))
     print(console.ssm.get_parameter(param_arn2))
     assert console.ssm.get_parameter_arn(param_name2).endswith(param_name2)
+
+    print(console.ssm.get_run_command_execution(command_id=run_command_id))
 
 
 if __name__ == "__main__":

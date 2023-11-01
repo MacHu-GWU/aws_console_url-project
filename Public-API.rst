@@ -392,7 +392,9 @@ ssm
 - ``aws_console_url.AWSConsole.ssm.filter_parameters(facets: Union[str, List[str]])``
 - ``aws_console_url.AWSConsole.ssm.get_parameter(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.ssm.get_parameter_arn(name: str)``
+- ``aws_console_url.AWSConsole.ssm.get_run_command_execution(command_id: str)``
 - ``aws_console_url.AWSConsole.ssm.parameters``
+- ``aws_console_url.AWSConsole.ssm.run_command_executing_commands``
 
 step_function
 ------------------------------------------------------------------------------
