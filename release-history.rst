@@ -16,6 +16,13 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+1.3.2 (2023-11-01)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Bugfixes**
+
+- fix a mistake that accidentally overwrite the ``api.py`` module.
+
+
 1.3.1 (2023-11-01)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

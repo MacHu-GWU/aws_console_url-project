@@ -26,6 +26,7 @@ def list_all_service_module() -> T.List[str]:
             continue
         module_name = path.stem
         module_name_list.append(module_name)
+    module_name_list.sort()
     return module_name_list
 
 

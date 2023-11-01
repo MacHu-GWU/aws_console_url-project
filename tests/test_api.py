@@ -9,37 +9,37 @@ def test():
     aws = aws_console_url.AWSConsole()
 
     
-    _ = aws.vpc
-    _ = aws.rds
-    _ = aws.dynamodb
-    _ = aws.codecommit
-    _ = aws.iam
-    _ = aws.sqs
-    _ = aws.secretmanager
-    _ = aws.cloudformation
-    _ = aws.kinesis_firehose
-    _ = aws.batch
-    _ = aws.ground_truth
-    _ = aws.kinesis
-    _ = aws.apigateway
-    _ = aws.codebuild
-    _ = aws.eventbridge
-    _ = aws.glue
-    _ = aws.step_function
     _ = aws.a2i
-    _ = aws.sagemaker
+    _ = aws.apigateway
+    _ = aws.athena
+    _ = aws.awslambda
+    _ = aws.batch
+    _ = aws.cloudformation
     _ = aws.cloudwatch
+    _ = aws.codebuild
+    _ = aws.codecommit
+    _ = aws.codepipeline
+    _ = aws.dynamodb
     _ = aws.ec2
     _ = aws.ecr
-    _ = aws.kms
-    _ = aws.athena
-    _ = aws.codepipeline
-    _ = aws.s3
-    _ = aws.awslambda
-    _ = aws.kinesis_video
-    _ = aws.ssm
     _ = aws.ecs
+    _ = aws.eventbridge
+    _ = aws.glue
+    _ = aws.ground_truth
+    _ = aws.iam
+    _ = aws.kinesis
+    _ = aws.kinesis_firehose
+    _ = aws.kinesis_video
+    _ = aws.kms
+    _ = aws.rds
+    _ = aws.s3
+    _ = aws.sagemaker
+    _ = aws.secretmanager
     _ = aws.sns
+    _ = aws.sqs
+    _ = aws.ssm
+    _ = aws.step_function
+    _ = aws.vpc
 
 
 if __name__ == "__main__":
