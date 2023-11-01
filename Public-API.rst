@@ -16,6 +16,38 @@ a2i
 - ``aws_console_url.AWSConsole.a2i.human_review_workforces``
 - ``aws_console_url.AWSConsole.a2i.worker_task_templates``
 
+apigateway
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.apigateway.apis``
+- ``aws_console_url.AWSConsole.apigateway.client_certificates``
+- ``aws_console_url.AWSConsole.apigateway.custom_domain_names``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_api_detail_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_arn(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_authorizers_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_dashboard_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_documentation_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_gateway_responses_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_models_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_resource_policy_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_resources_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v1_rest_api_stages_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_arn(api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_authorization_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_cors_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_export_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_integrations_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_logging_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_metrics_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_reimport_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_routes_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_stages_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.get_v2_api_throttling_tab(rest_api_id: str)``
+- ``aws_console_url.AWSConsole.apigateway.settings``
+- ``aws_console_url.AWSConsole.apigateway.usage_plans``
+- ``aws_console_url.AWSConsole.apigateway.vpc_links``
+
 athena
 ------------------------------------------------------------------------------
 - ``aws_console_url.AWSConsole.athena.capacity_reservations``
@@ -154,6 +186,7 @@ dynamodb
 - ``aws_console_url.AWSConsole.dynamodb.get_table_additional_settings(table_or_arn: str)``
 - ``aws_console_url.AWSConsole.dynamodb.get_table_arn(name: str)``
 - ``aws_console_url.AWSConsole.dynamodb.get_table_backups(table_or_arn: str)``
+- ``aws_console_url.AWSConsole.dynamodb.get_table_export(table_or_arn: str, export_name: str)``
 - ``aws_console_url.AWSConsole.dynamodb.get_table_exports_and_streams(table_or_arn: str)``
 - ``aws_console_url.AWSConsole.dynamodb.get_table_global_tables(table_or_arn: str)``
 - ``aws_console_url.AWSConsole.dynamodb.get_table_indexes(table_or_arn: str)``
@@ -259,10 +292,12 @@ iam
 - ``aws_console_url.AWSConsole.iam.get_policy_arn(name: str)``
 - ``aws_console_url.AWSConsole.iam.get_role(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.iam.get_role_arn(name: str)``
+- ``aws_console_url.AWSConsole.iam.get_role_inline_policy(role_name_or_arn: str, policy_name: str)``
 - ``aws_console_url.AWSConsole.iam.get_user(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.iam.get_user_arn(name: str)``
 - ``aws_console_url.AWSConsole.iam.get_user_group(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.iam.get_user_group_arn(name: str)``
+- ``aws_console_url.AWSConsole.iam.get_user_inline_policy(user_name_or_arn: str, policy_name: str)``
 - ``aws_console_url.AWSConsole.iam.groups``
 - ``aws_console_url.AWSConsole.iam.policies``
 - ``aws_console_url.AWSConsole.iam.roles``
@@ -288,6 +323,18 @@ kinesis_video
 - ``aws_console_url.AWSConsole.kinesis_video.get_kinesis_video_stream_arn(name: str, creation_time: str)``
 - ``aws_console_url.AWSConsole.kinesis_video.get_stream(name_or_arn: str)``
 - ``aws_console_url.AWSConsole.kinesis_video.streams``
+
+kms
+------------------------------------------------------------------------------
+- ``aws_console_url.AWSConsole.kms.aws_managed_keys``
+- ``aws_console_url.AWSConsole.kms.customer_managed_keys``
+- ``aws_console_url.AWSConsole.kms.get_key(key_id_or_alias_or_arn: str)``
+- ``aws_console_url.AWSConsole.kms.get_key_aliases_tab(key_id_or_alias_or_arn: str)``
+- ``aws_console_url.AWSConsole.kms.get_key_crypto_config_tab(key_id_or_alias_or_arn: str)``
+- ``aws_console_url.AWSConsole.kms.get_key_key_rotation_tab(key_id_or_alias_or_arn: str)``
+- ``aws_console_url.AWSConsole.kms.get_key_policy_tab(key_id_or_alias_or_arn: str)``
+- ``aws_console_url.AWSConsole.kms.get_key_tags_tab(key_id_or_alias_or_arn: str)``
+- ``aws_console_url.AWSConsole.kms.get_kms_key_arn(key_id_or_alias: str)``
 
 rds
 ------------------------------------------------------------------------------

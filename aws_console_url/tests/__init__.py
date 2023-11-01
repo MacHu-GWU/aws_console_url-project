@@ -9,10 +9,10 @@ from . import paths
 
 
 bsm = BotoSesManager(
-    profile_name="awshsh_app_dev_us_east_1",
+    # profile_name="awshsh_app_dev_us_east_1",
     # profile_name="bmt_infra_us_east_1",
     # profile_name="bmt_app_dev_us_east_1",
-    # profile_name="edf_sbx_eu_west_1_mfa",
+    profile_name="edf_sbx_eu_west_1_mfa",
     # region_name="us-east-1",
 )
 

@@ -8,6 +8,7 @@ from boto_session_manager import BotoSesManager
 from .compat import cached_property
 
 from .srv.a2i import A2I
+from .srv.apigateway import AWSApiGateway
 from .srv.athena import AWSAthena
 from .srv.awslambda import AWSLambda
 from .srv.batch import Batch
@@ -27,6 +28,7 @@ from .srv.iam import Iam
 from .srv.kinesis import AWSKinesis
 from .srv.kinesis_firehose import AWSKinesisFirehose
 from .srv.kinesis_video import AWSKinesisVideo
+from .srv.kms import AWSKMS
 from .srv.rds import RDS
 from .srv.s3 import S3
 from .srv.sagemaker import SageMaker
@@ -57,6 +59,10 @@ class AWSConsole:
     @cached_property
     def a2i(self) -> A2I:
         return A2I._from_aws_console(self)
+    
+    @cached_property
+    def apigateway(self) -> AWSApiGateway:
+        return AWSApiGateway._from_aws_console(self)
     
     @cached_property
     def athena(self) -> AWSAthena:
@@ -133,6 +139,10 @@ class AWSConsole:
     @cached_property
     def kinesis_video(self) -> AWSKinesisVideo:
         return AWSKinesisVideo._from_aws_console(self)
+    
+    @cached_property
+    def kms(self) -> AWSKMS:
+        return AWSKMS._from_aws_console(self)
     
     @cached_property
     def rds(self) -> RDS:

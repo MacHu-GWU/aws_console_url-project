@@ -21,6 +21,7 @@ def test():
     _ = aws.batch
     _ = aws.ground_truth
     _ = aws.kinesis
+    _ = aws.apigateway
     _ = aws.codebuild
     _ = aws.eventbridge
     _ = aws.glue
@@ -30,6 +31,7 @@ def test():
     _ = aws.cloudwatch
     _ = aws.ec2
     _ = aws.ecr
+    _ = aws.kms
     _ = aws.athena
     _ = aws.codepipeline
     _ = aws.s3
