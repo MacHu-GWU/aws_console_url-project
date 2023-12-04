@@ -55,6 +55,22 @@ class AWSConsole:
     aws_region: T.Optional[str] = dataclasses.field(default=None)
     is_us_gov_cloud: bool = dataclasses.field(default=False)
     bsm: BotoSesManager = dataclasses.field(default=lambda: BotoSesManager())
+
+    @classmethod
+    def from_bsm(
+        cls,
+        bsm: BotoSesManager,
+        is_us_gov_cloud: bool = False,
+    ):
+        """
+        Create an ``AWSConsole`` object from a ``BotoSesManager`` object.
+        """
+        return cls(
+            aws_account_id=bsm.aws_account_id,
+            aws_region=bsm.aws_region,
+            is_us_gov_cloud=is_us_gov_cloud,
+            bsm=bsm,
+        )
     
     @cached_property
     def a2i(self) -> A2I:

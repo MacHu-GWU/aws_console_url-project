@@ -16,11 +16,7 @@ bsm = BotoSesManager(
     # region_name="us-east-1",
 )
 
-console = AWSConsole(
-    aws_account_id=bsm.aws_account_id,
-    aws_region=bsm.aws_region,
-    bsm=bsm,
-)
+console = AWSConsole.from_bsm(bsm=bsm)
 
 sha256 = hashlib.sha256()
 sha256.update(f"{bsm.aws_account_id}-{bsm.aws_region}".encode("utf-8"))
