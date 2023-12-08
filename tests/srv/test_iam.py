@@ -20,6 +20,11 @@ def test():
     print(console.iam.roles)
     print(console.iam.policies)
 
+    print(console.iam.create_group)
+    print(console.iam.create_user)
+    print(console.iam.create_role)
+    print(console.iam.create_policy)
+
     print("-" * 80)
     print(console.iam.get_user_group(name))
     print(console.iam.get_user(name))

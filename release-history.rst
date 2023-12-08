@@ -16,6 +16,19 @@ Backlog (TODO)
 **Miscellaneous**
 
 
+1.4.1 (2023-12-08)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Features and Improvements**
+
+- add the ``AWSConsole.awslambda.filter_layer`` method
+- add the ``AWSConsole.awslambda.create_function`` method
+- add the ``AWSConsole.awslambda.create_layer_version`` method
+- add the ``AWSConsole.iam.create_group`` method
+- add the ``AWSConsole.iam.create_user`` method
+- add the ``AWSConsole.iam.create_role`` method
+- add the ``AWSConsole.iam.create_policy`` method
+
+
 1.3.3 (2023-12-04)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **Features and Improvements**

@@ -72,6 +72,22 @@ class Iam(Service):
     def policies(self) -> str:
         return f"{self._service_root}/home?#/policies"
 
+    @property
+    def create_group(self) -> str:
+        return f"{self._service_root}/home?#/groups/create"
+
+    @property
+    def create_user(self) -> str:
+        return f"{self._service_root}/home?#/users/create"
+
+    @property
+    def create_role(self) -> str:
+        return f"{self._service_root}/home?#/roles/create"
+
+    @property
+    def create_policy(self) -> str:
+        return f"{self._service_root}/home?#/policies/create"
+
     def get_user_group(self, name_or_arn: str) -> str:
         obj = self._get_iam_group_obj(name_or_arn)
         return f"{self._service_root}/home#/groups/details/{obj.iam_group_name}?section=users"

@@ -77,12 +77,36 @@ class AWSLambda(Service):
         query = "&".join([f"&o{i}=%3A&v{i}={token}" for i, token in enumerate(facets)])
         return (
             f"{self._service_root}/home?region={self._region}#"
-            f"/functions?fo=and&o0=%3A&{query}"
+            f"/functions?fo=and&{query}"
         )
+
+    def create_function(self) -> str:
+        return f"{self._service_root}/home?region={self._region}" f"#/create/function"
 
     @property
     def layers(self) -> str:
         return f"{self._service_root}/home?region={self._region}#/layers"
+
+    def filter_layers(
+        self,
+        facets: T.Union[str, T.List[str]],
+    ) -> str:
+        if isinstance(facets, str):
+            facets = [facets]
+        if len(facets) == 0:
+            raise ValueError("facets must not be empty")
+        query = "&".join([f"&o{i}=%3A&v{i}={token}" for i, token in enumerate(facets)])
+        return (
+            f"{self._service_root}/home?region={self._region}#"
+            f"/layers?fo=and&{query}"
+        )
+
+    def create_layer_version(self, name_or_arn: str) -> str:
+        lbd_layer = self._get_layer_obj(name_or_arn, version=1)
+        return (
+            f"{self._service_root}/home?region={self._region}#"
+            f"/layers/{lbd_layer.layer_name}/create/version"
+        )
 
     # --- lambda function
     def _get_function_tab(

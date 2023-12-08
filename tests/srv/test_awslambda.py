@@ -27,6 +27,10 @@ def test():
     print(console.awslambda.layers)
     print(console.awslambda.filter_functions(func))
     print(console.awslambda.filter_functions([prefix_snake, "test"]))
+    print(console.awslambda.create_function())
+    print(console.awslambda.filter_layers(layer))
+    print(console.awslambda.filter_layers([prefix_snake, "test"]))
+    print(console.awslambda.create_layer_version(layer))
 
     print(console.awslambda.get_function(func))
     print(console.awslambda.get_function_code_tab(func))
